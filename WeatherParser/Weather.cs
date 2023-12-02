@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.RegularExpressions;
 using static WeatherParser.Extensions;
 
@@ -15,7 +17,9 @@ public class Weather
     public string Location { get; set; }
 
     public Weather()
-    { }
+    {
+        GetWeather();
+    }
 
     private Weather(int currentTemperature, int minTemperature, int maxTemperature, DateTime currentTime, string location)
     {
@@ -68,5 +72,17 @@ public class Weather
 
             return DateTime.MinValue;
         }
+    }
+
+    public string GetWeatherToSend()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"Current temperature: {CurrentTemperature.ToString()}");
+        sb.AppendLine($"Minimal temperature: {MinTemperature.ToString()}");
+        sb.AppendLine($"Maximum temperature: {MaxTemperature.ToString()}");
+        sb.AppendLine($"Time: {CurrentTime.ToString()}");
+        sb.AppendLine($"Location: {Location}");
+
+        return sb.ToString();
     }
 }
