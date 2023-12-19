@@ -1,6 +1,6 @@
-﻿namespace WeatherParser;
+﻿namespace WeatherParser.Extensions;
 
-public static class Extensions
+public static class IntParsingExtensions
 {
     public static int ToInt(this string value)
     {
