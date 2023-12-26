@@ -1,4 +1,5 @@
-﻿using WeatherParser.Handlers;
+﻿using WeatherParser.Actions;
+using WeatherParser.Handlers;
 using WeatherParser.Models.Interfaces;
 using WeatherParser.Services;
 
@@ -17,7 +18,8 @@ public static class ServiceConfigurator
             .AddScoped<IWeatherParserService, WeatherParserService>()
             .AddScoped<IHtmlPathBuilder, HtmlPathBuilder>()
             .AddScoped<ITimerService, TimerService>()
-            .AddScoped<IConfigurationBuilder, ConfigurationBuilder>();
+            .AddScoped<IConfigurationBuilder, ConfigurationBuilder>()
+            .AddScoped<ILocationRequester, LocationRequester>();
 
         return services;
     }

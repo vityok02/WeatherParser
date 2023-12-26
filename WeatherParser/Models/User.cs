@@ -7,12 +7,9 @@ public class User : Telegram.Bot.Types.User
 
     public bool HasLocation() => Latitude != 0.0 && Longitude != 0.0;
 
-    public User SetLocation(double latitude, double longitude)
+    public void SetLocation(double latitude, double longitude)
     {
-        return new User()
-        {
-            Latitude = latitude,
-            Longitude = longitude
-        };
+        Latitude = latitude;
+        Longitude = longitude;
     }
 }
