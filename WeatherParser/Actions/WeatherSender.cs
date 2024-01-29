@@ -1,31 +1,42 @@
-﻿using Telegram.Bot;
+﻿using Microsoft.EntityFrameworkCore;
+using Telegram.Bot;
 using Telegram.Bot.Types;
+using WeatherParser.Data;
+using WeatherParser.Models;
 using WeatherParser.Models.Interfaces;
-using WeatherParser.Services;
-using User = WeatherParser.Models.User;
+using WeatherParser.Services.WeatherServices;
 
 namespace WeatherParser.Actions;
 
 public class WeatherSender(
     ITelegramBotClient telegramBotClient,
+    AppDbContext dbContext,
     IWeatherService weatherService,
-    IWeatherValidator weatherValidator,
+    IValidator<Weather> weatherValidator,
     ILocationRequester locationRequester)
     : IWeatherSender
 {
     private readonly ITelegramBotClient _telegramBotClient = telegramBotClient;
+    private readonly AppDbContext _dbContext = dbContext;
     private readonly IWeatherService _weatherService = weatherService;
-    private readonly IWeatherValidator _weatherValidator = weatherValidator;
+    private readonly IValidator<Weather> _weatherValidator = weatherValidator;
     private readonly ILocationRequester _locationRequester = locationRequester;
 
-    public async Task<Message> SendWeatherAsync(User user, CancellationToken cancellationToken)
+    public async Task<Message> SendWeatherAsync(long userId, CancellationToken cancellationToken)
     {
-        if (!user.HasLocation())
+        var user = await _dbContext.Users
+            .Where(u => u.Id == userId)
+            .Include(u => u.CurrentLocation)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (!user!.HasLocation)
         {
-            return await _locationRequester.RequestLocation(user.Id, cancellationToken);
+            return await _locationRequester.RequestLocationAsync(user.Id, cancellationToken);
         }
 
-        var weather = _weatherService.GetWeather(user.Latitude, user.Longitude);
+        var coordinates = new Coordinates(user.CurrentLocation!.Latitude, user.CurrentLocation.Longitude);
+
+        var weather = _weatherService.GetWeather(coordinates);
 
         var validationResult = _weatherValidator.Validate(weather);
 

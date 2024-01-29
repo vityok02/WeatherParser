@@ -2,14 +2,21 @@
 
 public class User : Telegram.Bot.Types.User
 {
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
+    public ICollection<Location>? Locations { get; }
+    public Location? CurrentLocation { get; private set; }
+    public long? CurrentLocationId { get; private set; }
+    public bool HasLocation => CurrentLocation != null;
 
-    public bool HasLocation() => Latitude != 0.0 && Longitude != 0.0;
-
-    public void SetLocation(double latitude, double longitude)
+    public void SetCurrentLocation(string locationName, Coordinates coordinates)
     {
-        Latitude = latitude;
-        Longitude = longitude;
+        Location location = new(locationName, coordinates);
+
+        CurrentLocation = location;
+    }
+
+    public void SetCurrentLocation(Location location)
+    {
+        CurrentLocation = location;
+        CurrentLocationId = location.Id;
     }
 }

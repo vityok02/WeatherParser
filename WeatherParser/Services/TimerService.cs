@@ -1,10 +1,6 @@
-﻿namespace WeatherParser.Services;
+﻿using WeatherParser.Models.Interfaces;
 
-public interface ITimerService
-{
-    TimeOnly GetTimeNow();
-    bool TimeIsReady(TimeOnly runAt);
-}
+namespace WeatherParser.Services.WeatherServices;
 
 public class TimerService : ITimerService
 {

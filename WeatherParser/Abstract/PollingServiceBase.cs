@@ -1,5 +1,4 @@
-﻿
-namespace WeatherParser.Abstract;
+﻿namespace WeatherParser.Abstract;
 
 public abstract class PollingServiceBase<TReceiverService> : BackgroundService
     where TReceiverService : IReceiverService
