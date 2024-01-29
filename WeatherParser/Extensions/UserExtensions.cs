@@ -1,5 +1,5 @@
-﻿using WeatherParser.Models;
-using TelegramUser = Telegram.Bot.Types.User;
+﻿using TelegramUser = Telegram.Bot.Types.User;
+using User = WeatherParser.Models.User;
 
 namespace WeatherParser.Extensions;
 

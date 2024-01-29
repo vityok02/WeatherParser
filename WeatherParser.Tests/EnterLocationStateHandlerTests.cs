@@ -3,12 +3,13 @@ using Microsoft.Extensions.Caching.Memory;
 using NSubstitute;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using WeatherParser.Bot.Features.MessageSender;
 using WeatherParser.Data.Repositories.CacheRepositories;
-using WeatherParser.Handlers.UserStateHandlers;
+using WeatherParser.Features.Geocoding.GeocodingRecords;
+using WeatherParser.Features.GeocodingServices;
+using WeatherParser.Features.UserState;
+using WeatherParser.Features.UserState.UserStateHandlers;
 using WeatherParser.Models;
-using WeatherParser.Models.GeocodingRecords;
-using WeatherParser.Models.Interfaces;
-using WeatherParser.Services.GeocodingServices;
 
 namespace WeatherParser.Tests;
 

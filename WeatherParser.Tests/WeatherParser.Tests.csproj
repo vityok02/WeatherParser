@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherParser\WeatherParser.csproj" />
+    <ProjectReference Include="..\WeatherParser\WeatherParser.Bot.csproj" />
   </ItemGroup>
 
 </Project>

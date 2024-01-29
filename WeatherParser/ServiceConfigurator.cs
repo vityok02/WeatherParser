@@ -1,18 +1,23 @@
-﻿using WeatherParser.Actions;
-using WeatherParser.Data.Repositories;
+﻿using WeatherParser.Abstract;
+using WeatherParser.Bot;
+using WeatherParser.Bot.Bot;
+using WeatherParser.Bot.Bot.Handlers.BotCommandHandlers;
+using WeatherParser.Bot.Bot.Handlers.BotHandlers;
+using WeatherParser.Bot.Bot.Handlers.CallbackQueryHandlers;
+using WeatherParser.Bot.Bot.Services;
+using WeatherParser.Bot.Features.Location;
+using WeatherParser.Bot.Features.MessageSender;
+using WeatherParser.Bot.Features.Weather;
 using WeatherParser.Data.Repositories.CacheRepositories;
-using WeatherParser.Handlers;
-using WeatherParser.Handlers.BotHandlers;
-using WeatherParser.Handlers.CallbackQueryHandlers;
-using WeatherParser.Handlers.CommandHandlers;
-using WeatherParser.Handlers.UserStateHandlers;
+using WeatherParser.Data.Repositories.UserRepository;
+using WeatherParser.Features.GeocodingServices;
+using WeatherParser.Features.Location;
+using WeatherParser.Features.Timer;
+using WeatherParser.Features.User;
+using WeatherParser.Features.UserState;
+using WeatherParser.Features.UserState.UserStateHandlers;
+using WeatherParser.Features.Weather;
 using WeatherParser.Models;
-using WeatherParser.Models.Interfaces;
-using WeatherParser.Services;
-using WeatherParser.Services.BotServices;
-using WeatherParser.Services.GeocodingServices;
-using WeatherParser.Services.WeatherServices;
-using WeatherParser.Validators;
 
 namespace WeatherParser;
 

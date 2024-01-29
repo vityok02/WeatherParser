@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using WeatherParser;
+using WeatherParser.Bot.Bot;
+using WeatherParser.Bot.Bot.Services;
 using WeatherParser.Data;
 using WeatherParser.Extensions;
-using WeatherParser.Services;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -21,7 +22,7 @@ var host = Host.CreateDefaultBuilder(args)
 
         services.AddServices();
 
-        services.AddDbContext<AppDbContext>((options) => 
+        services.AddDbContext<AppDbContext>((options) =>
             options.UseSqlServer(context.Configuration
                 .GetConnectionString("LocalSqlServer")));
 
