@@ -5,15 +5,15 @@ namespace WeatherParser.Bot.Bot.Handlers.BotCommandHandlers;
 
 public class LocationBotCommandHandler : IBotCommandHandler
 {
-    private readonly ILocationSelectionHandler _locationSelectionHandler;
+    private readonly ISelectLocationSender _locationSelectionHandler;
 
-    public LocationBotCommandHandler(ILocationSelectionHandler locationSelectionHandler)
+    public LocationBotCommandHandler(ISelectLocationSender locationSelectionHandler)
     {
         _locationSelectionHandler = locationSelectionHandler;
     }
 
     public async Task<Message> HandleAsync(Message message, CancellationToken cancellationToken = default)
     {
-        return await _locationSelectionHandler.SendLocationSelectionMessageAsync(message, cancellationToken);
+        return await _locationSelectionHandler.SendSelectLocationMethodsAsync(message.From!.Id, cancellationToken);
     }
 }

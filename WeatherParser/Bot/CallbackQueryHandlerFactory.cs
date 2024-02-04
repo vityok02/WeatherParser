@@ -16,8 +16,8 @@ public class CallbackQueryHandlerFactory : ICallbackQueryHandlerFactory
     {
         return query switch
         {
-            CallbackDatas.Geolocation => _serviceProvider.GetRequiredService<GeolocationQueryHandler>(),
-            CallbackDatas.ByLocationName => _serviceProvider.GetRequiredService<ByLocationNameQueryHandler>(),
+            CallbackData.Geolocation => _serviceProvider.GetRequiredService<GeolocationQueryHandler>(),
+            CallbackData.ByLocationName => _serviceProvider.GetRequiredService<ByLocationNameQueryHandler>(),
             _ => default!
         };
     }

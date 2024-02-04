@@ -11,8 +11,8 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public async Task<TEntity?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
-        var entity = _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
-        return await entity;
+        var entity = await _dbContext.Set<TEntity>().FindAsync(id, cancellationToken);
+        return entity;
     }
 
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)

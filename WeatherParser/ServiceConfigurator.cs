@@ -35,7 +35,7 @@ public static class ServiceConfigurator
             .AddCacheRepositories()
             .AddScoped<ITimerService, TimerService>()
             .AddScoped<IConfigurationBuilder, ConfigurationBuilder>()
-            .AddScoped<ILocationSelectionHandler, LocationSelectionHandler>()
+            .AddScoped<ISelectLocationSender, SelectLocationMethodSender>()
             .AddScoped<IMessageSenderForLocationService, MessageSenderForLocationService>()
             .AddScoped<IUserStateService, UserStateService>()
             .AddScoped<ILocationRequester, LocationRequester>()

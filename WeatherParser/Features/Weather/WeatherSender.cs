@@ -14,14 +14,16 @@ public class WeatherSender(
     AppDbContext dbContext,
     IWeatherService weatherService,
     IValidator<Models.Weather> weatherValidator,
-    ILocationRequester locationRequester)
+    IWeatherUrlGenerator _urlGenerator,
+    ISelectLocationSender selectLocationSender)
     : IWeatherSender
 {
     private readonly ITelegramBotClient _telegramBotClient = telegramBotClient;
     private readonly AppDbContext _dbContext = dbContext;
     private readonly IWeatherService _weatherService = weatherService;
     private readonly IValidator<Models.Weather> _weatherValidator = weatherValidator;
-    private readonly ILocationRequester _locationRequester = locationRequester;
+    private readonly ISelectLocationSender _selectLocationSender = selectLocationSender;
+    private readonly IWeatherUrlGenerator _urlGenerator = _urlGenerator;
 
     public async Task<Message> SendWeatherAsync(long userId, CancellationToken cancellationToken)
     {
@@ -32,7 +34,7 @@ public class WeatherSender(
 
         if (!user!.HasLocation)
         {
-            return await _locationRequester.RequestLocationAsync(user.Id, cancellationToken);
+            return await _selectLocationSender.SendSelectLocationMethodsAsync(user.Id, cancellationToken);
         }
 
         var coordinates = new Coordinates(user.CurrentLocation!.Latitude, user.CurrentLocation.Longitude);
@@ -49,9 +51,12 @@ public class WeatherSender(
                 cancellationToken: cancellationToken);
         }
 
+        var text = $"{weather}\n" +
+            $"Learn more: {_urlGenerator.GenerateUrl(user.CurrentLocation.Latitude, user.CurrentLocation.Longitude)}";
+
         return await _telegramBotClient.SendTextMessageAsync(
             chatId: user.Id,
-            text: weather.ToString(),
+            text: text,
             cancellationToken: cancellationToken);
     }
 }

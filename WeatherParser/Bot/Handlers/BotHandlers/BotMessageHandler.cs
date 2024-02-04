@@ -77,9 +77,4 @@ public class BotMessageHandler : IBotMessageHandler
         _logger.LogInformation("Unknown update type: {UpdateType}", update.Type);
         return Task.CompletedTask;
     }
-
-    private Task HandleDefault()
-    {
-        return Task.CompletedTask;
-    }
 }
