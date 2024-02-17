@@ -21,8 +21,8 @@ internal sealed class LocationCommandHandler : ICommandHandler<LocationCommand>
 {
             new[]
             {
-                InlineKeyboardButton.WithCallbackData("Send geolocation", CallbackData.RequestLocation),
-                InlineKeyboardButton.WithCallbackData("Enter place name", CallbackData.EnterPlaceName)
+                InlineKeyboardButton.WithCallbackData("Send geolocation", CallbackData.SendGeolocationRequest),
+                InlineKeyboardButton.WithCallbackData("Enter place name", CallbackData.SendPlaceName)
             },
         });
 

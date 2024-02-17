@@ -8,10 +8,3 @@ public interface ICommandHandler<TCommand> : IRequestHandler<TCommand, Message>
 {
     Task<Message> Handle(TCommand command, CancellationToken cancellationToken);
 }
-
-public interface ICommandHandler<TCommand, TResponse>
-    : IRequestHandler<TCommand, Message>
-    where TCommand : ICommand<TResponse>
-{
-    Task<TResponse> Handle(TCommand command, CancellationToken cancellationToken);
-}

@@ -1,6 +1,9 @@
-﻿using Domain.Users;
+﻿using Application.Interfaces;
+using Domain.Users;
 using Infrastructure.Data;
+using Infrastructure.Data.Repositories;
 using Infrastructure.Data.Users;
+using Infrastructure.Geocoding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +21,9 @@ public static class DependencyInjection
 
         services.AddScoped<UserRepository>();
         services.AddScoped<IUserRepository, CachedUserRepository>();
+        services.AddScoped<ICachedUserStateRepository, CachedUserStateRepository>();
+        services.AddScoped<IGeocodingService, GeocodingService>();
+        services.AddScoped<ICachedPlacesRepository, CachedPlacesRepository>();
 
         services.AddMemoryCache();
 

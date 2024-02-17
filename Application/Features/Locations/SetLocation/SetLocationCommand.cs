@@ -2,4 +2,4 @@
 
 namespace Application.Features.Locations.SetLocation;
 
-public record SetLocationCommand(long UserId, string Text) : ICommand;
+public record SetLocationCommand(long UserId, string PlaceName) : ICommand;

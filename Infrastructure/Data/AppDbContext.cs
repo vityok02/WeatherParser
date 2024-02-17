@@ -9,11 +9,11 @@ public class AppDbContext : DbContext, IAppDbContext
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Location> Locations => Set<Location>();
+    public DbSet<Coordinates> Coordinates => Set<Coordinates>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
-
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

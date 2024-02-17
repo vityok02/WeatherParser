@@ -9,6 +9,8 @@ var host = Host.CreateDefaultBuilder(args)
     {
         services.Configure<BotConfiguration>(
             context.Configuration.GetSection(BotConfiguration.Configuration));
+        services.Configure<GeocodingConfiguration>(
+            context.Configuration.GetSection(GeocodingConfiguration.Configuration));
 
         services.AddHttpClient("telegram_bot_client")
             .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>

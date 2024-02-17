@@ -12,11 +12,6 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
-    public IQueryable<User> GetQueryable()
-    {
-        return _dbContext.Users.AsQueryable();
-    }
-
     public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Users.ToArrayAsync(cancellationToken);
@@ -25,6 +20,14 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
         return await _dbContext.Users.FindAsync(id, cancellationToken);
+    }
+
+    public async Task<User?> GetByIdWithLocationsAsync(long id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .Where(u => u.Id == id)
+            .Include(u => u.Locations)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task CreateAsync(User user, CancellationToken cancellationToken)

@@ -1,4 +1,10 @@
-﻿using Domain.Users;
+﻿using Application.Abstract;
+using Application.Constants;
+using Application.Features.CallbackQueryCommands.SendGeolocationRequestCommand;
+using Application.Features.CallbackQueryCommands.SendPlaceNameRequestCommand;
+using Application.Interfaces;
+using Domain.Users;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
 
@@ -8,23 +14,20 @@ public class CallbackQueryHandler
 {
     private readonly ILogger<CallbackQueryHandler> _logger;
     private readonly IUserRepository _userRepository;
+    private readonly ISender _sender;
 
-    public CallbackQueryHandler(ILogger<CallbackQueryHandler> logger, IUserRepository userRepository)
+    public CallbackQueryHandler(ILogger<CallbackQueryHandler> logger, IUserRepository userRepository, ISender sender, ICachedUserStateRepository cachedUserStateRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
+        _sender = sender;
     }
 
     public async Task HandleCallbackQuery(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Received inline keyboard callback from: {CallbackQueryId}", callbackQuery.Id);
 
-        var ifUserExists = await _userRepository.CheckUserExistingAsync(callbackQuery.From.Id, cancellationToken);
-
-        if (!ifUserExists)
-        {
-            await _userRepository.CreateAsync(callbackQuery.From.ToAppUser(), cancellationToken);
-        }
+        await _userRepository.EnsureCreate(callbackQuery.From.Id, callbackQuery.From.ToAppUser(), cancellationToken);
 
 
         if (callbackQuery.Data is null)
@@ -32,8 +35,17 @@ public class CallbackQueryHandler
             return;
         }
 
-        var handler = _callbackQueryHandlerFactory.GetHandler(callbackQuery.Data!);
-        await handler.HandleAsync(callbackQuery.From.Id, cancellationToken)!;
+        ICommand command = callbackQuery.Data switch
+        {
+            CallbackData.SendPlaceName => new SendPlaceNameRequestCommand(callbackQuery.From.Id),
+            CallbackData.SendGeolocationRequest => new SendGeolocationRequestCommand(callbackQuery.From.Id),
+            _ => null!
+        };
+
+        if (command is not null)
+        {
+            await _sender.Send(command, cancellationToken);
+        }
 
         await _userRepository.SaveChangesAsync(cancellationToken);
     }

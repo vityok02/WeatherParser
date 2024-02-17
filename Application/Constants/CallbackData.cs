@@ -2,6 +2,6 @@
 
 public static class CallbackData
 {
-    public const string RequestLocation = nameof(RequestLocation);
-    public const string EnterPlaceName = nameof(EnterPlaceName);
+    public const string SendGeolocationRequest = nameof(SendGeolocationRequest);
+    public const string SendPlaceName = nameof(SendPlaceName);
 }

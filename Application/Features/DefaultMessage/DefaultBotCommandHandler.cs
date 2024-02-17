@@ -3,18 +3,18 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Application.Default;
+namespace Application.Features.DefaultMessage;
 
-public record DefaultCommandHandler : ICommandHandler<DefaultCommand>
+public record DefaultBotCommandHandler : ICommandHandler<DefaultBotCommand>
 {
     private readonly ITelegramBotClient _botClient;
 
-    public DefaultCommandHandler(ITelegramBotClient telegramBotClient)
+    public DefaultBotCommandHandler(ITelegramBotClient telegramBotClient)
     {
         _botClient = telegramBotClient;
     }
 
-    public async Task<Message> Handle(DefaultCommand command, CancellationToken cancellationToken)
+    public async Task<Message> Handle(DefaultBotCommand command, CancellationToken cancellationToken)
     {
         var usageText = GetUsageText();
 

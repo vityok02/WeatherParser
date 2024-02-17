@@ -1,12 +1,12 @@
 ﻿using Application.Interfaces;
+using Infrastructure.Constants;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Application.UserStates;
+namespace Infrastructure.Data.Repositories;
 
 public class CachedUserStateRepository : ICachedUserStateRepository
 {
     private readonly IMemoryCache _memoryCache;
-    private static readonly string _salt = "user-state";
 
     public CachedUserStateRepository(IMemoryCache memoryCache)
     {
@@ -14,11 +14,11 @@ public class CachedUserStateRepository : ICachedUserStateRepository
     }
 
     public string? GetCache(long userId)
-        => _memoryCache.Get<string>($"{_salt}-{userId}");
+        => _memoryCache.Get<string>(CacheKeys.UserStateByUserId(userId));
 
     public void SetCache(long userId, string state)
-        => _memoryCache.Set($"{_salt}-{userId}", state, TimeSpan.FromMinutes(2));
+        => _memoryCache.Set(CacheKeys.UserStateByUserId(userId), state, TimeSpan.FromMinutes(2));
 
     public void RemoveCache(long userId)
-        => _memoryCache.Remove($"{_salt}-{userId}");
+        => _memoryCache.Remove(CacheKeys.UserStateByUserId(userId));
 }

@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240216155237_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,10 +36,16 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
 
+                    b.Property<long>("LocationId")
+                        .HasColumnType("bigint");
+
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId")
+                        .IsUnique();
 
                     b.ToTable("Coordinates");
                 });
@@ -49,15 +58,10 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CoordinatesId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoordinatesId");
 
                     b.ToTable("Locations");
                 });
@@ -92,15 +96,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("LocationUser");
                 });
 
-            modelBuilder.Entity("Domain.Locations.Location", b =>
+            modelBuilder.Entity("Domain.Locations.Coordinates", b =>
                 {
-                    b.HasOne("Domain.Locations.Coordinates", "Coordinates")
-                        .WithMany()
-                        .HasForeignKey("CoordinatesId")
+                    b.HasOne("Domain.Locations.Location", "Location")
+                        .WithOne("Coordinates")
+                        .HasForeignKey("Domain.Locations.Coordinates", "LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Coordinates");
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
@@ -125,6 +129,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Locations.Location", b =>
+                {
+                    b.Navigation("Coordinates");
                 });
 #pragma warning restore 612, 618
         }

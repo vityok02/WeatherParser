@@ -1,7 +1,10 @@
 ﻿using Application.Abstract;
 using Application.BotHandlers;
-using Application.Default;
+using Application.Constants;
+using Application.Features.DefaultMessage;
 using Application.Features.Locations;
+using Application.Features.Locations.EnterPlaceName;
+using Application.Features.Locations.SetLocation;
 using Application.Features.Weathers;
 using Application.Interfaces;
 using Application.Locations.SetLocationFromRequest;
@@ -47,32 +50,43 @@ public class MessageHandler
 
         var userId = message.From!.Id;
 
-        await _userRepository.EnsureCreate(userId, message.From.ToAppUser(), cancellationToken);
-
-        ICommand botCommand = message.Text!.Split(' ')[0] switch
-        {
-            BotCommand.Weather => new SendWeatherCommand(userId),
-            BotCommand.Location => new LocationCommand(userId),
-            _ => new DefaultCommand(userId)
-        };
-
-        await _sender.Send(botCommand, cancellationToken);
-
         if (message?.Location is not null)
         {
             var setLocationFromRequestCommand = new SetLocationFromRequestCommand(userId, message.Location);
             await _sender.Send(setLocationFromRequestCommand, cancellationToken);
         }
 
+        await _userRepository.EnsureCreate(userId, message!.From.ToAppUser(), cancellationToken);
+        await _userRepository.SaveChangesAsync(cancellationToken);
+
         var userState = _cachedUserStateRepository.GetCache(userId);
 
-        ICommand userStateCommand = userState switch
+        ICommand? userStateCommand = userState switch
+        {
+            UserState.EnterLocation => new EnterPlaceNameCommand(userId, message!.Text!),
+            UserState.SetLocation => new SetLocationCommand(userId, message!.Text!),
+            _ => null!
+        };
+
+        if (userStateCommand is not null)
+        {
+            await _sender.Send(userStateCommand, cancellationToken);
+            return;
+        }
+
+        ICommand? botCommand = message.Text!.Split(' ')[0] switch
         {
             BotCommand.Weather => new SendWeatherCommand(userId),
             BotCommand.Location => new LocationCommand(userId),
-            _ => new DefaultCommand(userId)
+            _ => null!
         };
 
-        await _sender.Send(userStateCommand, cancellationToken);
+        if (botCommand is not null)
+        {
+            await _sender.Send(botCommand, cancellationToken);
+            return;
+        }
+
+        await _sender.Send(new DefaultBotCommand(userId), cancellationToken);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Application.BotHandlers;
 using Application.Features.Messages;
+using Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Telegram.Bot.Types;
 
 namespace Application;
 
@@ -19,6 +21,7 @@ public static class DependencyInjection
             .AddScoped<MessageHandler>()
             .AddScoped<CallbackQueryHandler>()
             .AddScoped<DefaultHandler>()
+            .AddScoped<IValidator<Message>, MessageValidator>()
             ;
 
         return services;

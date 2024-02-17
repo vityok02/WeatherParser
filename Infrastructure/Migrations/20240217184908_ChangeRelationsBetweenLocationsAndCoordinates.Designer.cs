@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240209211903_Initial-Create")]
-    partial class InitialCreate
+    [Migration("20240217184908_ChangeRelationsBetweenLocationsAndCoordinates")]
+    partial class ChangeRelationsBetweenLocationsAndCoordinates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Locations.Location", b =>
+            modelBuilder.Entity("Domain.Locations.Coordinates", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,10 +39,28 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Coordinates");
+                });
+
+            modelBuilder.Entity("Domain.Locations.Location", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CoordinatesId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoordinatesId");
 
                     b.ToTable("Locations");
                 });
@@ -75,6 +93,17 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("LocationUser");
+                });
+
+            modelBuilder.Entity("Domain.Locations.Location", b =>
+                {
+                    b.HasOne("Domain.Locations.Coordinates", "Coordinates")
+                        .WithMany()
+                        .HasForeignKey("CoordinatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coordinates");
                 });
 
             modelBuilder.Entity("Domain.Users.User", b =>
