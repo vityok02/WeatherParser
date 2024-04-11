@@ -1,7 +1,6 @@
 ﻿using Application.Abstract;
 using Application.Constants;
-using Application.Features.CallbackQueryCommands.SendGeolocationRequestCommand;
-using Application.Features.CallbackQueryCommands.SendPlaceNameRequestCommand;
+using Application.Features.CallbackQueryCommands;
 using Application.Interfaces;
 using Domain.Users;
 using MediatR;
@@ -16,7 +15,11 @@ public class CallbackQueryHandler
     private readonly IUserRepository _userRepository;
     private readonly ISender _sender;
 
-    public CallbackQueryHandler(ILogger<CallbackQueryHandler> logger, IUserRepository userRepository, ISender sender, ICachedUserStateRepository cachedUserStateRepository)
+    public CallbackQueryHandler(
+        ILogger<CallbackQueryHandler> logger,
+        IUserRepository userRepository,
+        ISender sender,
+        IUserStateRepository cachedUserStateRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
