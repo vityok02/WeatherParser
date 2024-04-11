@@ -62,9 +62,9 @@ public class GeocodingService : IGeocodingService
         if (!response.IsSuccessStatusCode)
         {
             var responseError = JsonSerializer.Deserialize<ErrorResponse>(content, settings)!;
-            var error = new Error(responseError.StatusCode, responseError.Message);
+            var error = new Error(responseError.Message);
 
-            _logger.LogError($"Failure response. Code: {error.Code} Description: {error.Description}", error);
+            _logger.LogError(error.Description);
 
             return Result<Feature[]>
                 .Failure(error);
@@ -74,7 +74,7 @@ public class GeocodingService : IGeocodingService
         if (rootObject is null)
         {
             _logger.LogError("Deserialized object is null");
-            var error = new Error(404, "Locations not found");
+            var error = new Error("Locations not found");
 
             return Result<Feature[]>
                 .Failure(error);
@@ -84,7 +84,7 @@ public class GeocodingService : IGeocodingService
         if (features.Length == 0)
         {
             return Result<Feature[]>
-                .Failure(new(404, "Locations not found"));
+                .Failure(new("Locations not found"));
         }
 
         return Result<Feature[]>
