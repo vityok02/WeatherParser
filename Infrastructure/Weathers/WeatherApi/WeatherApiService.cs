@@ -42,6 +42,8 @@ public class WeatherApiService
             _logger.LogError("Weather is null");
             return Result<CurrentWeather>.Failure(new Error("Weather is null"));
         }
+
+        return Result<CurrentWeather>.Success(weather);
     }
 
     private async Task<Result<string>> GetResponse(HttpClient client, string path, CancellationToken cancellationToken)
