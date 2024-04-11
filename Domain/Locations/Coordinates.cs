@@ -17,4 +17,10 @@ public class Coordinates : BaseEntity
         Latitude = latitude;
         Longitude = longitude;
     }
+
+    public override string ToString()
+    {
+        return Latitude.ToString().Replace(',', '.') + ',' +
+            Longitude.ToString().Replace(',', '.');
+    }
 }
