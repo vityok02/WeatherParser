@@ -1,8 +1,7 @@
 ﻿using Application.BotHandlers;
-using Bot.Abstract;
 using Telegram.Bot;
 
-namespace Bot.Services;
+namespace Bot.Reciever;
 
 public class ReceiverService : ReceiverServiceBase<UpdateHandler>
 {

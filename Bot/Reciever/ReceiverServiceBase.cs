@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Polling;
 
-namespace Bot.Abstract;
+namespace Bot.Reciever;
 
 public class ReceiverServiceBase<TUpdateHandler> : IReceiverService
     where TUpdateHandler : IUpdateHandler

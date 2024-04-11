@@ -1,4 +1,4 @@
-﻿namespace Bot.Abstract;
+﻿namespace Bot.Reciever;
 
 public interface IReceiverService
 {

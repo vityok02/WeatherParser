@@ -1,4 +1,6 @@
-﻿namespace Bot.Abstract;
+﻿using Bot.Reciever;
+
+namespace Bot.Polling;
 
 public abstract class PollingServiceBase<TReceiverService> : BackgroundService
     where TReceiverService : IReceiverService

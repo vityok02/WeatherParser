@@ -1,6 +1,6 @@
-﻿using Bot.Abstract;
+﻿using Bot.Reciever;
 
-namespace Bot.Services;
+namespace Bot.Polling;
 
 public class PollingService : PollingServiceBase<ReceiverService>
 {
