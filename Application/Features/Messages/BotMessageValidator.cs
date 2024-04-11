@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Application.Features.Messages;
 
-public class MessageValidator : IValidator<Message>
+public class BotMessageValidator : IValidator<Message>
 {
     public ValidationResult Validate(Message message)
     {
@@ -17,11 +17,11 @@ public class MessageValidator : IValidator<Message>
         }
         if (message.From is null)
         {
-            validationResult.Errors.Add("User cannot null");
+            validationResult.Errors.Add("User cannot be null");
         }
         if (message.Text is null)
         {
-            validationResult.Errors.Add("Message text cannot be null");
+            validationResult.Errors.Add("Message text cannot be empty");
         }
 
         return validationResult;

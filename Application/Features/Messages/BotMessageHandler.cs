@@ -16,20 +16,20 @@ using BotCommand = Application.Constants.BotCommand;
 
 namespace Application.Features.Messages;
 
-public class MessageHandler
+public class BotMessageHandler
 {
     private readonly ILogger<UpdateHandler> _logger;
     private readonly IUserRepository _userRepository;
     private readonly ISender _sender;
     private readonly IValidator<Message> _validator;
-    private readonly ICachedUserStateRepository _cachedUserStateRepository;
+    private readonly IUserStateRepository _cachedUserStateRepository;
 
-    public MessageHandler(
+    public BotMessageHandler(
         ILogger<UpdateHandler> logger,
         IUserRepository userRepository,
         ISender sender,
         IValidator<Message> validator,
-        ICachedUserStateRepository cachedUserStateRepository)
+        IUserStateRepository cachedUserStateRepository)
     {
         _logger = logger;
         _userRepository = userRepository;
@@ -50,16 +50,42 @@ public class MessageHandler
 
         var userId = message.From!.Id;
 
-        if (message?.Location is not null)
-        {
-            var setLocationFromRequestCommand = new SetLocationFromRequestCommand(userId, message.Location);
-            await _sender.Send(setLocationFromRequestCommand, cancellationToken);
-        }
-
-        await _userRepository.EnsureCreate(userId, message!.From.ToAppUser(), cancellationToken);
+        await _userRepository.EnsureCreate(userId, message.From.ToAppUser(), cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
 
-        var userState = _cachedUserStateRepository.GetCache(userId);
+        await ProcessCommand(message, userId, cancellationToken);
+    }
+
+    private async Task ProcessCommand(Message message,
+        long userId,
+        CancellationToken cancellationToken)
+    {
+        ICommand? command;
+
+        if (message.Location is not null)
+        {
+            command = new SetLocationFromRequestCommand(userId, message.Location);
+        }
+        else
+        {
+            command = GetUserStateCommand(message, userId);
+            if (command is null)
+            {
+                command = GetBotCommand(message, userId);
+            }
+
+            if (command is null)
+            {
+                command = new DefaultBotCommand(userId);
+            }
+        }
+
+        await _sender.Send(command, cancellationToken);
+    }
+
+    private ICommand GetUserStateCommand(Message message, long userId)
+    {
+        var userState = _cachedUserStateRepository.GetUserState(userId);
 
         ICommand? userStateCommand = userState switch
         {
@@ -67,26 +93,16 @@ public class MessageHandler
             UserState.SetLocation => new SetLocationCommand(userId, message!.Text!),
             _ => null!
         };
+        return userStateCommand;
+    }
 
-        if (userStateCommand is not null)
-        {
-            await _sender.Send(userStateCommand, cancellationToken);
-            return;
-        }
-
-        ICommand? botCommand = message.Text!.Split(' ')[0] switch
+    private static ICommand GetBotCommand(Message message, long userId)
+    {
+        return message.Text!.Split(' ')[0] switch
         {
             BotCommand.Weather => new SendWeatherCommand(userId),
             BotCommand.Location => new LocationCommand(userId),
             _ => null!
         };
-
-        if (botCommand is not null)
-        {
-            await _sender.Send(botCommand, cancellationToken);
-            return;
-        }
-
-        await _sender.Send(new DefaultBotCommand(userId), cancellationToken);
     }
 }
