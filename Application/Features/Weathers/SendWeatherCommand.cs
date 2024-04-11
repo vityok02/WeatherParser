@@ -10,13 +10,13 @@ public sealed record SendWeatherCommand(long UserId) : ICommand;
 
 internal sealed class SendWeatherCommandHandler : ICommandHandler<SendWeatherCommand>
 {
-    private readonly ITelegramBotClient _telegramBotClient;
+    private readonly ITelegramBotClient _botClient;
     private readonly IUserRepository _userRepository;
     private readonly ISender _sender;
 
-    public SendWeatherCommandHandler(ITelegramBotClient telegramBotClient, IUserRepository userRepository, ISender sender)
+    public SendWeatherCommandHandler(ITelegramBotClient botClient, IUserRepository userRepository, ISender sender)
     {
-        _telegramBotClient = telegramBotClient;
+        _botClient = botClient;
         _userRepository = userRepository;
         _sender = sender;
     }

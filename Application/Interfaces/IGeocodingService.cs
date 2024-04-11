@@ -5,5 +5,5 @@ namespace Application.Interfaces;
 
 public interface IGeocodingService
 {
-    Task<Result<Feature[]>> GetPlacesByName(string placeName, CancellationToken cancellationToken);
+    Task<Result<Feature[]>> GetLocations(string placeName, CancellationToken cancellationToken);
 }

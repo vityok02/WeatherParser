@@ -1,5 +1,4 @@
-﻿using Domain;
-using Domain.Locations;
+﻿using Domain.Locations;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 

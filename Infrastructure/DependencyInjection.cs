@@ -21,9 +21,9 @@ public static class DependencyInjection
 
         services.AddScoped<UserRepository>();
         services.AddScoped<IUserRepository, CachedUserRepository>();
-        services.AddScoped<ICachedUserStateRepository, CachedUserStateRepository>();
+        services.AddScoped<IUserStateRepository, UserStateRepository>();
         services.AddScoped<IGeocodingService, GeocodingService>();
-        services.AddScoped<ICachedPlacesRepository, CachedPlacesRepository>();
+        services.AddScoped<IPlacesRepository, CachedPlacesRepository>();
 
         services.AddMemoryCache();
 

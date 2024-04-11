@@ -18,10 +18,10 @@ public static class DependencyInjection
 
         services
             .AddScoped<UpdateHandler>()
-            .AddScoped<MessageHandler>()
+            .AddScoped<BotMessageHandler>()
             .AddScoped<CallbackQueryHandler>()
             .AddScoped<DefaultHandler>()
-            .AddScoped<IValidator<Message>, MessageValidator>()
+            .AddScoped<IValidator<Message>, BotMessageValidator>()
             ;
 
         return services;

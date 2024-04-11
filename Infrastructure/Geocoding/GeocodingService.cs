@@ -19,7 +19,7 @@ public class GeocodingService : IGeocodingService
         _geocodingConfiguration = geocodingConfiguration;
     }
 
-    public async Task<Result<Feature[]>> GetPlacesByName(
+    public async Task<Result<Feature[]>> GetLocations(
         string locationName,
         CancellationToken cancellationToken = default)
     {
@@ -62,7 +62,7 @@ public class GeocodingService : IGeocodingService
         if (!response.IsSuccessStatusCode)
         {
             var responseError = JsonSerializer.Deserialize<ErrorResponse>(content, settings)!;
-            var error = new Error(responseError.StatusCode.ToString(), responseError.Message);
+            var error = new Error(responseError.StatusCode, responseError.Message);
 
             _logger.LogError($"Failure response. Code: {error.Code} Description: {error.Description}", error);
 
@@ -74,7 +74,7 @@ public class GeocodingService : IGeocodingService
         if (rootObject is null)
         {
             _logger.LogError("Deserialized object is null");
-            var error = new Error("404", "Locations not found");
+            var error = new Error(404, "Locations not found");
 
             return Result<Feature[]>
                 .Failure(error);
@@ -84,7 +84,7 @@ public class GeocodingService : IGeocodingService
         if (features.Length == 0)
         {
             return Result<Feature[]>
-                .Failure(new("404", "Locations not found"));
+                .Failure(new(404, "Locations not found"));
         }
 
         return Result<Feature[]>
