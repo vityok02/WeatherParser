@@ -14,15 +14,15 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 {
     private readonly ITelegramBotClient _botClient;
     private readonly IUserRepository _userRepository;
-    private readonly ICachedUserStateRepository _cachedUserStateRepository;
-    private readonly ICachedPlacesRepository _cachedPlacesRepository;
+    private readonly IUserStateRepository _cachedUserStateRepository;
+    private readonly IPlacesRepository _cachedPlacesRepository;
     private readonly ISender _sender;
 
     public SetLocationCommandHandler(
         ITelegramBotClient botClient,
         IUserRepository userRepository,
-        ICachedUserStateRepository cachedUserStateRepository,
-        ICachedPlacesRepository cachedPlacesRepository,
+        IUserStateRepository cachedUserStateRepository,
+        IPlacesRepository cachedPlacesRepository,
         ISender sender)
     {
         _botClient = botClient;
@@ -34,7 +34,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 
     public async Task<Message> Handle(SetLocationCommand command, CancellationToken cancellationToken)
     {
-        var locations = _cachedPlacesRepository.GetCache(command.UserId);
+        var locations = _cachedPlacesRepository.GetPlaces(command.UserId);
 
         if (locations is null)
         {
@@ -55,7 +55,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
         var user = await _userRepository.GetByIdWithLocationsAsync(command.UserId, cancellationToken);
         user!.SetCurrentLocation(locationToSet);
 
-        _cachedUserStateRepository.RemoveCache(command.UserId);
+        _cachedUserStateRepository.RemoveUserState(command.UserId);
 
         await _userRepository.SaveChangesAsync(cancellationToken);
 
