@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  bot:
+    image: ${DOCKER_REGISTRY-}bot
+    container_name: bot-app
+    build:
+      context: .
+      dockerfile: Bot/Dockerfile
+    environment:
+      - UseDocker=true
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: bot-db
+    restart: always
+    environment:
+      - SA_PASSWORD=yourStrong(!)Password
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./.containers/bot-db:/var/lib/sql/data 
+
