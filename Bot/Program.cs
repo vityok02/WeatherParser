@@ -1,6 +1,5 @@
 ﻿using Application;
 using Bot;
-using Bot.Services;
 using Infrastructure;
 using Telegram.Bot;
 
@@ -9,8 +8,6 @@ var host = Host.CreateDefaultBuilder(args)
     {
         services.Configure<BotConfiguration>(
             context.Configuration.GetSection(BotConfiguration.Configuration));
-        services.Configure<GeocodingConfiguration>(
-            context.Configuration.GetSection(GeocodingConfiguration.Configuration));
 
         services.AddHttpClient("telegram_bot_client")
             .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
@@ -22,12 +19,8 @@ var host = Host.CreateDefaultBuilder(args)
 
         services.AddApplication();
         services.AddInfrastructure(context.Configuration);
-
-        services.AddScoped<ReceiverService>();
-
-        services.AddHostedService<PollingService>();
+        services.AddPresentation();
     })
     .Build();
-
 
 await host.RunAsync();

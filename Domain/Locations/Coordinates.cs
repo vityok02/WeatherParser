@@ -17,4 +17,11 @@ public class Coordinates : BaseEntity
         Latitude = latitude;
         Longitude = longitude;
     }
+
+    public override string ToString()
+    {
+        return
+            $"{Longitude.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture)}," +
+            $"{Latitude.ToString("0.000000", System.Globalization.CultureInfo.InvariantCulture)}";
+    }
 }

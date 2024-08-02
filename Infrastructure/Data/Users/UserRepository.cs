@@ -27,6 +27,7 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users
             .Where(u => u.Id == id)
             .Include(u => u.Locations)
+            .ThenInclude(l => l.Coordinates)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -42,7 +43,7 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> HasLocationAsync(long id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.AnyAsync(u => u.Id == id && u.HasLocation, cancellationToken);
+        return await _dbContext.Users.AnyAsync(u => u.Id == id && u.CurrentLocation != null, cancellationToken);
     }
 
     public async Task EnsureCreate(long userId, User user, CancellationToken cancellationToken)

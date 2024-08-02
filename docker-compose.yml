@@ -12,7 +12,6 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: bot-db
-    restart: always
     environment:
       - SA_PASSWORD=yourStrong(!)Password
       - ACCEPT_EULA=Y

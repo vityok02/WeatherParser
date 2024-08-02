@@ -1,11 +1,11 @@
 ﻿using Application.Abstract;
 using Application.Features.Locations.EnterPlaceName;
 using Application.Interfaces;
+using Domain;
 using Domain.Locations;
 using Domain.Users;
 using MediatR;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Features.Locations.SetLocation;
@@ -32,7 +32,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
         _sender = sender;
     }
 
-    public async Task<Message> Handle(SetLocationCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SetLocationCommand command, CancellationToken cancellationToken)
     {
         var locations = _cachedPlacesRepository.GetCache(command.UserId);
 
@@ -59,10 +59,12 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 
         await _userRepository.SaveChangesAsync(cancellationToken);
 
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Location successfully set ✅",
             replyMarkup: new ReplyKeyboardRemove(),
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 }

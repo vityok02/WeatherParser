@@ -1,5 +1,6 @@
 ﻿using Application.Abstract;
 using Application.Interfaces;
+using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -15,12 +16,14 @@ internal class SendGeolocationRequestCommandHandler : ICommandHandler<SendGeoloc
         _botClient = botClient;
     }
 
-    public async Task<Message> Handle(SendGeolocationRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SendGeolocationRequestCommand command, CancellationToken cancellationToken)
     {
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Click the button to send your geolocation",
             replyMarkup: new ReplyKeyboardMarkup(KeyboardButton.WithRequestLocation("Send geolocation")),
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 }

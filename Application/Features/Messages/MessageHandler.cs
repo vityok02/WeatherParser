@@ -59,14 +59,13 @@ public class MessageHandler
         await _userRepository.EnsureCreate(userId, message!.From.ToAppUser(), cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
 
-        var userState = _cachedUserStateRepository.GetCache(userId);
+        await ProcessBotCommand(message, userId, cancellationToken);
+    }
 
-        ICommand? userStateCommand = userState switch
-        {
-            UserState.EnterLocation => new EnterPlaceNameCommand(userId, message!.Text!),
-            UserState.SetLocation => new SetLocationCommand(userId, message!.Text!),
-            _ => null!
-        };
+    private async Task ProcessBotCommand(Message message, long userId, CancellationToken cancellationToken)
+    {
+        var userState = _cachedUserStateRepository.GetCache(userId);
+        ICommand? userStateCommand = GetUserStateCommand(message, userId, userState);
 
         if (userStateCommand is not null)
         {
@@ -74,12 +73,7 @@ public class MessageHandler
             return;
         }
 
-        ICommand? botCommand = message.Text!.Split(' ')[0] switch
-        {
-            BotCommand.Weather => new SendWeatherCommand(userId),
-            BotCommand.Location => new LocationCommand(userId),
-            _ => null!
-        };
+        ICommand? botCommand = GetBotCommand(message, userId);
 
         if (botCommand is not null)
         {
@@ -88,5 +82,25 @@ public class MessageHandler
         }
 
         await _sender.Send(new DefaultBotCommand(userId), cancellationToken);
+    }
+
+    private static ICommand GetBotCommand(Message message, long userId)
+    {
+        return message.Text!.Split(' ')[0] switch
+        {
+            BotCommand.Weather => new SendWeatherCommand(userId),
+            BotCommand.Location => new LocationCommand(userId),
+            _ => null!
+        };
+    }
+
+    private static ICommand GetUserStateCommand(Message message, long userId, string? userState)
+    {
+        return userState switch
+        {
+            UserState.EnterLocation => new EnterPlaceNameCommand(userId, message!.Text!),
+            UserState.SetLocation => new SetLocationCommand(userId, message!.Text!),
+            _ => null!
+        };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Abstract;
+using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -14,15 +15,17 @@ public record DefaultBotCommandHandler : ICommandHandler<DefaultBotCommand>
         _botClient = telegramBotClient;
     }
 
-    public async Task<Message> Handle(DefaultBotCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DefaultBotCommand command, CancellationToken cancellationToken)
     {
         var usageText = GetUsageText();
 
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: usageText,
             replyMarkup: new ReplyKeyboardRemove(),
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 
     private static string GetUsageText()

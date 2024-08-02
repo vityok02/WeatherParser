@@ -1,6 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Constants;
 using Application.Interfaces;
+using Domain;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -17,13 +18,15 @@ internal class SendPlaceNameRequestCommandHandler : ICommandHandler<SendPlaceNam
         _cachedUserStateRepository = cachedUserStateRepository;
     }
 
-    public async Task<Message> Handle(SendPlaceNameRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SendPlaceNameRequestCommand command, CancellationToken cancellationToken)
     {
         _cachedUserStateRepository.SetCache(command.UserId, UserState.EnterLocation);
 
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Enter your place",
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 }

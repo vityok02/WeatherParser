@@ -1,7 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Constants;
+using Domain;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Features.Locations;
@@ -15,7 +15,7 @@ internal sealed class LocationCommandHandler : ICommandHandler<LocationCommand>
         _botClient = botClient;
     }
 
-    public async Task<Message> Handle(LocationCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(LocationCommand command, CancellationToken cancellationToken)
     {
         var replyMarkup = new InlineKeyboardMarkup(new[]
 {
@@ -26,10 +26,12 @@ internal sealed class LocationCommandHandler : ICommandHandler<LocationCommand>
             },
         });
 
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Select the method",
             replyMarkup: replyMarkup,
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 }

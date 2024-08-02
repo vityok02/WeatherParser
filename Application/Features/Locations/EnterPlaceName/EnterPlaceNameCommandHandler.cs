@@ -1,6 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Constants;
 using Application.Interfaces;
+using Domain;
 using Domain.CachedLocations;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -27,24 +28,28 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         _cachedPlacesRepository = cachedPlacesRepository;
     }
 
-    public async Task<Message> Handle(EnterPlaceNameCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(EnterPlaceNameCommand command, CancellationToken cancellationToken)
     {
         if (command.PlaceName.Contains('/'))
         {
             var errorMessage = "Invalid input. Please provide a valid location name.";
-            return await _botClient.SendTextMessageAsync(
+            await _botClient.SendTextMessageAsync(
                 chatId: command.UserId,
                 text: errorMessage,
                 cancellationToken: cancellationToken);
+
+            return Result.Success();
         }
 
         var result = await _geocodingService.GetPlacesByName(command.PlaceName, cancellationToken);
         if (result.IsFailure)
         {
-            return await _botClient.SendTextMessageAsync(
+            await _botClient.SendTextMessageAsync(
                 chatId: command.UserId,
                 text: result.Error.Description,
                 cancellationToken: cancellationToken);
+
+            return Result.Failure(result.Error);
         }
 
         var locations = result.Value;
@@ -56,11 +61,13 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         _cachedUserStateRepository.RemoveCache(command.UserId);
         _cachedUserStateRepository.SetCache(command.UserId, UserState.SetLocation);
 
-        return await _botClient.SendTextMessageAsync(
+        await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Select location from the list.\n" +
             "If you did not find the desired location, try entering your location again",
             replyMarkup: replyMarkup,
             cancellationToken: cancellationToken);
+
+        return Result.Success();
     }
 }

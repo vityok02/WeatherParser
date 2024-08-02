@@ -9,7 +9,6 @@ public class User : BaseEntity
     public ICollection<Location> Locations { get; } = new Collection<Location>();
     public Location? CurrentLocation { get; private set; }
     public long? CurrentLocationId { get; private set; }
-    public bool HasLocation => CurrentLocation != null;
 
     public User()
     { }
@@ -18,6 +17,8 @@ public class User : BaseEntity
     {
         Id = id;
     }
+
+    public bool HasLocation() => CurrentLocation != null;
 
     public void SetCurrentLocation(Location location)
     {

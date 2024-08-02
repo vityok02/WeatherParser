@@ -1,11 +1,11 @@
 ﻿using Application.Abstract;
-using Telegram.Bot.Types;
+using Domain;
 
 namespace Application.Features.Locations.DefaultUserState;
 
 internal class DefaultUserStateCommandHandler : ICommandHandler<DefaultUserStateCommand>
 {
-    public Task<Message> Handle(DefaultUserStateCommand command, CancellationToken cancellationToken)
+    public Task<Result> Handle(DefaultUserStateCommand command, CancellationToken cancellationToken)
     {
         // TODO:
         throw new NotImplementedException();

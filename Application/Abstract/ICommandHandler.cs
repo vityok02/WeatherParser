@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using Domain;
+using MediatR;
 using Telegram.Bot.Types;
 
 namespace Application.Abstract;
 
-public interface ICommandHandler<TCommand> : IRequestHandler<TCommand, Message>
+public interface ICommandHandler<TCommand> : IRequestHandler<TCommand, Result>
     where TCommand : ICommand
 {
-    Task<Message> Handle(TCommand command, CancellationToken cancellationToken);
+    Task<Result> Handle(TCommand command, CancellationToken cancellationToken);
 }
