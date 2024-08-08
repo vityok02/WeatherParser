@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Abstract;
 using MediatR;
 using Telegram.Bot.Types;
 

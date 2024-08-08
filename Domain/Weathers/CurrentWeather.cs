@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Domain;
+namespace Domain.Weathers;
 
-public class Weather
+public class CurrentWeather
 {
     public double? CurrentTemperature { get; private set; }
     public double? MinTemperature { get; private set; }
@@ -19,7 +19,7 @@ public class Weather
     public DateTime? ObservationTime { get; private set; } = default!;
     public string? Location { get; private set; } = default!;
 
-    public Weather(
+    public CurrentWeather(
         double? currentTemperature,
         double? windSpeed,
         string? windDirection,
@@ -30,6 +30,30 @@ public class Weather
         DateTime? observationTime)
     {
         CurrentTemperature = currentTemperature;
+        WindSpeed = windSpeed;
+        WindDirection = windDirection;
+        Humidity = humidity;
+        Cloud = cloud;
+        ConditionText = conditionText;
+        IsDay = isDay;
+        ObservationTime = observationTime;
+    }
+
+    public CurrentWeather(
+    double? currentTemperature,
+    double? maxTemperature,
+    double? minTemperature,
+    double? windSpeed,
+    string? windDirection,
+    double? humidity,
+    double? cloud,
+    string? conditionText,
+    bool? isDay,
+    DateTime? observationTime)
+    {
+        CurrentTemperature = currentTemperature;
+        MaxTemperature = maxTemperature;
+        MinTemperature = minTemperature;
         WindSpeed = windSpeed;
         WindDirection = windDirection;
         Humidity = humidity;

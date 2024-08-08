@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.WeatherApi.Response;
+﻿namespace Infrastructure.WeatherApi.Responses;
 
 public record Current(
     long Last_updated_epoch,

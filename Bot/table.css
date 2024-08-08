@@ -1,0 +1,34 @@
+﻿body {
+    background: white;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    font-size: 18px;
+    /*padding: 8px 5px;*/
+    border: 1px solid #ddd;
+}
+
+td {
+    text-align: center
+}
+
+th {
+    background-color: #333;
+    color: white;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+img {
+    width: 30px;
+}

@@ -1,5 +1,5 @@
 ﻿using Application.Abstract;
-using Domain;
+using Domain.Abstract;
 using Telegram.Bot.Types;
 
 namespace Application.Locations.SetLocationFromRequest;

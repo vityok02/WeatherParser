@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Abstract;
 
 namespace Application.Interfaces;
 

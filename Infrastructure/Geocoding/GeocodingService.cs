@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Domain;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

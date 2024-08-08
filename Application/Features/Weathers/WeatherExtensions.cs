@@ -1,12 +1,12 @@
-﻿using Domain;
-using System.Text;
+﻿using System.Text;
 using Domain.Abstract;
+using Domain.Weathers;
 
 namespace Application.Features.Weathers;
 
 public static class WeatherExtensions
 {
-    public static string ToString(this Weather weather)
+    public static string ToString(this CurrentWeather weather)
     {
         StringBuilder sb = new StringBuilder();
 

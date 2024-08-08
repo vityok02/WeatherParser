@@ -1,6 +1,8 @@
 ﻿using Application;
+using Application.Interfaces;
 using Bot;
 using Infrastructure;
+using Infrastructure.Data;
 using Telegram.Bot;
 
 var host = Host.CreateDefaultBuilder(args)
@@ -22,5 +24,17 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddPresentation();
     })
     .Build();
+
+try
+{
+    using var dbContext = host.Services.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+catch (Exception ex)
+{
+    var logger = host.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "Database was not created");
+}
+
 
 await host.RunAsync();

@@ -1,11 +1,12 @@
 ﻿using Application.Features.Weathers;
-using Domain;
+using Domain.Abstract;
 using Domain.Locations;
+using Domain.Weathers;
 using Infrastructure.WeatherApi;
-using Infrastructure.WeatherApi.Response;
+using Infrastructure.WeatherApi.Responses;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace Infrastructure.Weathers;
 
@@ -13,6 +14,7 @@ public class WeatherApiService : IWeatherApiService
 {
     private readonly HttpClient _client;
     private readonly WeatherApiConfiguration _configuration;
+    private const string PathPrefix = "/v1";
 
     public WeatherApiService(HttpClient client, IOptions<WeatherApiConfiguration> options)
     {
@@ -20,44 +22,66 @@ public class WeatherApiService : IWeatherApiService
         _configuration = options.Value;
     }
 
-    public async Task<Result<Weather>> GetCurrentWeatherAsync(Coordinates coordinates)
+    public async Task<Result<Domain.Weathers.CurrentWeather>> GetCurrentWeatherAsync(Coordinates coordinates)
     {
-        var query = new List<KeyValuePair<string, string>>
-        {
-            new("q", coordinates.ToString()),
-            new("key", _configuration.Key),
-        };
 
-        QueryBuilder qb = new QueryBuilder(query);
-        var path = "/v1/current.json";
+        QueryBuilder qb = new(
+            new List<KeyValuePair<string, string>>
+            {
+                new("q", coordinates.ToString()),
+                new("key", _configuration.Key),
+            });
 
-        var response = await _client.GetAsync(path + qb);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return Result<Weather>.Failure("Weathers.UnsuccessfulResponse", $"Status code: {response.StatusCode}");
-        }
+        var path = $"{PathPrefix}/current.json";
 
         try
         {
-            var weatherResponse = JsonSerializer
-                .Deserialize<WeatherApiResponse>(response.Content.ReadAsStringAsync().Result, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+            var weatherResponse = await _client
+                .GetFromJsonAsync<CurrentWeatherResponse>(path + qb);
 
             if (weatherResponse is null)
             {
-                return Result<Weather>.Failure("Weathers.FailedToGet", "Could not get weather from response");
+                return Result<Domain.Weathers.CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", "Could not get weather from response");
             }
 
             var weather = weatherResponse.ToWeather();
 
-            return Result<Weather>.Success(weather);
+            return Result<Domain.Weathers.CurrentWeather>.Success(weather);
         }
         catch (Exception ex)
         {
-            return Result<Weather>.Failure("Weather.FailedToGet", ex.Message);
+            return Result<Domain.Weathers.CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", ex.Message);
+        }
+    }
+
+    public async Task<Result<Forecast>> GetForecastAsync(Coordinates coordinates, int days)
+    {
+        var path = $"{PathPrefix}/forecast.json";
+
+        QueryBuilder qb = new(
+            new List<KeyValuePair<string, string>>
+            {
+                new("q", coordinates.ToString()),
+                new("days", days.ToString()),
+                new("key", _configuration.Key),
+            });
+
+        try
+        {
+            var forecastResponse = await _client.GetFromJsonAsync<ForecastResponse>(path + qb);
+
+            if (forecastResponse is null)
+            {
+                return Result<Forecast>.Failure("WeathersService.FailedToGetForecastResponse");
+            }
+
+            var forecast = forecastResponse.ToForecast();
+
+            return Result<Forecast>.Success(forecast);
+        }
+        catch (Exception ex)
+        {
+            return Result<Forecast>.Failure("WeatherService.FailedToGetForecastResponse", ex.Message);
         }
     }
 }

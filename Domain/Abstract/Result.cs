@@ -1,6 +1,4 @@
-﻿using Domain.Abstract;
-
-namespace Domain;
+﻿namespace Domain.Abstract;
 
 public class Result
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Domain;
+namespace Domain.Abstract;
 
 public class ValidationResult
 {

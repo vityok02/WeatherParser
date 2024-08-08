@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.WeatherApi.Response;
+﻿namespace Infrastructure.WeatherApi.Responses;
 
 public record Location(
     string Name,

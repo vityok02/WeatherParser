@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain;
+using Domain.Abstract;
 using Telegram.Bot.Types;
 
 namespace Application.Features.Messages;

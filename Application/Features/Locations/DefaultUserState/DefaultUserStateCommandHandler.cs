@@ -1,5 +1,5 @@
 ﻿using Application.Abstract;
-using Domain;
+using Domain.Abstract;
 
 namespace Application.Features.Locations.DefaultUserState;
 

@@ -1,7 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Features.Locations.EnterPlaceName;
 using Application.Interfaces;
-using Domain;
+using Domain.Abstract;
 using Domain.Locations;
 using Domain.Users;
 using MediatR;

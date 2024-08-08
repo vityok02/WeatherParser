@@ -1,7 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Constants;
 using Application.Interfaces;
-using Domain;
+using Domain.Abstract;
 using Domain.CachedLocations;
 using Telegram.Bot;
 using Telegram.Bot.Types;

@@ -1,6 +1,6 @@
 ﻿using Application.Abstract;
 using Application.Constants;
-using Domain;
+using Domain.Abstract;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 

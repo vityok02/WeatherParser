@@ -6,12 +6,17 @@ using Application.Features.Locations;
 using Application.Features.Locations.EnterPlaceName;
 using Application.Features.Locations.SetLocation;
 using Application.Features.Weathers;
+using Application.Features.Weathers.SendForecastToday;
+using Application.Features.Weathers.SendWeatherNow;
 using Application.Interfaces;
 using Application.Locations.SetLocationFromRequest;
+using Domain.Abstract;
+using Domain.Locations;
 using Domain.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using BotCommand = Application.Constants.BotCommand;
 
 namespace Application.Features.Messages;
@@ -57,6 +62,13 @@ public class MessageHandler
         }
 
         await _userRepository.EnsureCreate(userId, message!.From.ToAppUser(), cancellationToken);
+
+        if (!await _userRepository.HasLocationAsync(userId, cancellationToken))
+        {
+            await _sender.Send(new LocationCommand(userId), cancellationToken);
+            return;
+        }
+
         await _userRepository.SaveChangesAsync(cancellationToken);
 
         await ProcessBotCommand(message, userId, cancellationToken);
@@ -73,7 +85,8 @@ public class MessageHandler
             return;
         }
 
-        ICommand? botCommand = GetBotCommand(message, userId);
+        var user = await _userRepository.GetByIdWithLocationsAsync(userId, cancellationToken);
+        ICommand? botCommand = GetBotCommand(message, userId, user!.CurrentLocation!.Coordinates!);
 
         if (botCommand is not null)
         {
@@ -84,11 +97,12 @@ public class MessageHandler
         await _sender.Send(new DefaultBotCommand(userId), cancellationToken);
     }
 
-    private static ICommand GetBotCommand(Message message, long userId)
+    private ICommand GetBotCommand(Message message, long userId, Coordinates coordinates)
     {
         return message.Text!.Split(' ')[0] switch
         {
-            BotCommand.Weather => new SendWeatherCommand(userId),
+            BotCommand.WeatherNow => new SendWeatherNowCommand(userId, coordinates),
+            BotCommand.ForecastToday => new SendForecastTodayCommand(userId, coordinates),
             BotCommand.Location => new LocationCommand(userId),
             _ => null!
         };

@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Abstract;
 using WeatherParser.Features.Geocoding.GeocodingRecords;
 
 namespace Application.Interfaces;
