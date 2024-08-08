@@ -1,12 +1,10 @@
-﻿using Application.Features.Messages;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Bot.Messages;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
-namespace Application.BotHandlers;
+namespace Bot.BotHandlers;
 
 public class UpdateHandler : IUpdateHandler
 {
@@ -23,7 +21,7 @@ public class UpdateHandler : IUpdateHandler
 
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        // Find the best solution for the situation
+        // TODO: Find the best solution for the situation
         var handler = update switch
         {
             { Message: { } message } => _serviceProvider.GetRequiredService<MessageHandler>().HandleMessage(message, cancellationToken),

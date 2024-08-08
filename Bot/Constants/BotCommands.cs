@@ -1,4 +1,4 @@
-﻿namespace Application.Constants;
+﻿namespace Bot.Constants;
 
 public static class BotCommand
 {

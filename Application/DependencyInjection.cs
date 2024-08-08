@@ -1,5 +1,4 @@
-﻿using Application.BotHandlers;
-using Application.Features.Messages;
+﻿using Application.Features.Weathers.SendForecastToday;
 using Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Telegram.Bot.Types;
@@ -16,13 +15,7 @@ public static class DependencyInjection
             configuration
                 .RegisterServicesFromAssembly(assembly));
 
-        services
-            .AddScoped<UpdateHandler>()
-            .AddScoped<MessageHandler>()
-            .AddScoped<CallbackQueryHandler>()
-            .AddScoped<DefaultHandler>()
-            .AddScoped<IValidator<Message>, MessageValidator>()
-            ;
+        services.AddScoped<TableConverter>();
 
         return services;
     }

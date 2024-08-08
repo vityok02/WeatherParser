@@ -1,6 +1,6 @@
 ﻿using Application.Abstract;
-using Telegram.Bot.Types;
+using Domain.Locations;
 
 namespace Application.Locations.SetLocationFromRequest;
 
-public record SetLocationFromRequestCommand(long UserId, Location Location) : ICommand;
+public record SetLocationFromRequestCommand(long UserId, Coordinates Coordinates) : ICommand;

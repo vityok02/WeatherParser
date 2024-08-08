@@ -1,24 +1,22 @@
-﻿using Application.Abstract;
-using Application.Constants;
-using Domain.Abstract;
+﻿using Bot.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Features.Locations;
 
-internal sealed class LocationCommandHandler : ICommandHandler<LocationCommand>
+public sealed class LocationMethodSelector
 {
     private readonly ITelegramBotClient _botClient;
 
-    public LocationCommandHandler(ITelegramBotClient botClient)
+    public LocationMethodSelector(ITelegramBotClient botClient)
     {
         _botClient = botClient;
     }
 
-    public async Task<Result> Handle(LocationCommand command, CancellationToken cancellationToken)
+    public async Task SendChoice(long chatId, CancellationToken cancellationToken)
     {
         var replyMarkup = new InlineKeyboardMarkup(new[]
-{
+        {
             new[]
             {
                 InlineKeyboardButton.WithCallbackData("Send geolocation", CallbackData.SendGeolocationRequest),
@@ -27,11 +25,9 @@ internal sealed class LocationCommandHandler : ICommandHandler<LocationCommand>
         });
 
         await _botClient.SendTextMessageAsync(
-            chatId: command.UserId,
+            chatId: chatId,
             text: "Select the method",
             replyMarkup: replyMarkup,
             cancellationToken: cancellationToken);
-
-        return Result.Success();
     }
 }

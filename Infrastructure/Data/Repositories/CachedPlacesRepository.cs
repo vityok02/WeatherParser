@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Infrastructure.Data.Repositories;
 
-public class CachedPlacesRepository : ICachedPlacesRepository
+public class CachedPlacesRepository : IPlacesRepository
 {
     private readonly IMemoryCache _memoryCache;
 

@@ -1,20 +1,27 @@
-﻿using CoreHtmlToImage;
+﻿using Application.Interfaces;
+using CoreHtmlToImage;
 using Domain.Weathers;
 using System.Text;
-using Telegram.Bot.Types;
 
 namespace Application.Features.Weathers.SendForecastToday;
 
-public static class ConvertToTable
+public class TableConverter
 {
-    public static InputFile ToTable(Forecast forecast)
+    private readonly IAppFile _appFile;
+
+    public TableConverter(IAppFile appFile)
+    {
+        _appFile = appFile;
+    }
+
+    public IAppFile ToTable(Forecast forecast)
     {
         var hourlyForecast = forecast.DailyForecast
             .First().HourlyForecast
             .Where(h => h.Time.Hour % 3 == 0).ToArray();
 
         string table = CreateTable(hourlyForecast);
-
+        
         HtmlBuilder htmlBuilder = new();
 
         string styles = System.IO.File.ReadAllText("table.css", Encoding.UTF8);
@@ -26,17 +33,17 @@ public static class ConvertToTable
 
         Console.WriteLine(html);
 
-        InputFile file = ConvertToImage(html);
+        IAppFile file = ConvertToImage(html);
         return file;
     }
 
-    private static InputFile ConvertToImage(string html)
+    private IAppFile ConvertToImage(string html)
     {
         var converter = new HtmlConverter();
         var bytes = converter.FromHtmlString(html);
         var stream = new MemoryStream(bytes);
 
-        return InputFile.FromStream(stream);
+        return _appFile.FromStream(stream);
     }
 
     private static string CreateTable(HourlyForecast[] hourlyForecast)

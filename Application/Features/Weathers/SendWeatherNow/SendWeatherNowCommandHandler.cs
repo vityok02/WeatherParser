@@ -1,32 +1,23 @@
 ﻿using Application.Abstract;
-using Application.Features.Locations;
+using Application.Interfaces;
 using Domain.Abstract;
-using Domain.Locations;
 using Domain.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Telegram.Bot;
-
 namespace Application.Features.Weathers.SendWeatherNow;
 
 internal sealed class SendWeatherNowCommandHandler : ICommandHandler<SendWeatherNowCommand>
 {
-    private readonly ITelegramBotClient _telegramBotClient;
-    private readonly IUserRepository _userRepository;
+    private readonly IMessageSender _messageSender;
     private readonly IWeatherApiService _weatherApiService;
     private readonly ILogger<SendWeatherNowCommandHandler> _logger;
-    private readonly ISender _sender;
 
     public SendWeatherNowCommandHandler(
-        ITelegramBotClient telegramBotClient,
-        IUserRepository userRepository,
-        ISender sender,
+        IMessageSender messageSender,
         IWeatherApiService weatherApiService,
         ILogger<SendWeatherNowCommandHandler> logger)
     {
-        _telegramBotClient = telegramBotClient;
-        _userRepository = userRepository;
-        _sender = sender;
+        _messageSender = messageSender;
         _weatherApiService = weatherApiService;
         _logger = logger;
     }
@@ -43,7 +34,7 @@ internal sealed class SendWeatherNowCommandHandler : ICommandHandler<SendWeather
 
         var weather = result.Value;
 
-        await _telegramBotClient.SendTextMessageAsync(
+        await _messageSender.SendTextMessageAsync(
             chatId: command.ChatId,
             text: weather!.ToString()!,
             cancellationToken: cancellationToken);

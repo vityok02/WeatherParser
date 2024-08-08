@@ -1,40 +1,48 @@
 ﻿using Application.Abstract;
 using Application.Features.Locations.EnterPlaceName;
 using Application.Interfaces;
+using Application.Locations.SetLocationFromRequest;
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Users;
 using MediatR;
-using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Features.Locations.SetLocation;
 
 internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 {
-    private readonly ITelegramBotClient _botClient;
+    private readonly IMessageSender _messageSender;
     private readonly IUserRepository _userRepository;
-    private readonly ICachedUserStateRepository _cachedUserStateRepository;
-    private readonly ICachedPlacesRepository _cachedPlacesRepository;
+    private readonly IUserStateRepository _userStateRepository;
+    private readonly IPlacesRepository _placesRepository;
     private readonly ISender _sender;
+    private readonly IReplyKeyboardRemove _replyMarkup;
 
     public SetLocationCommandHandler(
-        ITelegramBotClient botClient,
+        IMessageSender messageSender,
         IUserRepository userRepository,
-        ICachedUserStateRepository cachedUserStateRepository,
-        ICachedPlacesRepository cachedPlacesRepository,
-        ISender sender)
+        IUserStateRepository cachedUserStateRepository,
+        IPlacesRepository cachedPlacesRepository,
+        ISender sender,
+        IReplyKeyboardRemove replyMarkup)
     {
-        _botClient = botClient;
+        _messageSender = messageSender;
         _userRepository = userRepository;
-        _cachedUserStateRepository = cachedUserStateRepository;
-        _cachedPlacesRepository = cachedPlacesRepository;
+        _userStateRepository = cachedUserStateRepository;
+        _placesRepository = cachedPlacesRepository;
         _sender = sender;
+        _replyMarkup = replyMarkup;
     }
 
     public async Task<Result> Handle(SetLocationCommand command, CancellationToken cancellationToken)
     {
-        var locations = _cachedPlacesRepository.GetCache(command.UserId);
+        if (command.CoordinatesResponse is not null)
+        {
+            return await _sender
+                .Send(new SetLocationFromRequestCommand(command.UserId, command.CoordinatesResponse));
+        }
+
+        var locations = _placesRepository.GetCache(command.UserId);
 
         if (locations is null)
         {
@@ -55,14 +63,14 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
         var user = await _userRepository.GetByIdWithLocationsAsync(command.UserId, cancellationToken);
         user!.SetCurrentLocation(locationToSet);
 
-        _cachedUserStateRepository.RemoveCache(command.UserId);
+        _userStateRepository.RemoveState(command.UserId);
 
         await _userRepository.SaveChangesAsync(cancellationToken);
 
-        await _botClient.SendTextMessageAsync(
+        await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Location successfully set ✅",
-            replyMarkup: new ReplyKeyboardRemove(),
+            replyMarkup: _replyMarkup,
             cancellationToken: cancellationToken);
 
         return Result.Success();

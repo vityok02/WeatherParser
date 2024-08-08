@@ -2,7 +2,7 @@
 using Domain.Abstract;
 using Telegram.Bot.Types;
 
-namespace Application.Features.Messages;
+namespace Bot.Messages;
 
 public class MessageValidator : IValidator<Message>
 {

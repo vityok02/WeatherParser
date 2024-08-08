@@ -2,7 +2,7 @@
 
 namespace Application.Interfaces;
 
-public interface ICachedPlacesRepository
+public interface IPlacesRepository
 {
     CachedLocation[]? GetCache(long userId);
     void SetCache(long userId, CachedLocation[] locations);

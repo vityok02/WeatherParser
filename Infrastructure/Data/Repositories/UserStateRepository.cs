@@ -4,21 +4,21 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Infrastructure.Data.Repositories;
 
-public class CachedUserStateRepository : ICachedUserStateRepository
+public class UserStateRepository : IUserStateRepository
 {
     private readonly IMemoryCache _memoryCache;
 
-    public CachedUserStateRepository(IMemoryCache memoryCache)
+    public UserStateRepository(IMemoryCache memoryCache)
     {
         _memoryCache = memoryCache;
     }
 
-    public string? GetCache(long userId)
+    public string? GetState(long userId)
         => _memoryCache.Get<string>(CacheKeys.UserStateByUserId(userId));
 
-    public void SetCache(long userId, string state)
+    public void SetState(long userId, string state)
         => _memoryCache.Set(CacheKeys.UserStateByUserId(userId), state, TimeSpan.FromMinutes(2));
 
-    public void RemoveCache(long userId)
+    public void RemoveState(long userId)
         => _memoryCache.Remove(CacheKeys.UserStateByUserId(userId));
 }

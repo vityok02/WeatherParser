@@ -1,4 +1,4 @@
-﻿using Application.BotHandlers;
+﻿using Bot.BotHandlers;
 using Bot.Abstract;
 using Telegram.Bot;
 

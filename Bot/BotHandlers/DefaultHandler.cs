@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 
-namespace Application.BotHandlers;
+namespace Bot.BotHandlers;
 
 public class DefaultHandler
 {

@@ -26,7 +26,7 @@ public class UserRepository : IUserRepository
     {
         return await _dbContext.Users
             .Where(u => u.Id == id)
-            .Include(u => u.Locations)
+            .Include(u => u.CurrentLocation)
             .ThenInclude(l => l.Coordinates)
             .FirstOrDefaultAsync(cancellationToken);
     }

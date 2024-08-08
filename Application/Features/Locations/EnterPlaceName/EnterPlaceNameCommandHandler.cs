@@ -12,20 +12,20 @@ namespace Application.Features.Locations.EnterPlaceName;
 internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameCommand>
 {
     private readonly ITelegramBotClient _botClient;
-    private readonly ICachedUserStateRepository _cachedUserStateRepository;
+    private readonly IUserStateRepository _userStateRepository;
     private readonly IGeocodingService _geocodingService;
-    private readonly ICachedPlacesRepository _cachedPlacesRepository;
+    private readonly IPlacesRepository _placesRepository;
 
     public EnterPlaceNameCommandHandler(
         ITelegramBotClient botClient,
-        ICachedUserStateRepository cachedUserStateRepository,
+        IUserStateRepository cachedUserStateRepository,
         IGeocodingService geocodingService,
-        ICachedPlacesRepository cachedPlacesRepository)
+        IPlacesRepository cachedPlacesRepository)
     {
         _botClient = botClient;
-        _cachedUserStateRepository = cachedUserStateRepository;
+        _userStateRepository = cachedUserStateRepository;
         _geocodingService = geocodingService;
-        _cachedPlacesRepository = cachedPlacesRepository;
+        _placesRepository = cachedPlacesRepository;
     }
 
     public async Task<Result> Handle(EnterPlaceNameCommand command, CancellationToken cancellationToken)
@@ -57,9 +57,9 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
 
         ReplyKeyboardMarkup replyMarkup = ReplyMarkupHelper.GetReplyKeyboardMarkup(locationsNames!);
 
-        _cachedPlacesRepository.SetCache(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
-        _cachedUserStateRepository.RemoveCache(command.UserId);
-        _cachedUserStateRepository.SetCache(command.UserId, UserState.SetLocation);
+        _placesRepository.SetCache(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
+        _userStateRepository.RemoveState(command.UserId);
+        _userStateRepository.SetState(command.UserId, UserState.SetLocation);
 
         await _botClient.SendTextMessageAsync(
             chatId: command.UserId,
