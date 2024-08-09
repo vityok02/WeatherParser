@@ -9,17 +9,12 @@
   <ItemGroup>
     <PackageReference Include="CoreHtmlToImage" Version="1.0.5" />
     <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Converter\" />
-    <Folder Include="Builders\" />
   </ItemGroup>
 
 </Project>

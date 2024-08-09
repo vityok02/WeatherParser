@@ -1,5 +1,6 @@
 ﻿using Application;
 using Bot;
+using Bot.Configurations;
 using Bot.Extensions;
 using Infrastructure;
 using Infrastructure.Data;

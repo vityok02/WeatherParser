@@ -5,18 +5,18 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.Services;
 
-public class GetLocationRequest
+public class LocationRequestHandler
 {
     private readonly ITelegramBotClient _botClient;
     private readonly IUserStateRepository _userStateRepository;
 
-    public GetLocationRequest(ITelegramBotClient botClient, IUserStateRepository userStateRepository)
+    public LocationRequestHandler(ITelegramBotClient botClient, IUserStateRepository userStateRepository)
     {
         _botClient = botClient;
         _userStateRepository = userStateRepository;
     }
 
-    public async Task GetLocationAsync(long userId, CancellationToken cancellationToken)
+    public async Task RequestLocation(long userId, CancellationToken cancellationToken)
     {
         _userStateRepository.SetState(userId, UserState.SetLocation);
 

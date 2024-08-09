@@ -1,4 +1,4 @@
-﻿namespace Bot;
+﻿namespace Bot.Configurations;
 
 public record BotConfiguration
 {

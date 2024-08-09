@@ -1,6 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Features.Locations.EnterPlaceName;
 using Application.Interfaces;
+using Application.Interfaces.ReplyMarkup;
 using Application.Locations.SetLocationFromRequest;
 using Domain.Abstract;
 using Domain.Locations;

@@ -41,7 +41,7 @@ public class TableConverter
             .AddHtml(table)
             .Build();
 
-        _logger.LogInformation(html);
+        _logger.LogInformation($"Created html code\n{html}");
 
         return _converter.ConvertToImage(html);
     }

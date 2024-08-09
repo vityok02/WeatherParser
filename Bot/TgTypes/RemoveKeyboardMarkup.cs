@@ -1,4 +1,4 @@
-﻿using Application.Features.Locations.EnterPlaceName;
+﻿using Application.Interfaces.ReplyMarkup;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.TgTypes;

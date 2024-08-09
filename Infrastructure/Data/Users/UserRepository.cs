@@ -48,11 +48,13 @@ public class UserRepository : IUserRepository
 
     public async Task EnsureCreate(long userId, User user, CancellationToken cancellationToken)
     {
-        var isUserExist = await _dbContext.Users.AnyAsync(u => u.Id == userId, cancellationToken);
+        var users = _dbContext.Users.AsNoTracking();
+
+        var isUserExist = await users.AnyAsync(u => u.Id == userId, cancellationToken);
 
         if (!isUserExist)
         {
-            await _dbContext.Users.AddAsync(user, cancellationToken);
+            await CreateAsync(user, cancellationToken);
         }
     }
 }

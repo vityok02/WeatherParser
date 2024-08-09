@@ -22,6 +22,7 @@ public class MessageHandler
     private readonly IValidator<Message> _validator;
     private readonly IUserStateRepository _userStateRepository;
     private readonly IServiceProvider _sp;
+    private readonly LocationRequestHandler _locationRequestHandler;
 
     public MessageHandler(
         ILogger<MessageHandler> logger,
@@ -29,7 +30,8 @@ public class MessageHandler
         ISender sender,
         IValidator<Message> validator,
         IUserStateRepository userStateRepository,
-        IServiceProvider sp)
+        IServiceProvider sp,
+        LocationRequestHandler locationRequestHandler)
     {
         _logger = logger;
         _userRepository = userRepository;
@@ -37,6 +39,7 @@ public class MessageHandler
         _validator = validator;
         _userStateRepository = userStateRepository;
         _sp = sp;
+        _locationRequestHandler = locationRequestHandler;
     }
 
     public async Task HandleMessage(Message message, CancellationToken cancellationToken)
@@ -51,17 +54,11 @@ public class MessageHandler
 
         var userId = message.From!.Id;
 
-        //if (message?.Location is not null)
-        //{
-        //    var setLocationFromRequestCommand = new SetLocationFromRequestCommand(userId, message.Location);
-        //    await _sender.Send(setLocationFromRequestCommand, cancellationToken);
-        //}
-
-        await _userRepository.EnsureCreate(userId, message!.From.ToAppUser(), cancellationToken);
+        await _userRepository.EnsureCreate(userId, new Domain.Users.User(userId), cancellationToken);
 
         if (!await _userRepository.HasLocationAsync(userId, cancellationToken))
         {
-            //await SendLocationChoice(userId, cancellationToken);
+            await _locationRequestHandler.RequestLocation(userId, cancellationToken);
 
             return;
         }
@@ -70,12 +67,6 @@ public class MessageHandler
 
         await ProcessBotCommand(message, userId, cancellationToken);
     }
-
-    //private async Task SendLocationChoice(long userId, CancellationToken cancellationToken)
-    //{
-    //    var locationMethodSelector = _sp.GetRequiredService<LocationMethodSelector>();
-    //    await locationMethodSelector.SendChoice(userId, cancellationToken);
-    //}
 
     private async Task ProcessBotCommand(Message message, long userId, CancellationToken cancellationToken)
     {
@@ -96,23 +87,13 @@ public class MessageHandler
             return;
         }
 
-        //ICommand? userStateCommand = GetUserStateCommand(message, userId, userState);
-
-        //if (userStateCommand is not null)
-        //{
-        //    await _sender.Send(userStateCommand, cancellationToken);
-        //    return;
-        //}
-
         var user = await _userRepository.GetByIdWithLocationsAsync(userId, cancellationToken);
         ICommand? botCommand = GetBotCommand(message, userId, user!.CurrentLocation!.Coordinates!);
 
         if (message.Text == BotCommand.Location)
         {
-            var getLocationRequest = _sp.GetRequiredService<GetLocationRequest>();
-            await getLocationRequest.GetLocationAsync(userId, cancellationToken);
+            await _locationRequestHandler.RequestLocation(userId, cancellationToken);
             return;
-            //await SendLocationChoice(userId, cancellationToken);
         }
 
         if (botCommand is not null)
@@ -137,14 +118,4 @@ public class MessageHandler
             _ => null!
         };
     }
-
-    //private static ICommand GetUserStateCommand(Message message, long userId, string? userState)
-    //{
-    //    return userState switch
-    //    {
-    //        UserState.EnterLocation => new EnterPlaceNameCommand(userId, message!.Text!),
-    //        UserState.SetLocation => new SetLocationCommand(userId, message!.Text!),
-    //        _ => null!
-    //    };
-    //}
 }

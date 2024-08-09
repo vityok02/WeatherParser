@@ -1,6 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Constants;
 using Application.Interfaces;
+using Application.Interfaces.ReplyMarkup;
 using Domain.Abstract;
 using Domain.CachedLocations;
 
@@ -70,17 +71,4 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
 
         return Result.Success();
     }
-}
-
-
-public interface IKeyboardMarkup : IAppReplyMarkup;
-
-public interface IKeyboardMarkupGenerator
-{
-    IAppReplyMarkup BuildKeyboard(string[] elements);
-}
-
-public interface IRemoveKeyboardMarkup : IAppReplyMarkup
-{
-
 }
