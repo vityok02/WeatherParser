@@ -3,7 +3,7 @@ using Application.Interfaces;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Bot;
+namespace Bot.Services;
 
 public class GetLocationRequest
 {

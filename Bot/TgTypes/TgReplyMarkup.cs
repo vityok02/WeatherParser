@@ -3,7 +3,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.TgTypes;
 
-public class TgReplyMarkup : IApplicationReplyMarkup, IReplyMarkup
+public class TgReplyMarkup : IAppReplyMarkup, IReplyMarkup
 {
     private ReplyKeyboardMarkup ReplyKeyboardMarkup { get; }
 

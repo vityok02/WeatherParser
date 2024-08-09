@@ -5,11 +5,11 @@ using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Data.Users;
 using Infrastructure.Geocoding;
+using Infrastructure.Services;
 using Infrastructure.Weathers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure;
 
@@ -44,11 +44,12 @@ public static class DependencyInjection
         services.Configure<WeatherApiConfiguration>(
             configuration.GetSection(WeatherApiConfiguration.Configuration));
 
-        services.AddScoped<UserRepository>();
-        services.AddScoped<IUserRepository, CachedUserRepository>();
-        services.AddScoped<IUserStateRepository, UserStateRepository>();
-        services.AddScoped<IGeocodingService, GeocodingService>();
-        services.AddScoped<IPlacesRepository, CachedPlacesRepository>();
+        services.AddScoped<UserRepository>()
+            .AddScoped<IUserRepository, CachedUserRepository>()
+            .AddScoped<IUserStateRepository, UserStateRepository>()
+            .AddScoped<IGeocodingService, GeocodingService>()
+            .AddScoped<IPlacesRepository, CachedPlacesRepository>()
+            .AddScoped<IStyleLoader, StyleLoader>();
 
         services.AddMemoryCache();
 

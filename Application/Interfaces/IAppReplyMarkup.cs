@@ -1,5 +1,5 @@
 ﻿namespace Application.Interfaces;
 
-public interface IApplicationReplyMarkup
+public interface IAppReplyMarkup
 {
 }

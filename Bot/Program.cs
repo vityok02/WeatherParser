@@ -1,6 +1,6 @@
 ﻿using Application;
-using Application.Interfaces;
 using Bot;
+using Bot.Extensions;
 using Infrastructure;
 using Infrastructure.Data;
 using Telegram.Bot;

@@ -1,8 +1,8 @@
 ﻿using Application.Abstract;
 using Application.Interfaces;
+using Application.Services;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types;
 
 namespace Application.Features.Weathers.SendForecastToday;
 

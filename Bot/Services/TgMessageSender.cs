@@ -1,33 +1,42 @@
 ﻿using Application.Interfaces;
+using Bot.TgTypes;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Bot.TgTypes;
+namespace Bot.Services;
 internal class TgMessageSender : IMessageSender
 {
     private readonly ITelegramBotClient _botClient;
+    private readonly TelegramFileAdapter _fileAdapter;
 
-    public TgMessageSender(ITelegramBotClient botClient)
+    public TgMessageSender(ITelegramBotClient botClient, TelegramFileAdapter fileAdapter)
     {
         _botClient = botClient;
+        _fileAdapter = fileAdapter;
     }
 
-    public async Task SendPhotoAsync(long chatId, IAppFile photo, CancellationToken cancellationToken)
+    public async Task SendPhotoAsync(long chatId, IFile photo, CancellationToken cancellationToken)
     {
         await _botClient.SendPhotoAsync(
             chatId: chatId,
-            photo: (TgFile)photo,
+            photo: _fileAdapter.ConvertToTelegramFile(photo),
             cancellationToken: cancellationToken);
     }
 
     public async Task SendTextMessageAsync(
-        long chatId, string text, IApplicationReplyMarkup replyMarkup, CancellationToken cancellationToken)
+        long chatId, string text, IAppReplyMarkup replyMarkup, CancellationToken cancellationToken)
     {
+        IReplyMarkup? telegramReplyMarkup = replyMarkup switch
+        {
+            KeyboardMarkup km => km.TelegramReplyKeyboardMarkup,
+            RemoveKeyboardMarkup rkm => rkm.ReplyKeyboardRemove,
+            _ => new ReplyKeyboardRemove()
+        };
+
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
             text: text,
-            replyMarkup: (IReplyMarkup)replyMarkup,
+            replyMarkup: telegramReplyMarkup,
             cancellationToken: cancellationToken);
     }
 

@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Converter\" />
+    <Folder Include="Builders\" />
+  </ItemGroup>
+
 </Project>

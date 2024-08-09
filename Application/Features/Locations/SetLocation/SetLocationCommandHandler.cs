@@ -16,7 +16,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
     private readonly IUserStateRepository _userStateRepository;
     private readonly IPlacesRepository _placesRepository;
     private readonly ISender _sender;
-    private readonly IReplyKeyboardRemove _replyMarkup;
+    private readonly IRemoveKeyboardMarkup _replyMarkup;
 
     public SetLocationCommandHandler(
         IMessageSender messageSender,
@@ -24,7 +24,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
         IUserStateRepository cachedUserStateRepository,
         IPlacesRepository cachedPlacesRepository,
         ISender sender,
-        IReplyKeyboardRemove replyMarkup)
+        IRemoveKeyboardMarkup replyMarkup)
     {
         _messageSender = messageSender;
         _userRepository = userRepository;

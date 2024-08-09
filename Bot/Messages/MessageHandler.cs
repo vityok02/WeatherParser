@@ -1,11 +1,11 @@
 ﻿using Application.Abstract;
 using Application.Constants;
-using Application.Features.Locations;
 using Application.Features.Locations.SetLocation;
 using Application.Features.Weathers.SendForecastToday;
 using Application.Features.Weathers.SendWeatherNow;
 using Application.Interfaces;
 using Bot.BotHandlers;
+using Bot.Services;
 using Domain.Locations;
 using Domain.Users;
 using MediatR;
@@ -20,7 +20,7 @@ public class MessageHandler
     private readonly IUserRepository _userRepository;
     private readonly ISender _sender;
     private readonly IValidator<Message> _validator;
-    private readonly IUserStateRepository _cachedUserStateRepository;
+    private readonly IUserStateRepository _userStateRepository;
     private readonly IServiceProvider _sp;
 
     public MessageHandler(
@@ -28,14 +28,14 @@ public class MessageHandler
         IUserRepository userRepository,
         ISender sender,
         IValidator<Message> validator,
-        IUserStateRepository cachedUserStateRepository,
+        IUserStateRepository userStateRepository,
         IServiceProvider sp)
     {
         _logger = logger;
         _userRepository = userRepository;
         _sender = sender;
         _validator = validator;
-        _cachedUserStateRepository = cachedUserStateRepository;
+        _userStateRepository = userStateRepository;
         _sp = sp;
     }
 
@@ -61,7 +61,7 @@ public class MessageHandler
 
         if (!await _userRepository.HasLocationAsync(userId, cancellationToken))
         {
-            await SendLocationChoice(userId, cancellationToken);
+            //await SendLocationChoice(userId, cancellationToken);
 
             return;
         }
@@ -71,15 +71,15 @@ public class MessageHandler
         await ProcessBotCommand(message, userId, cancellationToken);
     }
 
-    private async Task SendLocationChoice(long userId, CancellationToken cancellationToken)
-    {
-        var locationMethodSelector = _sp.GetRequiredService<LocationMethodSelector>();
-        await locationMethodSelector.SendChoice(userId, cancellationToken);
-    }
+    //private async Task SendLocationChoice(long userId, CancellationToken cancellationToken)
+    //{
+    //    var locationMethodSelector = _sp.GetRequiredService<LocationMethodSelector>();
+    //    await locationMethodSelector.SendChoice(userId, cancellationToken);
+    //}
 
     private async Task ProcessBotCommand(Message message, long userId, CancellationToken cancellationToken)
     {
-        var userState = _cachedUserStateRepository.GetState(userId);
+        var userState = _userStateRepository.GetState(userId);
 
         if (userState == UserState.SetLocation)
         {

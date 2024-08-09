@@ -1,14 +1,27 @@
 ﻿using Application.Abstract;
+using Application.Interfaces;
 using Domain.Abstract;
-using Telegram.Bot.Types;
 
 namespace Application.Locations.SetLocationFromRequest;
 
-internal class SetLocationFromRequestCommandHandler : ICommandHandler<SetLocationFromRequestCommand>
+internal sealed class SetLocationFromRequestCommandHandler : ICommandHandler<SetLocationFromRequestCommand>
 {
-    public Task<Result> Handle(SetLocationFromRequestCommand command, CancellationToken cancellationToken)
+    private readonly IMessageSender _messageSender;
+
+    public SetLocationFromRequestCommandHandler(IMessageSender messageSender)
+    {
+        _messageSender = messageSender;
+    }
+
+    public async Task<Result> Handle(SetLocationFromRequestCommand command, CancellationToken cancellationToken)
     {
         // TODO:
-        throw new NotImplementedException();
+        await _messageSender.SendTextMessageAsync(
+            command.UserId,
+            "Location successfully set",
+            cancellationToken);
+
+        return Result.Success();
+        //throw new NotImplementedException();
     }
 }

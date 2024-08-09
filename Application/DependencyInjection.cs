@@ -1,7 +1,9 @@
-﻿using Application.Features.Weathers.SendForecastToday;
+﻿using Application.Abstract;
 using Application.Interfaces;
+using Application.Services;
+using Application.Services.HtmlProcessing;
+using CoreHtmlToImage;
 using Microsoft.Extensions.DependencyInjection;
-using Telegram.Bot.Types;
 
 namespace Application;
 
@@ -15,7 +17,15 @@ public static class DependencyInjection
             configuration
                 .RegisterServicesFromAssembly(assembly));
 
-        services.AddScoped<TableConverter>();
+        services
+            .AddScoped<TableConverter>()
+            .AddScoped<IFile, FileWrapper>()
+            .AddScoped<ForecastTableGenerator>()
+            .AddScoped<HtmlBuilder>()
+            .AddScoped<HtmlToImageConverter>()
+            .AddScoped<HtmlTableBuilder>()
+            .AddScoped<HtmlConverter>()
+            ;
 
         return services;
     }

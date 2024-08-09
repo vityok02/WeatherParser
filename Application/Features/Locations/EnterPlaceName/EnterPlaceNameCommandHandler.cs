@@ -3,29 +3,29 @@ using Application.Constants;
 using Application.Interfaces;
 using Domain.Abstract;
 using Domain.CachedLocations;
-using Telegram.Bot;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Application.Features.Locations.EnterPlaceName;
 
 internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameCommand>
 {
-    private readonly ITelegramBotClient _botClient;
+    private readonly IMessageSender _messageSender;
     private readonly IUserStateRepository _userStateRepository;
     private readonly IGeocodingService _geocodingService;
     private readonly IPlacesRepository _placesRepository;
+    private readonly IKeyboardMarkupGenerator _keyboardMarkupGenerator;
 
     public EnterPlaceNameCommandHandler(
-        ITelegramBotClient botClient,
+        IMessageSender messageSender,
         IUserStateRepository cachedUserStateRepository,
         IGeocodingService geocodingService,
-        IPlacesRepository cachedPlacesRepository)
+        IPlacesRepository cachedPlacesRepository,
+        IKeyboardMarkupGenerator keyboardMarkupGenerator)
     {
-        _botClient = botClient;
+        _messageSender = messageSender;
         _userStateRepository = cachedUserStateRepository;
         _geocodingService = geocodingService;
         _placesRepository = cachedPlacesRepository;
+        _keyboardMarkupGenerator = keyboardMarkupGenerator;
     }
 
     public async Task<Result> Handle(EnterPlaceNameCommand command, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         if (command.PlaceName.Contains('/'))
         {
             var errorMessage = "Invalid input. Please provide a valid location name.";
-            await _botClient.SendTextMessageAsync(
+            await _messageSender.SendTextMessageAsync(
                 chatId: command.UserId,
                 text: errorMessage,
                 cancellationToken: cancellationToken);
@@ -44,7 +44,7 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         var result = await _geocodingService.GetPlacesByName(command.PlaceName, cancellationToken);
         if (result.IsFailure)
         {
-            await _botClient.SendTextMessageAsync(
+            await _messageSender.SendTextMessageAsync(
                 chatId: command.UserId,
                 text: result.Error.Description,
                 cancellationToken: cancellationToken);
@@ -55,13 +55,13 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         var locations = result.Value;
         var locationsNames = locations!.Select(l => l.FullPlaceName).ToArray();
 
-        ReplyKeyboardMarkup replyMarkup = ReplyMarkupHelper.GetReplyKeyboardMarkup(locationsNames!);
+        IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator.BuildKeyboard(locationsNames!);
 
         _placesRepository.SetCache(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
         _userStateRepository.RemoveState(command.UserId);
         _userStateRepository.SetState(command.UserId, UserState.SetLocation);
 
-        await _botClient.SendTextMessageAsync(
+        await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,
             text: "Select location from the list.\n" +
             "If you did not find the desired location, try entering your location again",
@@ -70,4 +70,17 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
 
         return Result.Success();
     }
+}
+
+
+public interface IKeyboardMarkup : IAppReplyMarkup;
+
+public interface IKeyboardMarkupGenerator
+{
+    IAppReplyMarkup BuildKeyboard(string[] elements);
+}
+
+public interface IRemoveKeyboardMarkup : IAppReplyMarkup
+{
+
 }

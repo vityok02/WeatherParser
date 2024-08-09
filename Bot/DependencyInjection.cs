@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Features.Locations.EnterPlaceName;
+using Application.Interfaces;
 using Bot.BotHandlers;
 using Bot.Messages;
 using Bot.Services;
@@ -21,9 +22,10 @@ public static class DependencyInjection
             .AddScoped<IMessageSender, TgMessageSender>()
             .AddScoped<GetLocationRequest>()
             .AddScoped<DefaultMessageHandler>()
-            .AddScoped<IApplicationReplyMarkup, TgReplyMarkup>()
-            .AddScoped<IReplyKeyboardRemove, TgRemoveKeyboardMarkup>()
-            .AddScoped<IAppFile, TgFile>()
+            .AddScoped<IAppReplyMarkup, TgReplyMarkup>()
+            .AddScoped<TelegramFileAdapter>()
+            .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()
+            .AddScoped<IRemoveKeyboardMarkup, RemoveKeyboardMarkup>()
             ;
 
         return services;

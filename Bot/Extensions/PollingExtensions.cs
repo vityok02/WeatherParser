@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace Bot;
+namespace Bot.Extensions;
 
 public static class PollingExtensions
 {
