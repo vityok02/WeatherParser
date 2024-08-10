@@ -2,4 +2,4 @@
 
 namespace Application.Features.Locations.DefaultUserState;
 
-public record DefaultUserStateCommand() : ICommand;
+public record DefaultCommand(long ChatId) : ICommand;

@@ -1,5 +1,5 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
-using Application.Interfaces.ReplyMarkup;
+using Application.Abstract;
 
 namespace Bot
 {

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Abstract;
 using Domain.Abstract;
 using Telegram.Bot.Types;
 
@@ -17,7 +17,7 @@ public class MessageValidator : IValidator<Message>
         }
         if (message.From is null)
         {
-            validationResult.Errors.Add("User cannot null");
+            validationResult.Errors.Add("User cannot be null");
         }
         if (message.Text is null)
         {

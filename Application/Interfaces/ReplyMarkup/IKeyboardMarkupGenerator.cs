@@ -1,4 +1,6 @@
-﻿namespace Application.Interfaces.ReplyMarkup;
+﻿using Application.Abstract;
+
+namespace Application.Interfaces.ReplyMarkup;
 
 public interface IKeyboardMarkupGenerator
 {

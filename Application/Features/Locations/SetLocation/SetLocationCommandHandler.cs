@@ -3,6 +3,7 @@ using Application.Features.Locations.EnterPlaceName;
 using Application.Interfaces;
 using Application.Interfaces.ReplyMarkup;
 using Application.Locations.SetLocationFromRequest;
+using Application.Messaging;
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Users;
@@ -10,7 +11,7 @@ using MediatR;
 
 namespace Application.Features.Locations.SetLocation;
 
-internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
+internal sealed class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 {
     private readonly IMessageSender _messageSender;
     private readonly IUserRepository _userRepository;
@@ -37,13 +38,7 @@ internal class SetLocationCommandHandler : ICommandHandler<SetLocationCommand>
 
     public async Task<Result> Handle(SetLocationCommand command, CancellationToken cancellationToken)
     {
-        if (command.CoordinatesResponse is not null)
-        {
-            return await _sender
-                .Send(new SetLocationFromRequestCommand(command.UserId, command.CoordinatesResponse));
-        }
-
-        var locations = _placesRepository.GetCache(command.UserId);
+        var locations = _placesRepository.GetPlaces(command.UserId);
 
         if (locations is null)
         {

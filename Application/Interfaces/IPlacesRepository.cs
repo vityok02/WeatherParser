@@ -4,7 +4,7 @@ namespace Application.Interfaces;
 
 public interface IPlacesRepository
 {
-    CachedLocation[]? GetCache(long userId);
-    void SetCache(long userId, CachedLocation[] locations);
-    void RemoveCache(long userId);
+    CachedLocation[]? GetPlaces(long userId);
+    void SetPlaces(long userId, CachedLocation[] locations);
+    void RemovePlaces(long userId);
 }

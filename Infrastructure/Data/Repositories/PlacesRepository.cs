@@ -5,21 +5,21 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Infrastructure.Data.Repositories;
 
-public class CachedPlacesRepository : IPlacesRepository
+public class PlacesRepository : IPlacesRepository
 {
     private readonly IMemoryCache _memoryCache;
 
-    public CachedPlacesRepository(IMemoryCache memoryCache)
+    public PlacesRepository(IMemoryCache memoryCache)
     {
         _memoryCache = memoryCache;
     }
 
-    public CachedLocation[]? GetCache(long userId)
+    public CachedLocation[]? GetPlaces(long userId)
         => _memoryCache.Get<CachedLocation[]>(CacheKeys.PlacesByUserId(userId));
 
-    public void SetCache(long userId, CachedLocation[] locations)
+    public void SetPlaces(long userId, CachedLocation[] locations)
         => _memoryCache.Set(CacheKeys.PlacesByUserId(userId), locations, TimeSpan.FromMinutes(2));
 
-    public void RemoveCache(long userId)
+    public void RemovePlaces(long userId)
         => _memoryCache.Remove(CacheKeys.PlacesByUserId(userId));
 }

@@ -3,4 +3,4 @@ using Domain.Locations;
 
 namespace Application.Locations.SetLocationFromRequest;
 
-public record SetLocationFromRequestCommand(long UserId, Coordinates Coordinates) : ICommand;
+public record SetSharedLocationCommand(long UserId, Coordinates Coordinates) : ICommand;

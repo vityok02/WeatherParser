@@ -1,5 +1,5 @@
 ﻿using Application.Abstract;
-using Application.Interfaces;
+using Application.Messaging;
 using Domain.Abstract;
 using Domain.Users;
 using MediatR;

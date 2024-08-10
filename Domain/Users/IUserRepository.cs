@@ -8,5 +8,5 @@ public interface IUserRepository
     Task CreateAsync(User user, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
     Task<bool> HasLocationAsync(long Id, CancellationToken cancellationToken);
-    Task EnsureCreate(long userId, User user, CancellationToken cancellationToken);
+    Task EnsureCreate(long userId, CancellationToken cancellationToken);
 }

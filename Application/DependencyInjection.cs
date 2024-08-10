@@ -1,6 +1,8 @@
 ﻿using Application.Abstract;
 using Application.Interfaces;
 using Application.Services;
+using Application.Services.Commands;
+using Application.Services.Commands.Strategy;
 using Application.Services.HtmlProcessing;
 using CoreHtmlToImage;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,13 @@ public static class DependencyInjection
             .AddScoped<HtmlToImageConverter>()
             .AddScoped<HtmlTableBuilder>()
             .AddScoped<HtmlConverter>()
+            .AddScoped<ICommandStrategy, BotCommandStrategy>()
+            .AddScoped<ICommandStrategy, LocationRequestStrategy>()
+            .AddScoped<ICommandStrategy, SetSharedLocationStrategy>()
+            .AddScoped<ICommandStrategy, UserStateStrategy>()
+            .AddScoped<ICommandFactory, CommandFactory>()
+            .AddScoped<ICommandProcessor, CommandProcessor>()
+            .AddScoped<CommandFactory>()
             ;
 
         return services;

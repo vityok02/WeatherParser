@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Common.Constants;
 using Infrastructure.Constants;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -13,10 +14,10 @@ public class UserStateRepository : IUserStateRepository
         _memoryCache = memoryCache;
     }
 
-    public string? GetState(long userId)
-        => _memoryCache.Get<string>(CacheKeys.UserStateByUserId(userId));
+    public UserState? GetState(long userId)
+        => _memoryCache.Get<UserState>(CacheKeys.UserStateByUserId(userId));
 
-    public void SetState(long userId, string state)
+    public void SetState(long userId, UserState state)
         => _memoryCache.Set(CacheKeys.UserStateByUserId(userId), state, TimeSpan.FromMinutes(2));
 
     public void RemoveState(long userId)

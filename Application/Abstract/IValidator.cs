@@ -1,6 +1,6 @@
 ﻿using Domain.Abstract;
 
-namespace Application.Interfaces;
+namespace Application.Abstract;
 
 public interface IValidator<T> where T : class
 {

@@ -1,22 +1,22 @@
 ﻿using Application.Abstract;
-using Application.Interfaces;
+using Application.Messaging;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Locations.SetLocationFromRequest;
 
-internal sealed class SetLocationFromRequestCommandHandler : ICommandHandler<SetLocationFromRequestCommand>
+internal sealed class SetSharedLocationCommandHandler : ICommandHandler<SetSharedLocationCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly ILogger<SetLocationFromRequestCommandHandler> _logger;
+    private readonly ILogger<SetSharedLocationCommandHandler> _logger;
 
-    public SetLocationFromRequestCommandHandler(IMessageSender messageSender, ILogger<SetLocationFromRequestCommandHandler> logger)
+    public SetSharedLocationCommandHandler(IMessageSender messageSender, ILogger<SetSharedLocationCommandHandler> logger)
     {
         _messageSender = messageSender;
         _logger = logger;
     }
 
-    public async Task<Result> Handle(SetLocationFromRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SetSharedLocationCommand command, CancellationToken cancellationToken)
     {
         // TODO:
         await _messageSender.SendTextMessageAsync(

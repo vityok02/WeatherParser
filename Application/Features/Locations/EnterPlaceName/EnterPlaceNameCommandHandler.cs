@@ -1,7 +1,8 @@
 ﻿using Application.Abstract;
-using Application.Constants;
 using Application.Interfaces;
 using Application.Interfaces.ReplyMarkup;
+using Application.Messaging;
+using Common.Constants;
 using Domain.Abstract;
 using Domain.CachedLocations;
 
@@ -58,7 +59,7 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
 
         IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator.BuildKeyboard(locationsNames!);
 
-        _placesRepository.SetCache(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
+        _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
         _userStateRepository.RemoveState(command.UserId);
         _userStateRepository.SetState(command.UserId, UserState.SetLocation);
 

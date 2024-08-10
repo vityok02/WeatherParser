@@ -1,4 +1,4 @@
-﻿namespace Bot.Constants;
+﻿namespace Common.Constants;
 
 public static class CallbackData
 {

@@ -1,5 +1,5 @@
 ﻿using Application.Abstract;
-using Application.Interfaces;
+using Application.Messaging;
 using Application.Services;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;

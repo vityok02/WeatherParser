@@ -24,7 +24,7 @@ public class UpdateHandler : IUpdateHandler
         // TODO: Find the best solution for the situation
         var handler = update switch
         {
-            { Message: { } message } => _serviceProvider.GetRequiredService<MessageHandler>().HandleMessage(message, cancellationToken),
+            { Message: { } message } => _serviceProvider.GetRequiredService<IMessageHandler>().HandleMessage(message, cancellationToken),
             { CallbackQuery: { } callbackQuery } => _serviceProvider.GetRequiredService<CallbackQueryHandler>().HandleCallbackQuery(callbackQuery, cancellationToken),
             _ => _serviceProvider.GetRequiredService<DefaultHandler>().HandleDefault(update)
         };

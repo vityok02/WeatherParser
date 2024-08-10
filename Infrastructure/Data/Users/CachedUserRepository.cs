@@ -60,8 +60,8 @@ public class CachedUserRepository : IUserRepository
         return await _userRepository.HasLocationAsync(id, cancellationToken);
     }
 
-    public async Task EnsureCreate(long userId, User user, CancellationToken cancellationToken)
+    public async Task EnsureCreate(long userId, CancellationToken cancellationToken)
     {
-        await _userRepository.EnsureCreate(userId, user, cancellationToken);
+        await _userRepository.EnsureCreate(userId, cancellationToken);
     }
 }

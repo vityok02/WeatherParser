@@ -1,5 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.Abstract;
+using Application.Interfaces;
 using Application.Interfaces.ReplyMarkup;
+using Application.Messaging;
+using Application.Services.Commands;
 using Bot.BotHandlers;
 using Bot.Messages;
 using Bot.Services;
@@ -15,13 +18,11 @@ public static class DependencyInjection
         services.AddScoped<ReceiverService>()
             .AddHostedService<PollingService>()
             .AddScoped<UpdateHandler>()
-            .AddScoped<MessageHandler>()
+            .AddScoped<IMessageHandler, MessageHandler>()
             .AddScoped<CallbackQueryHandler>()
             .AddScoped<DefaultHandler>()
             .AddScoped<IValidator<Message>, MessageValidator>()
-            .AddScoped<IMessageSender, TgMessageSender>()
-            .AddScoped<LocationRequestHandler>()
-            .AddScoped<DefaultMessageHandler>()
+            .AddScoped<IMessageSender, TelegramMessageSender>()
             .AddScoped<IAppReplyMarkup, TgReplyMarkup>()
             .AddScoped<TelegramFileAdapter>()
             .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()

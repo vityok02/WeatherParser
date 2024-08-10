@@ -48,7 +48,7 @@ public static class DependencyInjection
             .AddScoped<IUserRepository, CachedUserRepository>()
             .AddScoped<IUserStateRepository, UserStateRepository>()
             .AddScoped<IGeocodingService, GeocodingService>()
-            .AddScoped<IPlacesRepository, CachedPlacesRepository>()
+            .AddScoped<IPlacesRepository, PlacesRepository>()
             .AddScoped<IStyleLoader, StyleLoader>();
 
         services.AddMemoryCache();
