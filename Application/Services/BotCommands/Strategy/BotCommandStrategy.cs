@@ -24,7 +24,7 @@ public class BotCommandStrategy : ICommandStrategy
         var user = await _userRepository
             .GetByIdWithLocationsAsync(message.UserId, cancellationToken);
 
-        var userCoordinates = user!.CurrentLocation!.Coordinates;
+        var userCoordinates = user!.CurrentLocation?.Coordinates;
 
         var command =
             GetBotCommand(message.MessageText, message.UserId, userCoordinates);

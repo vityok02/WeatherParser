@@ -6,24 +6,28 @@ using Domain.Abstract;
 
 namespace Application.Features.Locations.LocationRequest;
 
-internal sealed class LocationRequestCommandHandler : ICommandHandler<LocationRequestCommand>
+internal sealed class LocationRequestCommandHandler
+    : ICommandHandler<LocationRequestCommand>
 {
     private readonly IMessageSender _messageSender;
     private readonly IUserStateRepository _userStateRepository;
 
-    public LocationRequestCommandHandler(IMessageSender messageSender, IUserStateRepository userStateRepository)
+    public LocationRequestCommandHandler(
+        IMessageSender messageSender, IUserStateRepository userStateRepository)
     {
         _messageSender = messageSender;
         _userStateRepository = userStateRepository;
     }
 
-    public async Task<Result> Handle(LocationRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        LocationRequestCommand command, CancellationToken cancellationToken)
     {
-        _userStateRepository.SetState(command.ChatId, UserState.SetLocation);
+        _userStateRepository.SetState(command.ChatId, UserState.EnterLocation);
 
         await _messageSender.SendLocationRequestAsync(
             chatId: command.ChatId,
-            messageText: "Click the button or enter your place manually",
+            messageText: "Enter your location.\n" +
+            "Click the button or enter your place manually",
             buttonText: "Send geolocation",
             cancellationToken: cancellationToken);
 

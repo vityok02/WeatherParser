@@ -10,6 +10,7 @@ using Infrastructure.Weathers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure;
 
@@ -17,32 +18,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = GetConnectionString(configuration);
+        services.AddDbContext(configuration);
 
-        connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+        services.AddConfigurations(configuration);
 
-        services.AddDbContext<AppDbContext>(options =>
-        {
-            options.UseSqlServer(connectionString, 
-                providerOptions => providerOptions.EnableRetryOnFailure(10));
-        });
-
-        services.AddHttpClient<IWeatherApiService, WeatherApiService>((sp, httpClient) =>
-        {
-            httpClient.BaseAddress = new Uri("https://api.weatherapi.com");
-        })
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return new SocketsHttpHandler
-                {
-                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
-                };
-            });
-
-        services.Configure<GeocodingConfiguration>(
-            configuration.GetSection(GeocodingConfiguration.Configuration));
-        services.Configure<WeatherApiConfiguration>(
-            configuration.GetSection(WeatherApiConfiguration.Configuration));
+        services.AddClients();
 
         services.AddScoped<UserRepository>()
             .AddScoped<IUserRepository, CachedUserRepository>()
@@ -52,6 +32,65 @@ public static class DependencyInjection
             .AddScoped<IStyleLoader, StyleLoader>();
 
         services.AddMemoryCache();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDbContext(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        string? connectionString = GetConnectionString(configuration);
+
+        connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString,
+                providerOptions => providerOptions.EnableRetryOnFailure(10));
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection AddConfigurations(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<GeocodingConfiguration>(
+            configuration.GetSection(GeocodingConfiguration.Configuration));
+        services.Configure<WeatherApiConfiguration>(
+            configuration.GetSection(WeatherApiConfiguration.Configuration));
+
+        return services;
+    }
+
+    private static IServiceCollection AddClients(
+        this IServiceCollection services)
+    {
+        services.AddHttpClient<IWeatherApiService, WeatherApiService>((sp, httpClient) =>
+        {
+            var settings = sp.GetRequiredService<IOptions<WeatherApiConfiguration>>().Value;
+            httpClient.BaseAddress = new Uri(settings.BaseUrl);
+        })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new SocketsHttpHandler
+                {
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+                };
+            });
+
+        services.AddHttpClient<IGeocodingService, GeocodingService>((sp, httpClient) =>
+        {
+            var settings = sp.GetRequiredService<IOptions<GeocodingConfiguration>>().Value;
+            httpClient.BaseAddress = new Uri(settings.Path);
+        })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new SocketsHttpHandler
+                {
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+                };
+            });
 
         return services;
     }

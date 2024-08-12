@@ -48,10 +48,10 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         {
             await _messageSender.SendTextMessageAsync(
                 chatId: command.UserId,
-                text: result.Error.Description,
+                text: "Cannot get places",
                 cancellationToken: cancellationToken);
 
-            return Result.Failure(result.Error);
+            return Result.Failure(result.Error!);
         }
 
         var locations = result.Value;
@@ -61,7 +61,7 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
 
         _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
         _userStateRepository.RemoveState(command.UserId);
-        _userStateRepository.SetState(command.UserId, UserState.SetLocation);
+        _userStateRepository.SetState(command.UserId, UserState.SetLocation); //
 
         await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,

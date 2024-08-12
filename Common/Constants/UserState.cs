@@ -2,5 +2,7 @@
 
 public enum UserState
 {
+    None,
+    EnterLocation,
     SetLocation
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Abstract;
+using Application.Interfaces;
 using Application.Messaging;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ internal sealed class SetSharedLocationCommandHandler : ICommandHandler<SetShare
 {
     private readonly IMessageSender _messageSender;
     private readonly ILogger<SetSharedLocationCommandHandler> _logger;
+    private readonly IGeocodingService _geocodingService;
 
     public SetSharedLocationCommandHandler(IMessageSender messageSender, ILogger<SetSharedLocationCommandHandler> logger)
     {

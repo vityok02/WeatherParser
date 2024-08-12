@@ -7,6 +7,7 @@ namespace Application.Services.Commands.Strategy;
 
 public class LocationRequestStrategy : ICommandStrategy
 {
+    public int Priority => 2;
     private readonly IUserRepository _userRepository;
 
     public LocationRequestStrategy(IUserRepository repository)

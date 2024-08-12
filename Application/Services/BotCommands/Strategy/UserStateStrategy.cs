@@ -1,4 +1,5 @@
 ﻿using Application.Abstract;
+using Application.Features.Locations.EnterPlaceName;
 using Application.Features.Locations.SetLocation;
 using Application.Interfaces;
 using Application.Messaging;
@@ -41,6 +42,8 @@ public class UserStateStrategy : ICommandStrategy
         {
             UserState.SetLocation =>
                 new SetLocationCommand(userId, messageText),
+            UserState.EnterLocation =>
+                new EnterPlaceNameCommand(userId, messageText),
             _ => null!
         };
     }

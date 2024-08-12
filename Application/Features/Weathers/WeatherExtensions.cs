@@ -8,7 +8,7 @@ public static class WeatherExtensions
 {
     public static string ToString(this CurrentWeather weather)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
 
         sb
             .AppendLineIfNotNull(weather.CurrentTemperature, $"Temperature: {weather.CurrentTemperature}")

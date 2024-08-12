@@ -1,10 +1,12 @@
 ﻿using Application.Abstract;
+using Application.Behaviors;
 using Application.Interfaces;
 using Application.Services;
 using Application.Services.Commands;
 using Application.Services.Commands.Strategy;
 using Application.Services.HtmlProcessing;
 using CoreHtmlToImage;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -27,15 +29,22 @@ public static class DependencyInjection
             .AddScoped<HtmlToImageConverter>()
             .AddScoped<HtmlTableBuilder>()
             .AddScoped<HtmlConverter>()
-            .AddScoped<ICommandStrategy, BotCommandStrategy>()
-            .AddScoped<ICommandStrategy, LocationRequestStrategy>()
-            .AddScoped<ICommandStrategy, SetSharedLocationStrategy>()
-            .AddScoped<ICommandStrategy, UserStateStrategy>()
-            .AddScoped<ICommandFactory, CommandFactory>()
             .AddScoped<ICommandProcessor, CommandProcessor>()
             .AddScoped<CommandFactory>()
+            .AddScoped<ICommandFactory, CommandFactory>()
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBegavior<,>))
+            .AddStrategies()
             ;
 
         return services;
+    }
+
+    private static IServiceCollection AddStrategies(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<ICommandStrategy, SetSharedLocationStrategy>()
+            .AddScoped<ICommandStrategy, LocationRequestStrategy>()
+            .AddScoped<ICommandStrategy, UserStateStrategy>()
+            .AddScoped<ICommandStrategy, BotCommandStrategy>();
     }
 }

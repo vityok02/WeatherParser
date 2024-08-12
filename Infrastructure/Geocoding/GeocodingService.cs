@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Abstract;
+using Domain.Locations;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -10,83 +12,104 @@ namespace Infrastructure.Geocoding;
 public class GeocodingService : IGeocodingService
 {
     private readonly ILogger<GeocodingService> _logger;
-    private readonly IOptions<GeocodingConfiguration> _geocodingConfiguration;
+    private readonly GeocodingConfiguration _cfg;
+    private readonly HttpClient _client;
+    private readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
 
-    public GeocodingService(ILogger<GeocodingService> logger, IOptions<GeocodingConfiguration> geocodingConfiguration)
+    public GeocodingService(
+        ILogger<GeocodingService> logger,
+        IOptions<GeocodingConfiguration> geocodingConfiguration,
+        HttpClient client)
     {
         _logger = logger;
-        _geocodingConfiguration = geocodingConfiguration;
+        _cfg = geocodingConfiguration.Value;
+        _client = client;
+    }
+
+    public async Task<Result<string>> GetPlaceName(
+        Coordinates coordinates, CancellationToken cancellationToken)
+    {
+        return Result<string>.Success(string.Empty);
     }
 
     public async Task<Result<Feature[]>> GetPlacesByName(
         string locationName,
         CancellationToken cancellationToken = default)
     {
-        var response = await GetGeocodingResponseAsync([locationName], cancellationToken);
+        string url = GetPath(locationName);
 
-        var locationsResult = await GetLocationsFromResponseAsync(response, cancellationToken);
+        var response = await _client.GetAsync(url, cancellationToken);
+
+        var locationsResult = await GetLocationsResult(response, cancellationToken);
+
         if (locationsResult.IsFailure)
         {
-            return Result<Feature[]>
-                .Failure(locationsResult.Error!);
+            return Result<Feature[]>.Failure(locationsResult.Error!);
         }
 
-        var locations = locationsResult.Value;
-
-        return Result<Feature[]>.Success(locations!);
-    }
-
-    private async Task<HttpResponseMessage> GetGeocodingResponseAsync(
-        string[] parameters,
-        CancellationToken cancellationToken = default)
-    {
-        var cfg = _geocodingConfiguration.Value;
-
-        var geocodingApiUrl = $"{cfg.Path}/{parameters[0]}.json?key={cfg.Token}";
-        using var geocodingClient = new HttpClient();
-
-        return await geocodingClient.GetAsync(geocodingApiUrl, cancellationToken);
-    }
-
-    private async Task<Result<Feature[]>> GetLocationsFromResponseAsync(
-        HttpResponseMessage response,
-        CancellationToken cancellationToken = default)
-    {
-        var content = await response.Content.ReadAsStringAsync(cancellationToken);
-        var settings = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var responseError = JsonSerializer.Deserialize<ErrorResponse>(content, settings)!;
-            var error = new Error(responseError.StatusCode.ToString(), responseError.Message);
-
-            _logger.LogError($"Failure response. Code: {error.Code} Description: {error.Description}", error);
-
-            return Result<Feature[]>
-                .Failure(error);
-        }
-
-        var rootObject = JsonSerializer.Deserialize<RootObject>(content, settings);
-        if (rootObject is null)
-        {
-            _logger.LogError("Deserialized object is null");
-            var error = new Error("404", "Locations not found");
-
-            return Result<Feature[]>
-                .Failure(error);
-        }
-
-        var features = rootObject.Features;
-        if (features.Length == 0)
-        {
-            return Result<Feature[]>
-                .Failure(new("404", "Locations not found"));
-        }
+        _logger.LogInformation("The location successfully get");
 
         return Result<Feature[]>
-            .Success(features);
+            .Success(locationsResult.Value);
+    }
+
+    private string GetPath(string locationName)
+    {
+        QueryBuilder qb = new(
+            new List<KeyValuePair<string, string>>
+            {
+                new( "key", _cfg.Token )
+            });
+
+        var url = $"{_cfg.Path}/{locationName}.json{qb}";
+        return url;
+    }
+
+    private async Task<Result<Feature[]>> GetLocationsResult(
+        HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        var content = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+        try
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseError = await JsonSerializer
+                    .DeserializeAsync<ErrorResponse>(content, _jsonOptions, cancellationToken);
+
+                return HandleError<Feature[]>("Response.UnsuccessStatusCode", responseError?.Message);
+            }
+
+            var deserializedObject = await JsonSerializer
+                .DeserializeAsync<RootObject>(content, _jsonOptions, cancellationToken);
+
+            var features = deserializedObject?.Features;
+
+            if (features is null)
+            {
+                HandleError<Feature[]>("Features.IsNull");
+            }
+
+            return Result<Feature[]>.Success(features);
+        }
+        catch (Exception ex)
+        {
+            return HandleError<Feature[]>(ex, "Failed to deserialize object");
+        }
+    }
+
+    private Result<T> HandleError<T>(Exception ex, string code, string? message = null)
+    {
+        _logger.LogError(ex, message);
+        return Result<T>.Failure(code, message);
+    }
+
+    private Result<T> HandleError<T>(string code, string? description = null)
+    {
+        _logger.LogError($"{code}. {description}");
+        return Result<T>.Failure(code, description);
     }
 }
