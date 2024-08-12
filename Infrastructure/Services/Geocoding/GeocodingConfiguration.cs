@@ -1,4 +1,4 @@
-﻿namespace Infrastructure;
+﻿namespace Infrastructure.Services.Geocoding;
 
 public record GeocodingConfiguration
 {

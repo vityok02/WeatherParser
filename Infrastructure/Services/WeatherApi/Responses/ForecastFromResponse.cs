@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.WeatherApi.Responses;
+﻿namespace Infrastructure.Services.WeatherApi.Responses;
 
 public record ForecastFromResponse(
     ForecastDay[] ForecastDay

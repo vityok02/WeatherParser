@@ -2,13 +2,13 @@
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Weathers;
-using Infrastructure.WeatherApi;
-using Infrastructure.WeatherApi.Responses;
+using Infrastructure.Services.WeatherApi;
+using Infrastructure.Services.WeatherApi.Responses;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 
-namespace Infrastructure.Weathers;
+namespace Infrastructure.Services.WeatherApi;
 
 public class WeatherApiService : IWeatherApiService
 {
@@ -22,7 +22,7 @@ public class WeatherApiService : IWeatherApiService
         _configuration = options.Value;
     }
 
-    public async Task<Result<Domain.Weathers.CurrentWeather>> GetCurrentWeatherAsync(Coordinates coordinates)
+    public async Task<Result<CurrentWeather>> GetCurrentWeatherAsync(Coordinates coordinates)
     {
 
         QueryBuilder qb = new(
@@ -41,16 +41,16 @@ public class WeatherApiService : IWeatherApiService
 
             if (weatherResponse is null)
             {
-                return Result<Domain.Weathers.CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", "Could not get weather from response");
+                return Result<CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", "Could not get weather from response");
             }
 
             var weather = weatherResponse.ToWeather();
 
-            return Result<Domain.Weathers.CurrentWeather>.Success(weather);
+            return Result<CurrentWeather>.Success(weather);
         }
         catch (Exception ex)
         {
-            return Result<Domain.Weathers.CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", ex.Message);
+            return Result<CurrentWeather>.Failure("WeatherService.FailedToGetWeatherResponse", ex.Message);
         }
     }
 

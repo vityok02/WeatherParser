@@ -1,15 +1,16 @@
 ﻿using Forecast = Domain.Weathers.Forecast;
-using Infrastructure.WeatherApi.Responses;
 using Domain.Weathers;
+using Infrastructure.Services.WeatherApi;
+using Infrastructure.Services.WeatherApi.Responses;
 
-namespace Infrastructure.WeatherApi;
+namespace Infrastructure.Services.WeatherApi;
 
 public static class ForecastExtensions
 {
     public static Forecast ToForecast(this ForecastResponse response)
     {
         IEnumerable<DailyForecast> dailyForecasts = response.Forecast.ForecastDay
-            .Select(d =>  
+            .Select(d =>
                 d.ToDailyForecast());
 
         return new Forecast(dailyForecasts);

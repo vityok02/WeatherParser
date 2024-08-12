@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Weathers;
+﻿namespace Infrastructure.Services.WeatherApi;
 
 public sealed class WeatherApiConfiguration
 {

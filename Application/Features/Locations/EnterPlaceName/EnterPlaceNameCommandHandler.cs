@@ -55,13 +55,13 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         }
 
         var locations = result.Value;
-        var locationsNames = locations!.Select(l => l.FullPlaceName).ToArray();
+        var locationsNames = locations!.Select(l => l.Name).ToArray();
 
         IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator.BuildKeyboard(locationsNames!);
 
-        _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocaion()).ToArray());
+        _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocation()).ToArray());
         _userStateRepository.RemoveState(command.UserId);
-        _userStateRepository.SetState(command.UserId, UserState.SetLocation); //
+        _userStateRepository.SetState(command.UserId, UserState.SetLocation);
 
         await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,
