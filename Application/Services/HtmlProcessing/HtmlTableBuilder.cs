@@ -2,7 +2,7 @@
 
 namespace Application.Services.HtmlProcessing;
 
-public class HtmlTableBuilder
+public class HtmlTableBuilder : IHtmlTableBuilder
 {
     private StringBuilder _builder = new("<table>");
     private List<string> rows = [];

@@ -1,7 +1,6 @@
-﻿using Forecast = Domain.Weathers.Forecast;
-using Domain.Weathers;
-using Infrastructure.Services.WeatherApi;
+﻿using Domain.Weathers;
 using Infrastructure.Services.WeatherApi.Responses;
+using Forecast = Domain.Weathers.Forecast;
 
 namespace Infrastructure.Services.WeatherApi;
 

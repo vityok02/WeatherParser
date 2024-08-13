@@ -4,12 +4,12 @@ namespace Infrastructure.Services.WeatherApi;
 
 public static class WeatherApiExtensions
 {
-    public static CurrentWeather ToWeather(this Responses.CurrentWeatherResponse response)
+    public static CurrentForecast ToWeather(this Responses.CurrentForecastResponse response)
     {
         bool.TryParse(response.Current.Is_day.ToString(), out bool isDay);
         DateTime.TryParse(response.Current.Last_updated, out DateTime lastUpdated);
 
-        return new CurrentWeather(
+        return new CurrentForecast(
             response.Current.Temp_c,
             response.Current.Wind_kph,
             response.Current.Wind_dir,

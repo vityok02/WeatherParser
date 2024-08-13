@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Weathers;
 
-public class CurrentWeather
+public class CurrentForecast
 {
     public double? CurrentTemperature { get; private set; }
     public double? MinTemperature { get; private set; }
@@ -19,7 +19,7 @@ public class CurrentWeather
     public DateTime? ObservationTime { get; private set; } = default!;
     public string? Location { get; private set; } = default!;
 
-    public CurrentWeather(
+    public CurrentForecast(
         double? currentTemperature,
         double? windSpeed,
         string? windDirection,
@@ -39,7 +39,7 @@ public class CurrentWeather
         ObservationTime = observationTime;
     }
 
-    public CurrentWeather(
+    public CurrentForecast(
     double? currentTemperature,
     double? maxTemperature,
     double? minTemperature,

@@ -6,7 +6,7 @@ namespace Application.Features.Weathers;
 
 public static class WeatherExtensions
 {
-    public static string ToString(this CurrentWeather weather)
+    public static string ToString(this CurrentForecast weather)
     {
         StringBuilder sb = new();
 

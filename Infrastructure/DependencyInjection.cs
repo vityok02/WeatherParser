@@ -29,7 +29,9 @@ public static class DependencyInjection
             .AddScoped<IUserStateRepository, UserStateRepository>()
             .AddScoped<IGeocodingService, GeocodingService>()
             .AddScoped<IPlacesRepository, PlacesRepository>()
-            .AddScoped<IStyleLoader, StyleLoader>();
+            .AddScoped<IStyleLoader, StyleLoader>()
+            .AddScoped<IWeatherApiUriBuilder, WeatherApiUriBuilder>()
+            ;
 
         services.AddMemoryCache();
 
