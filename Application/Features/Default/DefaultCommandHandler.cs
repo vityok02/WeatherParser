@@ -3,7 +3,7 @@ using Application.Interfaces.ReplyMarkup;
 using Application.Messaging;
 using Domain.Abstract;
 
-namespace Application.Features.Locations.DefaultUserState;
+namespace Application.Features.Default;
 
 internal sealed class DefaultCommandHandler : ICommandHandler<DefaultCommand>
 {

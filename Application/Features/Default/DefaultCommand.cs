@@ -1,5 +1,5 @@
 ﻿using Application.Abstract;
 
-namespace Application.Features.Locations.DefaultUserState;
+namespace Application.Features.Default;
 
 public record DefaultCommand(long ChatId) : ICommand;

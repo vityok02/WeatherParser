@@ -58,4 +58,33 @@ internal class TelegramMessageSender : IMessageSender
             photo: _fileAdapter.ConvertToTelegramFile(photo),
             cancellationToken: cancellationToken);
     }
+
+    public async Task SendKeyboardAsync(long chatId, string messateText, CancellationToken cancellationToken)
+    {
+        List<KeyboardButton[]> list = new List<KeyboardButton[]>();
+
+        KeyboardButton[] row1 =
+        [
+            new KeyboardButton("Today"),
+            new KeyboardButton("Tomorrow")
+        ];
+
+        KeyboardButton[] row2 =
+        [
+            new KeyboardButton("Button1"),
+            new KeyboardButton("Button2"),
+            new KeyboardButton("Button3"),
+        ];
+
+        list.Add(row1);
+        list.Add(row2);
+
+        var replyMarkup = new ReplyKeyboardMarkup(list);
+
+        await _botClient.SendTextMessageAsync(
+            chatId: chatId,
+            text: messateText,
+            replyMarkup: replyMarkup,
+            cancellationToken: cancellationToken);
+    }
 }

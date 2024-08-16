@@ -1,6 +1,7 @@
 ﻿using Application.Abstract;
 using Application.Features.Locations.LocationRequest;
-using Application.Features.Weathers.SendForecastToday;
+using Application.Features.Weathers.EnterDay;
+using Application.Features.Weathers.SendMultiDayForecast;
 using Application.Features.Weathers.SendWeatherNow;
 using Application.Messaging;
 using Common.Constants;
@@ -42,8 +43,24 @@ public class BotCommandStrategy : ICommandStrategy
             BotCommand.WeatherNow =>
                 new SendWeatherNowCommand(userId, userCoordinates!),
             BotCommand.ForecastToday =>
-                new SendForecastTodayCommand(userId, userCoordinates!),
+                new EnterDayCommand(userId, text),
+            BotCommand.MultiDayForecast =>
+                new SendMultidayForecastCommand(userId, ParseDays(text), userCoordinates!),
             _ => null!
         };
+    }
+
+    private static DateTime ParseDate(string text)
+    {
+        DateTime.TryParse(text, out var date);
+
+        return Convert.ToDateTime(date);
+    }
+
+    private static int ParseDays(string text)
+    {
+        int.TryParse(text, out var days);
+
+        return days;
     }
 }

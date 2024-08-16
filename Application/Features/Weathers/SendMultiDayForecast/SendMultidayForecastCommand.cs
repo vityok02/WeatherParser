@@ -5,7 +5,7 @@ using Domain.Locations;
 
 namespace Application.Features.Weathers.SendMultiDayForecast;
 
-public sealed record SendMultidayForecastCommand(string ChatId, int Days, Coordinates Coordinates) : ICommand;
+public sealed record SendMultidayForecastCommand(long ChatId, int Days, Coordinates Coordinates) : ICommand;
 
 internal sealed class SendMultidayForecastCommandHandler
     : ICommandHandler<SendMultidayForecastCommand>

@@ -12,6 +12,10 @@ public static class WeatherServiceErrors
         "WeatherApiService.FailedToGetWeather",
         "Failed to get weather");
 
+    public readonly static Error ForecastNull = new(
+        "Forecast.Null",
+        "Object is null");
+
     public readonly static Error FailedForecast = new(
         "WeatherApiService.FailedToGetForecast",
         "Failed to get forecast");

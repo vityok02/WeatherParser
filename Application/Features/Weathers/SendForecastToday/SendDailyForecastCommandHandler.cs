@@ -23,6 +23,7 @@ internal sealed class SendDailyForecastCommandHandler : ICommandHandler<SendDail
 
     public async Task<Result> Handle(SendDailyForecastCommand command, CancellationToken cancellationToken)
     {
+
         var result = await _weatherService.GetDailyForecastAsync(command.Coordinates, command.Date);
 
         if (result.IsFailure)
@@ -30,7 +31,7 @@ internal sealed class SendDailyForecastCommandHandler : ICommandHandler<SendDail
             return Result.Failure(result.Error!);
         }
         
-        var img = _converter.ToTable(result.Value.DailyForecast!);
+        var img = _converter.ToTable(result.Value!);
 
         await _messageSender.SendPhotoAsync(
             chatId: command.ChatId,

@@ -51,11 +51,19 @@ public class WeatherApiService : IWeatherApiService
             return Result<DailyForecast>.Failure(forecastResponse.Error!);
         }
 
-        //var forecast = forecastResponse.Value!.ToForecast();
-        var forecast = forecastResponse.Value
-            .Forecast.ForecastDay.Where(d => d.Day.Date == date);
+        var forecast = forecastResponse.Value!
+            .Forecast.ForecastDay
+            .Where(f => f.Day.Date == date.ToString("yyyy-MM-dd"))
+            .FirstOrDefault();
 
-        return Result<DailyForecast>.Success(forecast);
+        if (forecast is null)
+        {
+            _logger.LogInformation("Variable is null: {@forecast}",
+                forecast);
+            return Result<DailyForecast>.Failure(WeatherServiceErrors.ForecastNull);
+        }
+
+        return Result<DailyForecast>.Success(forecast.ToDailyForecast());
     }
 
     public async Task<Result<Forecast>> GetMultiDayForecastAsync(
