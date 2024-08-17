@@ -1,5 +1,5 @@
-﻿using Application.Features.Weathers;
-using Application.Interfaces;
+﻿using Application.Common.Interfaces;
+using Application.Commands.Weathers;
 using Domain.Users;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Application.Services;
 
 namespace Infrastructure;
 
@@ -29,7 +30,10 @@ public static class DependencyInjection
             .AddScoped<IUserStateRepository, UserStateRepository>()
             .AddScoped<IGeocodingService, GeocodingService>()
             .AddScoped<IPlacesRepository, PlacesRepository>()
-            .AddScoped<IStyleLoader, StyleLoader>();
+            .AddScoped<IStyleLoader, StyleLoader>()
+            .AddScoped<IWeatherApiUriBuilder, WeatherApiUriBuilder>()
+            .AddScoped<ISessionManager, SessionManager>()
+            ;
 
         services.AddMemoryCache();
 

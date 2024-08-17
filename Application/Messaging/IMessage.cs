@@ -5,6 +5,6 @@ namespace Application.Messaging;
 public interface IMessage
 {
     long UserId { get; }
-    string MessageText { get; }
+    string Text { get; }
     Coordinates? Coordinates { get; }
 }

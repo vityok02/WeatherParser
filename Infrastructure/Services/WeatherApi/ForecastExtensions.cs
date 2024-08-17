@@ -1,7 +1,6 @@
-﻿using Forecast = Domain.Weathers.Forecast;
-using Domain.Weathers;
-using Infrastructure.Services.WeatherApi;
+﻿using Domain.Weathers;
 using Infrastructure.Services.WeatherApi.Responses;
+using Forecast = Domain.Weathers.Forecast;
 
 namespace Infrastructure.Services.WeatherApi;
 
@@ -16,12 +15,12 @@ public static class ForecastExtensions
         return new Forecast(dailyForecasts);
     }
 
-    private static DailyForecast ToDailyForecast(this ForecastDay forecastDay)
+    public static DailyForecast ToDailyForecast(this ForecastDay forecastDay)
     {
         var day = forecastDay.Day;
 
         return new(
-            Convert.ToDateTime(day.Date),
+            Convert.ToDateTime(forecastDay.Date),
             day.AvgTemp_c,
             day.MinTemp_c,
             day.MaxTemp_c,
@@ -36,12 +35,12 @@ public static class ForecastExtensions
             forecastDay.Hour.Select(h => h.ToHourlyForecast()));
     }
 
-    private static Domain.Weathers.Condition ToCondition(this Responses.Condition condition)
+    public static Domain.Weathers.Condition ToCondition(this Responses.Condition condition)
     {
         return new Domain.Weathers.Condition(condition.Text, condition.Icon);
     }
 
-    private static HourlyForecast ToHourlyForecast(this Hour hour)
+    public static HourlyForecast ToHourlyForecast(this Hour hour)
     {
         return new HourlyForecast(
             Convert.ToDateTime(hour.Time),

@@ -1,4 +1,4 @@
-﻿using Application.Abstract;
+﻿using Application.Common.Abstract;
 using Application.Messaging;
 
 namespace Application.Services.Commands;

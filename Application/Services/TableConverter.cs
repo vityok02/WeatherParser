@@ -1,5 +1,5 @@
-﻿using Application.Abstract;
-using Application.Interfaces;
+﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
 using Application.Services.HtmlProcessing;
 using Domain.Weathers;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ public class TableConverter
     private readonly HtmlToImageConverter _converter;
     private readonly ForecastTableGenerator _tableGenerator;
     private readonly ILogger<TableConverter> _logger;
-
+    //abstract htmlBuilder
     public TableConverter(
         HtmlToImageConverter converter,
         IStyleLoader styleLoader,
@@ -25,13 +25,9 @@ public class TableConverter
         _logger = logger;
     }
 
-    public FileWrapper ToTable(Forecast forecast)
+    public FileWrapper ToTable(DailyForecast forecast)
     {
-        var hourlyForecast = forecast.DailyForecast
-            .First().HourlyForecast
-            .Where(h => h.Time.Hour % 3 == 0).ToArray();
-
-        string table = _tableGenerator.CreateTable(hourlyForecast);
+        string table = _tableGenerator.CreateDailyForecastTable(forecast);
         string styles = _styleLoader.LoadStyles("table.css");
 
         HtmlBuilder htmlBuilder = new HtmlBuilder();

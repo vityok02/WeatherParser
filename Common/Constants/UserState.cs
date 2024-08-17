@@ -4,5 +4,9 @@ public enum UserState
 {
     None,
     EnterLocation,
-    SetLocation
+    SetLocation,
+    EnterDay,
+    EnterDays,
+    GetDailyForecast,
+    GetMultiDayForecast,
 }

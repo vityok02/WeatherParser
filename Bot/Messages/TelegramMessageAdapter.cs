@@ -14,7 +14,7 @@ public class TelegramMessageAdapter : IMessage
     }
 
     public long UserId => _message.From!.Id;
-    public string MessageText => _message.Text!;
+    public string Text => _message.Text!;
     public Coordinates? Coordinates
     {
         get

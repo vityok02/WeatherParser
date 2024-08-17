@@ -1,8 +1,6 @@
-﻿using Application.Abstract;
-using Application.Interfaces;
-using Application.Interfaces.ReplyMarkup;
+﻿using Application.Common.Abstract;
+using Application.Common.Interfaces.ReplyMarkup;
 using Application.Messaging;
-using Application.Services.Commands;
 using Bot.BotHandlers;
 using Bot.Messages;
 using Bot.Services;

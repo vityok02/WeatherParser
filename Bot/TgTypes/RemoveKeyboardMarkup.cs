@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.ReplyMarkup;
+﻿using Application.Common.Interfaces.ReplyMarkup;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.TgTypes;
