@@ -1,6 +1,6 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
 using Common.Constants;
 using Domain.Abstract;
 
@@ -30,7 +30,7 @@ internal class EnterDayCommandHandler
 
         if (day == DateTime.MinValue)
         {
-            await _messageSender.SendKeyboardAsync(
+            await _messageSender.SendTextMessageAsync(
                 command.UserId,
                 "Try again",
                 cancellationToken);

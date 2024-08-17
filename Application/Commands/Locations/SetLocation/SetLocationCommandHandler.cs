@@ -1,13 +1,13 @@
 ﻿using Application.Common.Abstract;
-using Application.Common.Interfaces;
 using Application.Common.Interfaces.ReplyMarkup;
 using Application.Commands.Locations.EnterPlaceName;
 using Application.Locations.SetLocationFromRequest;
-using Application.Messaging;
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Users;
 using MediatR;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Messaging;
 
 namespace Application.Commands.Locations.SetLocation;
 

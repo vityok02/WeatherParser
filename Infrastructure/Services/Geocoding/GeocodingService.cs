@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces.Services;
 using Domain.Abstract;
 using Domain.Locations;
 using Infrastructure.Services.Geocoding.Response;

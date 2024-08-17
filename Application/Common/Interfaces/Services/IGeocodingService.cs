@@ -1,7 +1,7 @@
 ﻿using Domain.Abstract;
 using Domain.Locations;
 
-namespace Application.Common.Interfaces;
+namespace Application.Common.Interfaces.Services;
 
 public interface IGeocodingService
 {

@@ -1,6 +1,6 @@
 ﻿using Application.Common.Abstract;
-using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Repositories;
 using Common.Constants;
 using Domain.Abstract;
 

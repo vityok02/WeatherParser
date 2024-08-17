@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Application.Services;
+using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Repositories;
 
 namespace Infrastructure;
 

@@ -1,4 +1,6 @@
-﻿namespace Application.Services.HtmlProcessing;
+﻿using Application.Services.HtmlProcessing;
+
+namespace Application.Common.Interfaces.Services;
 
 public interface IHtmlTableBuilder
 {

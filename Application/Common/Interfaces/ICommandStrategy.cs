@@ -1,7 +1,7 @@
 ﻿using Application.Common.Abstract;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
 
-namespace Application.Services.Commands.Strategies;
+namespace Application.Common.Interfaces;
 
 public interface ICommandStrategy
 {

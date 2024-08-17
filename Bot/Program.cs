@@ -4,7 +4,6 @@ using Bot.Configurations;
 using Bot.Extensions;
 using Infrastructure;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Telegram.Bot;

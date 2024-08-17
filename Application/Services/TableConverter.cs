@@ -12,7 +12,7 @@ public class TableConverter
     private readonly HtmlToImageConverter _converter;
     private readonly ForecastTableGenerator _tableGenerator;
     private readonly ILogger<TableConverter> _logger;
-    //abstract htmlBuilder
+    // TODO: abstract htmlBuilder
     public TableConverter(
         HtmlToImageConverter converter,
         IStyleLoader styleLoader,
@@ -30,7 +30,7 @@ public class TableConverter
         string table = _tableGenerator.CreateDailyForecastTable(forecast);
         string styles = _styleLoader.LoadStyles("table.css");
 
-        HtmlBuilder htmlBuilder = new HtmlBuilder();
+        HtmlBuilder htmlBuilder = new();
 
         var html = htmlBuilder
             .SetStyles(styles)

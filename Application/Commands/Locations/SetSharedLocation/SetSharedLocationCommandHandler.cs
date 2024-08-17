@@ -1,6 +1,6 @@
 ﻿using Application.Common.Abstract;
-using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Services;
 using Domain.Abstract;
 using Microsoft.Extensions.Logging;
 

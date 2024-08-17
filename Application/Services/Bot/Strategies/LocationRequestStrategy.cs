@@ -1,9 +1,10 @@
 ﻿using Application.Common.Abstract;
 using Application.Commands.Locations.LocationRequest;
-using Application.Messaging;
 using Domain.Users;
+using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces;
 
-namespace Application.Services.Commands.Strategies;
+namespace Application.Services.Bot.Strategies;
 
 public class LocationRequestStrategy : ICommandStrategy
 {

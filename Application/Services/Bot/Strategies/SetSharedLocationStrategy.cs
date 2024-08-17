@@ -1,8 +1,9 @@
 ﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
+using Application.Common.Interfaces.Messaging;
 using Application.Locations.SetLocationFromRequest;
-using Application.Messaging;
 
-namespace Application.Services.Commands.Strategies;
+namespace Application.Services.Bot.Strategies;
 
 public class SetSharedLocationStrategy : ICommandStrategy
 {

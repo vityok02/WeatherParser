@@ -1,9 +1,9 @@
 ﻿using Application.Commands.Default;
 using Application.Common.Abstract;
-using Application.Messaging;
-using Application.Services.Commands.Strategies;
+using Application.Common.Interfaces;
+using Application.Common.Interfaces.Messaging;
 
-namespace Application.Services.Commands;
+namespace Application.Services.Bot.Commands;
 
 public class CommandFactory : ICommandFactory
 {

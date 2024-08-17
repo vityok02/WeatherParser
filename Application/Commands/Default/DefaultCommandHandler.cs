@@ -1,38 +1,48 @@
 ﻿using Application.Common.Abstract;
+using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
-using Application.Messaging;
+using Common.Constants;
 using Domain.Abstract;
 
 namespace Application.Commands.Default;
 
-internal sealed class DefaultCommandHandler : ICommandHandler<DefaultCommand>
+internal sealed class DefaultCommandHandler
+    : ICommandHandler<DefaultCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly IRemoveKeyboardMarkup _replyMarkup;
+    private readonly IKeyboardMarkupGenerator _keyboardGenerator;
 
-    public DefaultCommandHandler(IMessageSender messageSender, IRemoveKeyboardMarkup replyMarkup)
+    public DefaultCommandHandler(
+        IMessageSender messageSender,
+        IKeyboardMarkupGenerator keyboardGenerator)
     {
         _messageSender = messageSender;
-        _replyMarkup = replyMarkup;
+        _keyboardGenerator = keyboardGenerator;
     }
 
-    public async Task<Result> Handle(DefaultCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        DefaultCommand command, 
+        CancellationToken cancellationToken)
     {
-        var usageText = GetUsageText();
+        IAppReplyMarkup keyboard = GetKeyboard();
 
         await _messageSender.SendTextMessageAsync(
             chatId: command.ChatId,
-            text: usageText,
-            replyMarkup: _replyMarkup,
+            text: "Select action",
+            replyMarkup: keyboard,
             cancellationToken: cancellationToken);
 
         return Result.Success();
     }
 
-    private static string GetUsageText()
+    private IAppReplyMarkup GetKeyboard()
     {
-        return "Usage:\n" +
-            "/weather  - get weather information\n" +
-            "/location - send location\n";
+        IEnumerable<IEnumerable<string>> buttons = [
+            [BotCommand.WeatherNow, BotCommand.ForecastToday],
+            [BotCommand.ForecastTomorrow, BotCommand.Location]
+        ];
+
+        var keyboard = _keyboardGenerator.BuildKeyboard(buttons);
+        return keyboard;
     }
 }

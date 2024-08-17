@@ -1,5 +1,6 @@
 ﻿using Application.Common.Abstract;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Services;
 using Domain.Abstract;
 namespace Application.Commands.Weathers.SendWeatherNow;
 

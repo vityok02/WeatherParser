@@ -1,14 +1,8 @@
 ﻿using Application.Commands.Weathers.Formatting.HourlyForecast;
-using Application.Services.HtmlProcessing;
+using Application.Common.Interfaces.Services;
 using Domain.Weathers;
 
 namespace Application.Services;
-
-public interface IForecastTableGenerator
-{
-    string CreateDailyForecastTable(DailyForecast dailyForecast);
-    string CreateMultiDayForecastTable(Forecast forecast);
-}
 
 public class ForecastTableGenerator
 {
@@ -21,6 +15,8 @@ public class ForecastTableGenerator
 
     public string CreateDailyForecastTable(DailyForecast dailyForecast)
     {
+        // TODO: fix bug
+
         var hourlyForecast = dailyForecast.HourlyForecast
             .Where(hf => hf.Time.Hour % 3 == 0)
             .Select(hf => hf.ToFormattedHourlyForecast());

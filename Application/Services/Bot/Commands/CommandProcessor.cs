@@ -1,10 +1,9 @@
 ﻿using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
 using Domain.Users;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
-namespace Application.Services.Commands;
+namespace Application.Services.Bot.Commands;
 
 public class CommandProcessor : ICommandProcessor
 {

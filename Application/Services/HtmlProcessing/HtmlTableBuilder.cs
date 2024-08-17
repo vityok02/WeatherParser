@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Application.Common.Interfaces.Services;
+using System.Text;
 
 namespace Application.Services.HtmlProcessing;
 

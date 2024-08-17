@@ -1,9 +1,10 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Behaviors;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Services;
 using Application.Services;
-using Application.Services.Commands;
-using Application.Services.Commands.Strategies;
+using Application.Services.Bot.Commands;
+using Application.Services.Bot.Strategies;
 using Application.Services.HtmlProcessing;
 using Application.Users;
 using CoreHtmlToImage;

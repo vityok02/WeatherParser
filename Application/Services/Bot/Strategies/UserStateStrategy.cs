@@ -4,12 +4,12 @@ using Application.Commands.Weathers.EnterDay;
 using Application.Commands.Weathers.SendForecastToday;
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
 using Common.Constants;
 using Domain.Locations;
 using MediatR;
 
-namespace Application.Services.Commands.Strategies;
+namespace Application.Services.Bot.Strategies;
 
 public class UserStateStrategy : ICommandStrategy
 {

@@ -1,4 +1,4 @@
-﻿using Application.Commands.Weathers;
+﻿using Application.Common.Interfaces.Services;
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Weathers;

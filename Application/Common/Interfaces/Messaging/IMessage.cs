@@ -1,6 +1,6 @@
 ﻿using Domain.Locations;
 
-namespace Application.Messaging;
+namespace Application.Common.Interfaces.Messaging;
 
 public interface IMessage
 {

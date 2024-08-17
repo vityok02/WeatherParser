@@ -1,7 +1,8 @@
 ﻿using Application.Common.Abstract;
-using Application.Common.Interfaces;
+using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
-using Application.Messaging;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
 using Common.Constants;
 using Domain.Abstract;
 using Domain.CachedLocations;

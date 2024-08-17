@@ -2,7 +2,7 @@
 using Domain.Locations;
 using Domain.Weathers;
 
-namespace Application.Commands.Weathers;
+namespace Application.Common.Interfaces.Services;
 
 public interface IWeatherApiService
 {
