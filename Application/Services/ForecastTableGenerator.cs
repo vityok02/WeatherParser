@@ -1,4 +1,4 @@
-﻿using Application.Features.Weathers.Formatting.HourlyForecast;
+﻿using Application.Commands.Weathers.Formatting.HourlyForecast;
 using Application.Services.HtmlProcessing;
 using Domain.Weathers;
 

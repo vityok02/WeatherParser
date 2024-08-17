@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Interfaces;
 using Telegram.Bot.Types;
 
 namespace Bot.Services;

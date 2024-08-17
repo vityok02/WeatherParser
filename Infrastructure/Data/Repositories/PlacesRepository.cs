@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Interfaces;
 using Domain.CachedLocations;
 using Infrastructure.Constants;
 using Microsoft.Extensions.Caching.Memory;

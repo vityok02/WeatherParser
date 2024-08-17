@@ -1,4 +1,4 @@
-﻿using Application.Abstract;
+﻿using Application.Common.Abstract;
 using CoreHtmlToImage;
 
 namespace Application.Services.HtmlProcessing;

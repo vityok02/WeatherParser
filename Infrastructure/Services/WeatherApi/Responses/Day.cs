@@ -1,7 +1,6 @@
 ﻿namespace Infrastructure.Services.WeatherApi.Responses;
 
 public record Day(
-    string Date,
     double MaxTemp_c,
     double MinTemp_c,
     double AvgTemp_c,

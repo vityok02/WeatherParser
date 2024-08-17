@@ -1,10 +1,11 @@
-﻿using Application.Abstract;
-using Application.Behaviors;
-using Application.Interfaces;
+﻿using Application.Common.Abstract;
+using Application.Common.Behaviors;
+using Application.Common.Interfaces;
 using Application.Services;
 using Application.Services.Commands;
-using Application.Services.Commands.Strategy;
+using Application.Services.Commands.Strategies;
 using Application.Services.HtmlProcessing;
+using Application.Users;
 using CoreHtmlToImage;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,12 +28,13 @@ public static class DependencyInjection
             .AddScoped<ForecastTableGenerator>()
             .AddScoped<HtmlBuilder>()
             .AddScoped<HtmlToImageConverter>()
-            .AddScoped<HtmlTableBuilder>()
+            .AddScoped<IHtmlTableBuilder, HtmlTableBuilder>()
             .AddScoped<HtmlConverter>()
             .AddScoped<ICommandProcessor, CommandProcessor>()
             .AddScoped<CommandFactory>()
             .AddScoped<ICommandFactory, CommandFactory>()
             .AddScoped<IUserService, UserService>()
+            .AddScoped<IUserSession, UserSession>()
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBegavior<,>))
             .AddStrategies()
             ;

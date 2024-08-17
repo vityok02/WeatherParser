@@ -20,7 +20,7 @@ public static class ForecastExtensions
         var day = forecastDay.Day;
 
         return new(
-            Convert.ToDateTime(day.Date),
+            Convert.ToDateTime(forecastDay.Date),
             day.AvgTemp_c,
             day.MinTemp_c,
             day.MaxTemp_c,

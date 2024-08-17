@@ -1,5 +1,5 @@
-﻿using Application.Abstract;
-using Application.Interfaces.ReplyMarkup;
+﻿using Application.Common.Abstract;
+using Application.Common.Interfaces.ReplyMarkup;
 
 namespace Bot.Services;
 

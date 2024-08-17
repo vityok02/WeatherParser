@@ -1,5 +1,5 @@
-﻿using Application.Abstract;
-using Application.Interfaces;
+﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
 using Application.Services.HtmlProcessing;
 using Domain.Weathers;
 using Microsoft.Extensions.Logging;

@@ -1,7 +1,5 @@
-﻿using Application.Abstract;
-using Application.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Messaging;
-using Domain.Abstract;
 using Domain.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,18 +11,18 @@ public class CommandProcessor : ICommandProcessor
     private readonly IUserRepository _userRepository;
     private readonly ICommandFactory _commandFactory;
     private readonly ISender _sender;
-    private readonly ILogger<CommandProcessor> _logger;
+    private readonly ISessionManager _sessionManager;
 
     public CommandProcessor(
         IUserRepository repository,
         ICommandFactory commandFactory,
         ISender sender,
-        ILogger<CommandProcessor> logger)
+        ISessionManager sessionManager)
     {
         _userRepository = repository;
         _commandFactory = commandFactory;
         _sender = sender;
-        _logger = logger;
+        _sessionManager = sessionManager;
     }
 
     public async Task ProcessCommand(IMessage message, CancellationToken cancellationToken)

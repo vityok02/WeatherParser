@@ -1,8 +1,7 @@
-﻿using Application.Abstract;
-using Application.Features.Default;
-using Application.Features.Locations.DefaultUserState;
+﻿using Application.Commands.Default;
+using Application.Common.Abstract;
 using Application.Messaging;
-using Application.Services.Commands.Strategy;
+using Application.Services.Commands.Strategies;
 
 namespace Application.Services.Commands;
 

@@ -1,4 +1,4 @@
-﻿using Application.Features.Weathers;
+﻿using Application.Commands.Weathers;
 using Domain.Abstract;
 using Domain.Locations;
 using Domain.Weathers;
@@ -53,7 +53,7 @@ public class WeatherApiService : IWeatherApiService
 
         var forecast = forecastResponse.Value!
             .Forecast.ForecastDay
-            .Where(f => f.Day.Date == date.ToString("yyyy-MM-dd"))
+            .Where(f => f.Date == date.ToString("yyyy-MM-dd"))
             .FirstOrDefault();
 
         if (forecast is null)
