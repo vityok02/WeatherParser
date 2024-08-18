@@ -40,6 +40,8 @@ internal sealed class DefaultCommandHandler
         IEnumerable<IEnumerable<string>> buttons = [
             [BotCommand.WeatherNow, BotCommand.ForecastToday],
             [BotCommand.ForecastTomorrow, BotCommand.Location]
+            //[$"☀️{BotCommand.WeatherNow}", $"🌤️{BotCommand.ForecastToday}", $"🌥️{BotCommand.ForecastTomorrow}"],
+            //[$"📍{BotCommand.Location}" , $"🌐{BotCommand.ChangeLanguage}"]
         ];
 
         var keyboard = _keyboardGenerator.BuildKeyboard(buttons);

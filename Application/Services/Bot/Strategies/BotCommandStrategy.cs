@@ -29,8 +29,10 @@ public class BotCommandStrategy : ICommandStrategy
 
         var userCoordinates = user!.CurrentLocation?.Coordinates;
 
+        var text = message.Text.Substring(1);
+
         var command =
-            GetBotCommand(message.Text, message.UserId, userCoordinates!);
+            GetBotCommand(text, message.UserId, userCoordinates!);
 
         return command;
     }
