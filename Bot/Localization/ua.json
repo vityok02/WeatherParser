@@ -1,0 +1,11 @@
+{
+  "language": "uk",
+  "translations": {
+    "StartMessage": "Привіт! Я бот, який надає прогноз погоди. Оберіть дію",
+    "CurrentWeatherButton": "Поточна погода",
+    "ForecastTodayButton": "Прогноз на сьогодні",
+    "ForecastTomorrowButton": "Прогноз на завтра",
+    "ChangeLocationButton": "Змінити місцезнаходження",
+    "ChangeLanguageButton": "Змінити мову"
+  }
+}

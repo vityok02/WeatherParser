@@ -19,7 +19,7 @@ public class CallbackQueryHandler
         _logger.LogInformation("Received inline keyboard callback from: {CallbackQueryId}", callbackQuery.Id);
 
         var userId = callbackQuery.From.Id;
-        await _userRepository.EnsureCreate(userId, cancellationToken);
+        await _userRepository.EnsureCreateAsync(userId, cancellationToken);
 
 
         if (callbackQuery.Data is null)

@@ -27,7 +27,7 @@ public class CommandProcessor : ICommandProcessor
     public async Task ProcessCommand(IMessage message, CancellationToken cancellationToken)
     {
         await _userRepository
-            .EnsureCreate(message.UserId, cancellationToken);
+            .EnsureCreateAsync(message.UserId, cancellationToken);
 
         await _userRepository.SaveChangesAsync(cancellationToken);
 

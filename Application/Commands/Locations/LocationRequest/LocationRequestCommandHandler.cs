@@ -1,6 +1,6 @@
 ﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
-using Application.Common.Interfaces.Repositories;
 using Common.Constants;
 using Domain.Abstract;
 
@@ -10,19 +10,20 @@ internal sealed class LocationRequestCommandHandler
     : ICommandHandler<LocationRequestCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly IUserStateRepository _userStateRepository;
+    private readonly ISessionManager _sessionManager;
 
     public LocationRequestCommandHandler(
-        IMessageSender messageSender, IUserStateRepository userStateRepository)
+        IMessageSender messageSender, ISessionManager sessionManager)
     {
         _messageSender = messageSender;
-        _userStateRepository = userStateRepository;
+        _sessionManager = sessionManager;
     }
 
     public async Task<Result> Handle(
         LocationRequestCommand command, CancellationToken cancellationToken)
     {
-        _userStateRepository.SetState(command.ChatId, UserState.EnterLocation);
+        var userSession = _sessionManager.GetOrCreateSession(command.ChatId);
+        userSession.Set("state", UserState.EnterLocation);
 
         await _messageSender.SendLocationRequestAsync(
             chatId: command.ChatId,

@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Bot.TgTypes;
+using Common.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -47,7 +48,11 @@ internal class TelegramMessageSender : IMessageSender
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
             text: messageText,
-            replyMarkup: new ReplyKeyboardMarkup(KeyboardButton.WithRequestLocation(buttonText)),
+            replyMarkup: new ReplyKeyboardMarkup(
+                [
+                    KeyboardButton.WithRequestLocation(buttonText), 
+                    new KeyboardButton(BotCommand.Cancel)
+                ]),
             cancellationToken: cancellationToken);
     }
 

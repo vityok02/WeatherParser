@@ -1,20 +1,19 @@
-﻿using Application.Common.Abstract;
+﻿using Application.Commands.Weathers;
+using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Common.Constants;
 using Domain.Abstract;
 
-namespace Application.Commands.Weathers.EnterDay;
+namespace Application.Commands.Requests.RequestDay;
 
-public record EnterDayCommand(long UserId, string Text) : ICommand;
-
-internal class EnterDayCommandHandler
-    : ICommandHandler<EnterDayCommand>
+internal class RequestDayCommandHandler
+    : ICommandHandler<RequestDayCommand>
 {
     private readonly IMessageSender _messageSender;
     private readonly ISessionManager _sessionManager;
 
-    public EnterDayCommandHandler(
+    public RequestDayCommandHandler(
         IMessageSender messageSender,
         ISessionManager sessionManager)
     {
@@ -23,7 +22,7 @@ internal class EnterDayCommandHandler
     }
 
     public async Task<Result> Handle(
-        EnterDayCommand command, 
+        RequestDayCommand command,
         CancellationToken cancellationToken)
     {
         var day = Days.Value.GetValueOrDefault(command.Text);

@@ -1,6 +1,7 @@
-﻿using Application.Commands.Locations.EnterPlaceName;
+﻿using Application.Commands.Default;
 using Application.Commands.Locations.SetLocation;
-using Application.Commands.Weathers.EnterDay;
+using Application.Commands.Requests.RequestDay;
+using Application.Commands.Requests.RequestPlaceName;
 using Application.Commands.Weathers.SendForecastToday;
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
@@ -46,7 +47,7 @@ public class UserStateStrategy : ICommandStrategy
         // TODO: refactor logic with Sender.
         if (userState.Value == UserState.EnterDay)
         {
-            await _sender.Send(new EnterDayCommand(message.UserId, message.Text), cancelToken);
+            await _sender.Send(new RequestDayCommand(message.UserId, message.Text), cancelToken);
             userState = userSession.Get<UserState>("state");
         }
 
@@ -64,10 +65,19 @@ public class UserStateStrategy : ICommandStrategy
             UserState.SetLocation =>
                 new SetLocationCommand(message.UserId, message.Text),
             UserState.EnterLocation =>
-                new EnterPlaceNameCommand(message.UserId, message.Text),
+                GetRequestPlaceNameCommand(message.UserId, message.Text),
             UserState.GetDailyForecast =>
                 new SendDailyForecastCommand(message.UserId, coordinates, date),
             _ => null!
         };
+    }
+
+    private ICommand GetRequestPlaceNameCommand(long userId, string text)
+    {
+        if (text == BotCommand.Cancel)
+        {
+            return new DefaultCommand(userId);
+        }
+        return new RequestPlaceNameCommand(userId, text);
     }
 }

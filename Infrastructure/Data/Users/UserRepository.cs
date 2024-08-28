@@ -1,4 +1,5 @@
-﻿using Domain.Users;
+﻿using Domain.Languages;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Users;
@@ -46,17 +47,27 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.AnyAsync(u => u.Id == id && u.CurrentLocation != null, cancellationToken);
     }
 
-    public async Task EnsureCreate(long userId, CancellationToken cancellationToken)
+    public async Task EnsureCreateAsync(long userId, CancellationToken cancellationToken)
     {
         var users = _dbContext.Users;
 
         var isUserExist = await users.AnyAsync(u => u.Id == userId, cancellationToken);
 
-        var user = new User(userId);
-
         if (!isUserExist)
         {
+            var user = new User(userId, 1);
+
             await CreateAsync(user, cancellationToken);
         }
+    }
+
+    public async Task<Language?> GetLanguageAsync(long id, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users
+            .Where(u => u.Id == id)
+            .Include(u => u.Language)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return user?.Language;
     }
 }

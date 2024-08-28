@@ -33,7 +33,7 @@ public class GeocodingService : IGeocodingService
     public async Task<Result<string>> GetPlaceName(
         Coordinates coordinates, CancellationToken cancellationToken)
     {
-        return Result<string>.Success(string.Empty);
+        return await Task.FromResult(Result<string>.Success(string.Empty));
     }
 
     public async Task<Result<Location[]>> GetPlacesByName(

@@ -1,4 +1,5 @@
 ﻿using Application.Commands.Locations.LocationRequest;
+using Application.Commands.Requests.RequestLanguage;
 using Application.Commands.Weathers.SendForecastToday;
 using Application.Commands.Weathers.SendWeatherNow;
 using Application.Common.Abstract;
@@ -29,7 +30,7 @@ public class BotCommandStrategy : ICommandStrategy
 
         var userCoordinates = user!.CurrentLocation?.Coordinates;
 
-        var text = message.Text.Substring(1);
+        var text = message.Text;
 
         var command =
             GetBotCommand(text, message.UserId, userCoordinates!);
@@ -42,7 +43,7 @@ public class BotCommandStrategy : ICommandStrategy
     {
         return text switch
         {
-            BotCommand.Location =>
+            BotCommand.ChangeLocation =>
                 new LocationRequestCommand(userId),
             BotCommand.WeatherNow =>
                 new SendWeatherNowCommand(userId, userCoordinates!),
@@ -50,6 +51,8 @@ public class BotCommandStrategy : ICommandStrategy
                 new SendDailyForecastCommand(userId, userCoordinates, DateTime.Now),
             BotCommand.ForecastTomorrow =>
                 new SendDailyForecastCommand(userId, userCoordinates, DateTime.Now.AddDays(1)),
+            BotCommand.ChangeLanguage =>
+                new RequestLanguageCommand(userId),
             _ => null!
         };
     }

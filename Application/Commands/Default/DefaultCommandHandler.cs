@@ -1,8 +1,9 @@
 ﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
-using Common.Constants;
 using Domain.Abstract;
+using Domain.Users;
 
 namespace Application.Commands.Default;
 
@@ -11,40 +12,37 @@ internal sealed class DefaultCommandHandler
 {
     private readonly IMessageSender _messageSender;
     private readonly IKeyboardMarkupGenerator _keyboardGenerator;
+    private readonly ITranslationService _translations;
+    private readonly ISessionManager _sessionManager;
 
     public DefaultCommandHandler(
         IMessageSender messageSender,
-        IKeyboardMarkupGenerator keyboardGenerator)
+        IKeyboardMarkupGenerator keyboardGenerator,
+        ITranslationService translations,
+        ISessionManager sessionManager)
     {
         _messageSender = messageSender;
         _keyboardGenerator = keyboardGenerator;
+        _translations = translations;
+        _sessionManager = sessionManager;
     }
 
     public async Task<Result> Handle(
         DefaultCommand command, 
         CancellationToken cancellationToken)
     {
-        IAppReplyMarkup keyboard = GetKeyboard();
+        var userSession = _sessionManager.GetOrCreateSession(command.UserId);
+        userSession.Remove("state");
+
+        await _translations.SetLanguageByUserId(command.UserId, cancellationToken);
 
         await _messageSender.SendTextMessageAsync(
-            chatId: command.ChatId,
-            text: "Select action",
-            replyMarkup: keyboard,
+            chatId: command.UserId,
+            text: _translations.StartMessage,
+            replyMarkup: DefaultKeyboard
+                .GetKeyboard(_keyboardGenerator),
             cancellationToken: cancellationToken);
 
         return Result.Success();
-    }
-
-    private IAppReplyMarkup GetKeyboard()
-    {
-        IEnumerable<IEnumerable<string>> buttons = [
-            [BotCommand.WeatherNow, BotCommand.ForecastToday],
-            [BotCommand.ForecastTomorrow, BotCommand.Location]
-            //[$"☀️{BotCommand.WeatherNow}", $"🌤️{BotCommand.ForecastToday}", $"🌥️{BotCommand.ForecastTomorrow}"],
-            //[$"📍{BotCommand.Location}" , $"🌐{BotCommand.ChangeLanguage}"]
-        ];
-
-        var keyboard = _keyboardGenerator.BuildKeyboard(buttons);
-        return keyboard;
     }
 }

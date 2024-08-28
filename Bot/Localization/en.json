@@ -1,0 +1,16 @@
+{
+  "language": "en",
+  "translations": {
+    "messages": {
+      "StartMessage": "Hello! I am a bot that sends you forecasts. Select an action",
+      "RequestLanguage": "Select language"
+    },
+    "buttons": {
+      "CurrentWeatherButton": "Current weather",
+      "ForecastTodayButton": "Forecast today",
+      "ForecastTomorrowButton": "Forecast tomorrow",
+      "ChangeLocationButton": "Change location",
+      "ChangeLanguageButton": "Change language"
+    }
+  }
+}

@@ -2,4 +2,4 @@
 
 namespace Application.Commands.Default;
 
-public record DefaultCommand(long ChatId) : ICommand;
+public record DefaultCommand(long UserId) : ICommand;

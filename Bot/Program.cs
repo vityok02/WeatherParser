@@ -33,14 +33,19 @@ builder.UseSerilog((context, config) =>
 
 var host = builder.Build();
 
+// TODO: languages dublicates in table Languages
+
+var logger = host.Services.GetRequiredService<ILogger<Program>>();
 try
 {
     using var dbContext = host.Services.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
+    logger.LogInformation("Database was created");
+    await DataSeeder.SeedDataAsync(dbContext);
+    logger.LogInformation("Data was Seeded");
 }
 catch (Exception ex)
 {
-    var logger = host.Services.GetRequiredService<ILogger<Program>>();
     logger.LogError(ex, "Database was not created");
 }
 

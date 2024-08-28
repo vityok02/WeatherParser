@@ -47,8 +47,8 @@ public static class DependencyInjection
     {
         return services
             .AddScoped<ICommandStrategy, SetSharedLocationStrategy>()
-            .AddScoped<ICommandStrategy, LocationRequestStrategy>()
             .AddScoped<ICommandStrategy, UserStateStrategy>()
+            .AddScoped<ICommandStrategy, LocationRequestStrategy>()
             .AddScoped<ICommandStrategy, BotCommandStrategy>();
     }
 }

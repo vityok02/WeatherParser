@@ -1,4 +1,5 @@
 ﻿using Application.Common.Abstract;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
 using Application.Common.Interfaces.Repositories;
@@ -7,31 +8,31 @@ using Common.Constants;
 using Domain.Abstract;
 using Domain.CachedLocations;
 
-namespace Application.Commands.Locations.EnterPlaceName;
+namespace Application.Commands.Requests.RequestPlaceName;
 
-internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameCommand>
+internal class RequestPlaceNameCommandHandler : ICommandHandler<RequestPlaceNameCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly IUserStateRepository _userStateRepository;
+    private readonly ISessionManager _sessionManager;
     private readonly IGeocodingService _geocodingService;
     private readonly IPlacesRepository _placesRepository;
     private readonly IKeyboardMarkupGenerator _keyboardMarkupGenerator;
 
-    public EnterPlaceNameCommandHandler(
+    public RequestPlaceNameCommandHandler(
         IMessageSender messageSender,
-        IUserStateRepository cachedUserStateRepository,
+        ISessionManager sessionManager,
         IGeocodingService geocodingService,
         IPlacesRepository cachedPlacesRepository,
         IKeyboardMarkupGenerator keyboardMarkupGenerator)
     {
         _messageSender = messageSender;
-        _userStateRepository = cachedUserStateRepository;
+        _sessionManager = sessionManager;
         _geocodingService = geocodingService;
         _placesRepository = cachedPlacesRepository;
         _keyboardMarkupGenerator = keyboardMarkupGenerator;
     }
 
-    public async Task<Result> Handle(EnterPlaceNameCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RequestPlaceNameCommand command, CancellationToken cancellationToken)
     {
         if (command.PlaceName.Contains('/'))
         {
@@ -61,8 +62,10 @@ internal class EnterPlaceNameCommandHandler : ICommandHandler<EnterPlaceNameComm
         IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator.BuildKeyboard(locationsNames!);
 
         _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocation()).ToArray());
-        _userStateRepository.RemoveState(command.UserId);
-        _userStateRepository.SetState(command.UserId, UserState.SetLocation);
+
+        var userSession = _sessionManager.GetOrCreateSession(command.UserId);
+        userSession.Remove("state");
+        userSession.Set("state", UserState.SetLocation);
 
         await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,

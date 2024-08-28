@@ -2,6 +2,7 @@
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
+using Common.Constants;
 
 namespace Application.Services.Bot.Commands;
 
@@ -17,6 +18,11 @@ public class CommandFactory : ICommandFactory
     public async Task<ICommand> Create(
         IMessage message, CancellationToken cancellationToken)
     {
+        if (message.Text == BotCommand.Start)
+        {
+            return new DefaultCommand(message.UserId);
+        }
+
         foreach (var strategy in _strategies)
         {
             var command = await strategy.CreateCommand(message, cancellationToken);

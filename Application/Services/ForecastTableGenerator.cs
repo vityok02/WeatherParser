@@ -15,8 +15,6 @@ public class ForecastTableGenerator
 
     public string CreateDailyForecastTable(DailyForecast dailyForecast)
     {
-        // TODO: fix bug
-
         var hourlyForecast = dailyForecast.HourlyForecast
             .Where(hf => hf.Time.Hour % 3 == 0)
             .Select(hf => hf.ToFormattedHourlyForecast());
