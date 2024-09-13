@@ -11,7 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Application.Services;
+using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Repositories;
+using Infrastructure.Translations;
+using Infrastructure.Translations.Interfaces;
+using Application.Common.Interfaces.Localization;
+using Domain.Languages;
 
 namespace Infrastructure;
 
@@ -33,6 +38,10 @@ public static class DependencyInjection
             .AddScoped<IStyleLoader, StyleLoader>()
             .AddScoped<IWeatherApiUriBuilder, WeatherApiUriBuilder>()
             .AddScoped<ISessionManager, SessionManager>()
+            .AddTransient<ITranslationService, TranslationService>()
+            .AddScoped<IPathProvider, PathProvider>()
+            .AddScoped<ITranslationsParser, TranslationsParser>()
+            .AddScoped<ILanguageRepository, LanguageRepository>()
             ;
 
         services.AddMemoryCache();
@@ -43,9 +52,9 @@ public static class DependencyInjection
     private static IServiceCollection AddDbContext(
         this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = GetConnectionString(configuration);
+        //string? connectionString = GetConnectionString(configuration);
 
-        connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+        var connectionString = configuration.GetConnectionString("docker");
 
         services.AddDbContext<AppDbContext>(options =>
         {

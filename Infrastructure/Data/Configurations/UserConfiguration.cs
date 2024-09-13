@@ -19,5 +19,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne(u => u.CurrentLocation)
             .WithMany()
             .HasForeignKey(u => u.CurrentLocationId);
+
+        builder.HasOne(u => u.Language)
+            .WithMany(l => l.Users)
+            .HasForeignKey(u => u.LanguageId);
     }
 }

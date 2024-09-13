@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Application.Common.Interfaces.Services;
+using System.Text;
 
 namespace Application.Services.HtmlProcessing;
 
@@ -27,8 +28,13 @@ public class HtmlTableBuilder : IHtmlTableBuilder
 
     public string Build()
     {
-        _builder.AppendLine($"{string.Join("", rows)}</table>");
+        var result = _builder
+            .AppendLine($"{string.Join("", rows)}</table>")
+            .ToString();
 
-        return _builder.ToString();
+        _builder = new StringBuilder("<table>");
+        rows.Clear();
+
+        return result;
     }
 }

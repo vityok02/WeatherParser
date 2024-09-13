@@ -1,13 +1,15 @@
-﻿using Domain.Users;
+﻿using Domain.Languages;
+using Domain.Users;
 using Infrastructure.Constants;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading;
 
 namespace Infrastructure.Data.Users;
 
 public class CachedUserRepository : IUserRepository
 {
     private static readonly TimeSpan CacheTime = TimeSpan.FromMinutes(2);
-    private readonly IUserRepository _userRepository;
+    private readonly UserRepository _userRepository;
     private readonly IMemoryCache _memoryCache;
 
     public CachedUserRepository(UserRepository userRepository, AppDbContext dbContext, IMemoryCache memoryCache)
@@ -60,8 +62,13 @@ public class CachedUserRepository : IUserRepository
         return await _userRepository.HasLocationAsync(id, cancellationToken);
     }
 
-    public async Task EnsureCreate(long userId, CancellationToken cancellationToken)
+    public async Task EnsureCreateAsync(long userId, CancellationToken cancellationToken)
     {
-        await _userRepository.EnsureCreate(userId, cancellationToken);
+        await _userRepository.EnsureCreateAsync(userId, cancellationToken);
+    }
+
+    public async Task<Language?> GetLanguageAsync(long id, CancellationToken cancellationToken)
+    {
+        return await _userRepository.GetLanguageAsync(id, cancellationToken);
     }
 }

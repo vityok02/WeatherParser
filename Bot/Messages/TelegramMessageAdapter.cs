@@ -1,4 +1,4 @@
-﻿using Application.Messaging;
+﻿using Application.Common.Interfaces.Messaging;
 using Domain.Locations;
 using Telegram.Bot.Types;
 

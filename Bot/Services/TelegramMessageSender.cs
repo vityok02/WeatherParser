@@ -1,23 +1,29 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
-using Application.Messaging;
+using Application.Common.Interfaces.Messaging;
 using Bot.TgTypes;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.Services;
-internal class TelegramMessageSender : IMessageSender
+
+public class TelegramMessageSender : IMessageSender
 {
     private readonly ITelegramBotClient _botClient;
     private readonly TelegramFileAdapter _fileAdapter;
 
-    public TelegramMessageSender(ITelegramBotClient botClient, TelegramFileAdapter fileAdapter)
+    public TelegramMessageSender(
+        ITelegramBotClient botClient,
+        TelegramFileAdapter fileAdapter)
     {
         _botClient = botClient;
         _fileAdapter = fileAdapter;
     }
 
-    public async Task SendTextMessageAsync(long chatId, string text, CancellationToken cancellationToken)
+    public async Task SendTextMessageAsync(
+        long chatId,
+        string text,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
@@ -26,11 +32,14 @@ internal class TelegramMessageSender : IMessageSender
     }
 
     public async Task SendTextMessageAsync(
-    long chatId, string text, IAppReplyMarkup replyMarkup, CancellationToken cancellationToken)
+        long chatId,
+        string text,
+        IAppReplyMarkup replyMarkup,
+        CancellationToken cancellationToken)
     {
         IReplyMarkup? telegramReplyMarkup = replyMarkup switch
         {
-            KeyboardMarkup km => km.TelegramReplyKeyboardMarkup,
+            AppKeyboardMarkup km => km.TelegramReplyKeyboardMarkup,
             RemoveKeyboardMarkup rkm => rkm.ReplyKeyboardRemove,
             _ => new ReplyKeyboardRemove()
         };
@@ -42,16 +51,24 @@ internal class TelegramMessageSender : IMessageSender
             cancellationToken: cancellationToken);
     }
 
-    public async Task SendLocationRequestAsync(long chatId, string messageText, string buttonText, CancellationToken cancellationToken)
+    public async Task SendLocationRequestAsync(
+        long chatId,
+        string messageText,
+        string buttonText,
+        string[] additionalButtons,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
             text: messageText,
-            replyMarkup: new ReplyKeyboardMarkup(KeyboardButton.WithRequestLocation(buttonText)),
+            replyMarkup: GetKeyboard(buttonText, additionalButtons),
             cancellationToken: cancellationToken);
     }
 
-    public async Task SendPhotoAsync(long chatId, IFile photo, CancellationToken cancellationToken)
+    public async Task SendPhotoAsync(
+        long chatId,
+        IFile photo,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendPhotoAsync(
             chatId: chatId,
@@ -59,32 +76,18 @@ internal class TelegramMessageSender : IMessageSender
             cancellationToken: cancellationToken);
     }
 
-    public async Task SendKeyboardAsync(long chatId, string messateText, CancellationToken cancellationToken)
+    private ReplyKeyboardMarkup GetKeyboard(
+        string button,
+        string[] additionalButtons)
     {
-        List<KeyboardButton[]> list = new List<KeyboardButton[]>();
+        List<KeyboardButton> buttons = [];
+        buttons.Add(KeyboardButton.WithRequestLocation(button));
 
-        KeyboardButton[] row1 =
-        [
-            new KeyboardButton("Today"),
-            new KeyboardButton("Tomorrow")
-        ];
+        foreach (var btn in additionalButtons)
+        {
+            buttons.Add(btn);
+        }
 
-        KeyboardButton[] row2 =
-        [
-            new KeyboardButton("Button1"),
-            new KeyboardButton("Button2"),
-            new KeyboardButton("Button3"),
-        ];
-
-        list.Add(row1);
-        list.Add(row2);
-
-        var replyMarkup = new ReplyKeyboardMarkup(list);
-
-        await _botClient.SendTextMessageAsync(
-            chatId: chatId,
-            text: messateText,
-            replyMarkup: replyMarkup,
-            cancellationToken: cancellationToken);
+        return new ReplyKeyboardMarkup(buttons);
     }
 }

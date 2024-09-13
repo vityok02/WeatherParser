@@ -1,6 +1,8 @@
-﻿using Application.Common.Abstract;
+﻿using Application.Commands.Default;
+using Application.Common.Abstract;
+using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
-using Application.Messaging;
+using Application.Keyboard;
 using Bot.BotHandlers;
 using Bot.Messages;
 using Bot.Services;
@@ -13,7 +15,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
-        services.AddScoped<ReceiverService>()
+        services
+            .AddScoped<ReceiverService>()
             .AddHostedService<PollingService>()
             .AddScoped<UpdateHandler>()
             .AddScoped<IMessageHandler, MessageHandler>()
@@ -25,6 +28,7 @@ public static class DependencyInjection
             .AddScoped<TelegramFileAdapter>()
             .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()
             .AddScoped<IRemoveKeyboardMarkup, RemoveKeyboardMarkup>()
+            .AddScoped<IDefaultKeyboardFactory, DefaultKeyboardFactory>()
             ;
 
         return services;

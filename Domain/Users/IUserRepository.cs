@@ -1,4 +1,6 @@
-﻿namespace Domain.Users;
+﻿using Domain.Languages;
+
+namespace Domain.Users;
 
 public interface IUserRepository
 {
@@ -8,5 +10,6 @@ public interface IUserRepository
     Task CreateAsync(User user, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
     Task<bool> HasLocationAsync(long Id, CancellationToken cancellationToken);
-    Task EnsureCreate(long userId, CancellationToken cancellationToken);
+    Task EnsureCreateAsync(long userId, CancellationToken cancellationToken);
+    Task<Language?> GetLanguageAsync(long userId, CancellationToken cancellationToken);
 }
