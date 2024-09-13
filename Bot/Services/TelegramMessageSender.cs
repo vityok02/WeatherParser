@@ -2,23 +2,28 @@
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Bot.TgTypes;
-using Common.Constants;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Bot.Services;
-internal class TelegramMessageSender : IMessageSender
+
+public class TelegramMessageSender : IMessageSender
 {
     private readonly ITelegramBotClient _botClient;
     private readonly TelegramFileAdapter _fileAdapter;
 
-    public TelegramMessageSender(ITelegramBotClient botClient, TelegramFileAdapter fileAdapter)
+    public TelegramMessageSender(
+        ITelegramBotClient botClient,
+        TelegramFileAdapter fileAdapter)
     {
         _botClient = botClient;
         _fileAdapter = fileAdapter;
     }
 
-    public async Task SendTextMessageAsync(long chatId, string text, CancellationToken cancellationToken)
+    public async Task SendTextMessageAsync(
+        long chatId,
+        string text,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
@@ -27,7 +32,10 @@ internal class TelegramMessageSender : IMessageSender
     }
 
     public async Task SendTextMessageAsync(
-    long chatId, string text, IAppReplyMarkup replyMarkup, CancellationToken cancellationToken)
+        long chatId,
+        string text,
+        IAppReplyMarkup replyMarkup,
+        CancellationToken cancellationToken)
     {
         IReplyMarkup? telegramReplyMarkup = replyMarkup switch
         {
@@ -43,24 +51,43 @@ internal class TelegramMessageSender : IMessageSender
             cancellationToken: cancellationToken);
     }
 
-    public async Task SendLocationRequestAsync(long chatId, string messageText, string buttonText, CancellationToken cancellationToken)
+    public async Task SendLocationRequestAsync(
+        long chatId,
+        string messageText,
+        string buttonText,
+        string[] additionalButtons,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendTextMessageAsync(
             chatId: chatId,
             text: messageText,
-            replyMarkup: new ReplyKeyboardMarkup(
-                [
-                    KeyboardButton.WithRequestLocation(buttonText), 
-                    new KeyboardButton(BotCommand.Cancel)
-                ]),
+            replyMarkup: GetKeyboard(buttonText, additionalButtons),
             cancellationToken: cancellationToken);
     }
 
-    public async Task SendPhotoAsync(long chatId, IFile photo, CancellationToken cancellationToken)
+    public async Task SendPhotoAsync(
+        long chatId,
+        IFile photo,
+        CancellationToken cancellationToken)
     {
         await _botClient.SendPhotoAsync(
             chatId: chatId,
             photo: _fileAdapter.ConvertToTelegramFile(photo),
             cancellationToken: cancellationToken);
+    }
+
+    private ReplyKeyboardMarkup GetKeyboard(
+        string button,
+        string[] additionalButtons)
+    {
+        List<KeyboardButton> buttons = [];
+        buttons.Add(KeyboardButton.WithRequestLocation(button));
+
+        foreach (var btn in additionalButtons)
+        {
+            buttons.Add(btn);
+        }
+
+        return new ReplyKeyboardMarkup(buttons);
     }
 }

@@ -69,13 +69,6 @@ public class CachedUserRepository : IUserRepository
 
     public async Task<Language?> GetLanguageAsync(long id, CancellationToken cancellationToken)
     {
-    return await _memoryCache.GetOrCreateAsync(
-        CacheKeys.UserLanguageById(id),
-        cacheEntry =>
-        {
-            cacheEntry.SetAbsoluteExpiration(CacheTime);
-
-            return _userRepository.GetLanguageAsync(id, cancellationToken);
-        });
+        return await _userRepository.GetLanguageAsync(id, cancellationToken);
     }
 }

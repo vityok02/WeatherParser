@@ -1,46 +1,45 @@
-﻿using Application.Common.Interfaces;
-using Common.Constants;
-using Domain;
-using Domain.Users;
+﻿using Application.Common.Interfaces.Localization;
+using Domain.Translations;
 using Infrastructure.Translations.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Translations;
 
 public class TranslationService : ITranslationService
 {
-    private readonly ITextProvider _textProvider;
-    private string _language = Languages.English;
-    private readonly IUserRepository _userRepository;
+    private readonly ILogger<TranslationService> _logger;
+    private readonly ITranslationsParser _translationsParser;
 
-    public TranslationService(ITextProvider textProvider, IUserRepository userRepository)
+    public TranslationService(
+        ILogger<TranslationService> logger,
+        ITranslationsParser translationsParser)
     {
-        _textProvider = textProvider;
-        _userRepository = userRepository;
+        _logger = logger;
+        _translationsParser = translationsParser;
     }
 
-    public async Task SetLanguageByUserId(long userId, CancellationToken cancellationToken)
+    public string GetButtonTranslation(string key, string language)
     {
-        var language = await _userRepository.GetLanguageAsync(userId, cancellationToken);
-        _language = language?.Name ?? Languages.English;
+        var translation = GetTranslation(language);
+        return translation.Buttons[key] ?? default!;
     }
 
-    // TODO: replace languages to TextProvider
+    public string GetMessageTranslation(string key, string language)
+    {
+        var translation = GetTranslation(language);
+        return translation.Messages[key] ?? default!;
+    }
 
-    public string StartMessage =>
-        _textProvider.GetMessageTranslation(nameof(StartMessage), _language);
-
-    public string CurrentForecastButton =>
-        _textProvider.GetButtonTranslation(nameof(CurrentForecastButton), _language);
-
-    public string ForecastTodayButton =>
-        _textProvider.GetButtonTranslation(nameof(ForecastTodayButton), _language);
-
-    public string ForecastTomorrowButton =>
-        _textProvider.GetButtonTranslation(nameof(ForecastTomorrowButton), _language);
-
-    public string ChangeLocationButton =>
-        _textProvider.GetButtonTranslation(nameof(ChangeLocationButton), _language);
-
-    public string RequestLanguage =>
-        _textProvider.GetMessageTranslation(nameof(RequestLanguage), _language);
+    public Translation GetTranslation(string language)
+    {
+        try
+        {
+            return _translationsParser.GetTranslations(language);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error looking up the text");
+            return default!;
+        }
+    }
 }

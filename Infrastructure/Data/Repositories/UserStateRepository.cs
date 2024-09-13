@@ -18,7 +18,10 @@ public class UserStateRepository : IUserStateRepository
         => _memoryCache.Get<UserState>(CacheKeys.UserStateByUserId(userId));
 
     public void SetState(long userId, UserState state)
-        => _memoryCache.Set(CacheKeys.UserStateByUserId(userId), state, TimeSpan.FromMinutes(2));
+    {
+        _memoryCache.Remove(userId);
+        _memoryCache.Set(CacheKeys.UserStateByUserId(userId), state, TimeSpan.FromMinutes(2));
+    }
 
     public void RemoveState(long userId)
         => _memoryCache.Remove(CacheKeys.UserStateByUserId(userId));

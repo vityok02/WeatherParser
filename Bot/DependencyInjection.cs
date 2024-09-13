@@ -1,6 +1,8 @@
-﻿using Application.Common.Abstract;
+﻿using Application.Commands.Default;
+using Application.Common.Abstract;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
+using Application.Keyboard;
 using Bot.BotHandlers;
 using Bot.Messages;
 using Bot.Services;
@@ -26,6 +28,7 @@ public static class DependencyInjection
             .AddScoped<TelegramFileAdapter>()
             .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()
             .AddScoped<IRemoveKeyboardMarkup, RemoveKeyboardMarkup>()
+            .AddScoped<IDefaultKeyboardFactory, DefaultKeyboardFactory>()
             ;
 
         return services;

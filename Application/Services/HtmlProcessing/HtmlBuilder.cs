@@ -4,7 +4,7 @@ namespace Application.Services.HtmlProcessing;
 
 public class HtmlBuilder
 {
-    private StringBuilder _builder = new();
+    private StringBuilder _builder = new(@"<head><meta charset=""UTF-8""></head>");
 
     public HtmlBuilder SetStyles(string styles)
     {

@@ -1,18 +1,19 @@
-﻿using Common.Constants;
+﻿using Domain.Languages;
 using Infrastructure.Translations.Interfaces;
 
 namespace Infrastructure.Translations;
 
 public class PathProvider : IPathProvider
 {
-    private string _path = "Localization/";
     public string GetFileName(string language)
     {
+        string path = "Localization/";
         return language switch
         {
-            Languages.English => _path += "en.json",
-            Languages.Ukrainian => _path += "ua.json",
-            _ => _path += "en.json"
+            // TODO: bug with jsonen
+            Languages.English => path += "en.json",
+            Languages.Ukrainian => path += "ua.json",
+            _ => path += "en.json"
         };
     }
 

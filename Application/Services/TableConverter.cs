@@ -1,6 +1,7 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Services.HtmlProcessing;
+using Domain.Translations;
 using Domain.Weathers;
 using Microsoft.Extensions.Logging;
 
@@ -25,9 +26,9 @@ public class TableConverter
         _logger = logger;
     }
 
-    public FileWrapper ToTable(DailyForecast forecast)
+    public FileWrapper ToTable(DailyForecast forecast, Translation translation)
     {
-        string table = _tableGenerator.CreateDailyForecastTable(forecast);
+        string table = _tableGenerator.CreateDailyForecastTable(forecast, translation);
         string styles = _styleLoader.LoadStyles("table.css");
 
         HtmlBuilder htmlBuilder = new();
@@ -37,7 +38,7 @@ public class TableConverter
             .AddHtml(table)
             .Build();
 
-        _logger.LogInformation($"Created html code\n{html}");
+        _logger.LogInformation($"Generated html code\n{html}");
 
         return _converter.ConvertToImage(html);
     }

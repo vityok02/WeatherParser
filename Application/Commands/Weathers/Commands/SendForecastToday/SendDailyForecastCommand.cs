@@ -1,8 +1,8 @@
 ﻿using Application.Common.Abstract;
 using Domain.Locations;
 
-namespace Application.Commands.Weathers.SendForecastToday;
+namespace Application.Commands.Weathers.Commands.SendForecastToday;
 
 public sealed record SendDailyForecastCommand(
-    long ChatId, Coordinates Coordinates, DateTime Date) 
+    long UserId, Coordinates Coordinates, DateTime Date)
     : ICommand;

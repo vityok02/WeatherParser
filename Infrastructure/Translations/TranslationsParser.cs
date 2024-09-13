@@ -1,4 +1,5 @@
-﻿using Infrastructure.Translations.Interfaces;
+﻿using Domain.Translations;
+using Infrastructure.Translations.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -9,13 +10,13 @@ public class TranslationsParser : ITranslationsParser
 {
     private readonly IPathProvider _pathProvider;
     private readonly JsonSerializerOptions _options;
-    private readonly ILogger<TextProvider> _logger;
+    private readonly ILogger<TranslationService> _logger;
     private readonly IMemoryCache _cache;
     private readonly TimeSpan CacheTime = TimeSpan.FromMinutes(2);
 
     public TranslationsParser(
         IPathProvider pathProvider,
-        ILogger<TextProvider> logger,
+        ILogger<TranslationService> logger,
         IMemoryCache cache)
     {
         _pathProvider = pathProvider;
@@ -35,8 +36,8 @@ public class TranslationsParser : ITranslationsParser
             {
                 entry.SetAbsoluteExpiration(CacheTime);
 
-
-                var content = File.ReadAllText(_pathProvider.GetFileName(language));
+                var content = File
+                    .ReadAllText(_pathProvider.GetFileName(language));
 
                 LanguagePack? pack = JsonSerializer
                     .Deserialize<LanguagePack>(

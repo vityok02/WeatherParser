@@ -36,6 +36,7 @@ public static class DependencyInjection
             .AddScoped<ICommandFactory, CommandFactory>()
             .AddScoped<IUserService, UserService>()
             .AddScoped<IUserSession, UserSession>()
+            .AddScoped<IUserTranslationService, UserTranslationService>()
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBegavior<,>))
             .AddStrategies()
             ;

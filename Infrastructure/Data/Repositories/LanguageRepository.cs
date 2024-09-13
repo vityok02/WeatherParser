@@ -16,4 +16,10 @@ public class LanguageRepository : ILanguageRepository
     {
         return await _context.Languages.ToArrayAsync(cancellationToken);
     }
+
+    public async Task<Language?> GetByName(string name, CancellationToken cancellationToken)
+    {
+        return await _context.Languages.Where(l => l.Name == name)
+            .SingleOrDefaultAsync();
+    }
 }

@@ -9,4 +9,5 @@ public enum UserState
     EnterDays,
     GetDailyForecast,
     GetMultiDayForecast,
+    ChangeLanguage,
 }

@@ -1,8 +1,8 @@
-﻿using Application.Common.Abstract;
-using Application.Commands.Locations.LocationRequest;
-using Domain.Users;
-using Application.Common.Interfaces.Messaging;
+﻿using Application.Commands.Requests.RequestLocation;
+using Application.Common.Abstract;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Messaging;
+using Domain.Users;
 
 namespace Application.Services.Bot.Strategies;
 
@@ -21,7 +21,7 @@ public class LocationRequestStrategy : ICommandStrategy
         if (!await _userRepository
             .HasLocationAsync(message.UserId, cancellationToken))
         {
-            return new LocationRequestCommand(message.UserId);
+            return new RequestLocationCommand(message.UserId);
         }
 
         return null!;

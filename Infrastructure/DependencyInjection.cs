@@ -11,11 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Application.Services;
 using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Repositories;
 using Infrastructure.Translations;
 using Infrastructure.Translations.Interfaces;
+using Application.Common.Interfaces.Localization;
+using Domain.Languages;
 
 namespace Infrastructure;
 
@@ -37,10 +38,10 @@ public static class DependencyInjection
             .AddScoped<IStyleLoader, StyleLoader>()
             .AddScoped<IWeatherApiUriBuilder, WeatherApiUriBuilder>()
             .AddScoped<ISessionManager, SessionManager>()
-            .AddScoped<ITranslationService, TranslationService>()
-            .AddScoped<ITextProvider, TextProvider>()
+            .AddTransient<ITranslationService, TranslationService>()
             .AddScoped<IPathProvider, PathProvider>()
             .AddScoped<ITranslationsParser, TranslationsParser>()
+            .AddScoped<ILanguageRepository, LanguageRepository>()
             ;
 
         services.AddMemoryCache();

@@ -1,8 +1,9 @@
 ﻿using Application.Commands.Default;
+using Application.Commands.Languages;
 using Application.Commands.Locations.SetLocation;
-using Application.Commands.Requests.RequestDay;
+using Application.Commands.Requests;
 using Application.Commands.Requests.RequestPlaceName;
-using Application.Commands.Weathers.SendForecastToday;
+using Application.Commands.Weathers.Commands.SendForecastToday;
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
@@ -68,6 +69,8 @@ public class UserStateStrategy : ICommandStrategy
                 GetRequestPlaceNameCommand(message.UserId, message.Text),
             UserState.GetDailyForecast =>
                 new SendDailyForecastCommand(message.UserId, coordinates, date),
+            UserState.ChangeLanguage =>
+                new SetLanguageCommand(message.UserId, message.Text),
             _ => null!
         };
     }
@@ -78,6 +81,7 @@ public class UserStateStrategy : ICommandStrategy
         {
             return new DefaultCommand(userId);
         }
+
         return new RequestPlaceNameCommand(userId, text);
     }
 }

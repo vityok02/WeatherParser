@@ -9,16 +9,21 @@ public class User : BaseEntity
     public ICollection<Location> Locations { get; } = [];
     public Location? CurrentLocation { get; private set; }
     public long? CurrentLocationId { get; private set; }
-    public Language Language { get; private set; } = null!;
+    public Language Language { get; private set; } = default!;
     public long LanguageId { get; private set; }
 
     public User()
     { }
 
-    public User(long id, long languageId)
+    public User(long id)
     {
         Id = id;
-        LanguageId = languageId;
+    }
+
+    public User(long id, Language language)
+    {
+        Id = id;
+        Language = language;
     }
 
     public bool HasLocation() => CurrentLocation != null;
@@ -41,8 +46,8 @@ public class User : BaseEntity
         }
     }
 
-    public void UpdateLanguage()
+    public void UpdateLanguage(Language language)
     {
-        Language = Language; 
+        Language = language; 
     }
 }

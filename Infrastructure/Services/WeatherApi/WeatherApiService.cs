@@ -26,29 +26,37 @@ public class WeatherApiService : IWeatherApiService
     }
 
     public async Task<Result<CurrentForecast>> GetNowcastAsync(
-        Coordinates coordinates)
+        Coordinates coordinates, string languageCode)
     {
-        var uri = _uriBuilder.BuildNowcastPath(coordinates);
-        var nowcastResponse = await GetForecastResponseAsync<CurrentForecastResponse>(uri);
+        var uri = _uriBuilder
+            .BuildNowcastPath(coordinates, languageCode);
+        var nowcastResponse = await 
+            GetForecastResponseAsync<CurrentForecastResponse>(uri);
 
         if (nowcastResponse.IsFailure)
         {
-            return Result<CurrentForecast>.Failure(nowcastResponse.Error!);
+            return Result<CurrentForecast>
+                .Failure(nowcastResponse.Error!);
         }
 
-        var nowcast = nowcastResponse.Value!.ToWeather();
-        return Result<CurrentForecast>.Success(nowcast);
+        var nowcast = nowcastResponse.Value!
+            .ToWeather();
+        return Result<CurrentForecast>
+            .Success(nowcast);
     }
 
     public async Task<Result<DailyForecast>> GetDailyForecastAsync(
-        Coordinates coordinates, DateTime date)
+        Coordinates coordinates, string languageCode, DateTime date)
     {
-        var uri = _uriBuilder.BuildDailyForecastPath(coordinates, date);
-        var forecastResponse = await GetForecastResponseAsync<ForecastResponse>(uri);
+        var uri = _uriBuilder
+            .BuildDailyForecastPath(coordinates, languageCode, date);
+        var forecastResponse = await 
+            GetForecastResponseAsync<ForecastResponse>(uri);
 
         if (forecastResponse.IsFailure)
         {
-            return Result<DailyForecast>.Failure(forecastResponse.Error!);
+            return Result<DailyForecast>
+                .Failure(forecastResponse.Error!);
         }
 
         var forecast = forecastResponse.Value!
@@ -67,18 +75,23 @@ public class WeatherApiService : IWeatherApiService
     }
 
     public async Task<Result<Forecast>> GetMultiDayForecastAsync(
-        Coordinates coordinates, int days)
+        Coordinates coordinates, string languageCode, int days)
     {
-        var uri = _uriBuilder.BuildMultiDayForecastPath(coordinates, days);
-        var forecastResponse = await GetForecastResponseAsync<ForecastResponse>(uri);
+        var uri = _uriBuilder
+            .BuildMultiDayForecastPath(coordinates, languageCode, days);
+        var forecastResponse = await 
+            GetForecastResponseAsync<ForecastResponse>(uri);
 
         if (forecastResponse.IsFailure)
         {
-            return Result<Forecast>.Failure(forecastResponse.Error!);
+            return Result<Forecast>
+                .Failure(forecastResponse.Error!);
         }
 
-        var forecast = forecastResponse.Value!.ToForecast();
-        return Result<Forecast>.Success(forecast);
+        var forecast = forecastResponse.Value!
+            .ToForecast();
+        return Result<Forecast>
+            .Success(forecast);
     }
 
     private async Task<Result<T>> GetForecastResponseAsync<T>(string uri)
@@ -86,7 +99,8 @@ public class WeatherApiService : IWeatherApiService
         // TODO: logging
         try
         {
-            var forecastResponse = await _client.GetFromJsonAsync<T>(uri);
+            var forecastResponse = await _client
+                .GetFromJsonAsync<T>(uri);
 
             if (forecastResponse is null)
             {

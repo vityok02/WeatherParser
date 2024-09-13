@@ -6,7 +6,7 @@ namespace Application.Common.Interfaces.Services;
 
 public interface IWeatherApiService
 {
-    Task<Result<CurrentForecast>> GetNowcastAsync(Coordinates coordinates);
-    Task<Result<DailyForecast>> GetDailyForecastAsync(Coordinates coordinates, DateTime date);
-    Task<Result<Forecast>> GetMultiDayForecastAsync(Coordinates coordinates, int days);
+    Task<Result<CurrentForecast>> GetNowcastAsync(Coordinates coordinates, string languageCode);
+    Task<Result<DailyForecast>> GetDailyForecastAsync(Coordinates coordinates, string languageCode, DateTime date);
+    Task<Result<Forecast>> GetMultiDayForecastAsync(Coordinates coordinates, string languageCode, int days);
 }

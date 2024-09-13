@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Translations.Interfaces;
+﻿using Domain.Translations;
+
+namespace Infrastructure.Translations.Interfaces;
 
 public interface ITranslationsParser
 {

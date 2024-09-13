@@ -1,47 +1,43 @@
-﻿using Application.Commands.Weathers;
-using Application.Common.Abstract;
+﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Common.Constants;
 using Domain.Abstract;
 
-namespace Application.Commands.Requests.RequestDay;
+namespace Application.Commands.Requests;
 
-internal class RequestDayCommandHandler
+internal sealed class RequestDayCommandHandler
     : ICommandHandler<RequestDayCommand>
 {
     private readonly IMessageSender _messageSender;
     private readonly ISessionManager _sessionManager;
+    private readonly IUserTranslationService _userTranslationService;
 
     public RequestDayCommandHandler(
         IMessageSender messageSender,
-        ISessionManager sessionManager)
+        ISessionManager sessionManager,
+        IUserTranslationService userTranslationService)
     {
         _messageSender = messageSender;
         _sessionManager = sessionManager;
+        _userTranslationService = userTranslationService;
     }
 
     public async Task<Result> Handle(
         RequestDayCommand command,
         CancellationToken cancellationToken)
     {
-        var day = Days.Value.GetValueOrDefault(command.Text);
+        var translation = await _userTranslationService
+            .GetUserTranslationAsync(command.UserId, cancellationToken);
 
-        if (day == DateTime.MinValue)
-        {
-            await _messageSender.SendTextMessageAsync(
-                command.UserId,
-                "Try again",
-                cancellationToken);
+        await _messageSender.SendTextMessageAsync(
+            command.UserId,
+            translation.Messages["RequestDay"],
+            cancellationToken);
 
-            return Result.Failure("Day.NotValid", "Value from user is not valid");
-        }
-
-        var session = _sessionManager
+        var userSession = _sessionManager
             .GetOrCreateSession(command.UserId);
-
-        session.Set("date", day);
-        session.Set("state", UserState.GetDailyForecast);
+        userSession.Set("state", UserState.EnterDay);
 
         return Result.Success();
     }

@@ -1,9 +1,7 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
-using Application.Common.Interfaces.ReplyMarkup;
 using Domain.Abstract;
-using Domain.Users;
 
 namespace Application.Commands.Default;
 
@@ -11,36 +9,37 @@ internal sealed class DefaultCommandHandler
     : ICommandHandler<DefaultCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly IKeyboardMarkupGenerator _keyboardGenerator;
-    private readonly ITranslationService _translations;
+    private readonly IUserTranslationService _translationService;
     private readonly ISessionManager _sessionManager;
+    private readonly IDefaultKeyboardFactory _keyboardFactory;
 
     public DefaultCommandHandler(
         IMessageSender messageSender,
-        IKeyboardMarkupGenerator keyboardGenerator,
-        ITranslationService translations,
-        ISessionManager sessionManager)
+        IUserTranslationService translations,
+        ISessionManager sessionManager,
+        IDefaultKeyboardFactory keyboardFactory)
     {
         _messageSender = messageSender;
-        _keyboardGenerator = keyboardGenerator;
-        _translations = translations;
+        _translationService = translations;
         _sessionManager = sessionManager;
+        _keyboardFactory = keyboardFactory;
     }
 
     public async Task<Result> Handle(
-        DefaultCommand command, 
+        DefaultCommand command,
         CancellationToken cancellationToken)
     {
+        var translation = await _translationService
+            .GetUserTranslationAsync(command.UserId, cancellationToken);
+
         var userSession = _sessionManager.GetOrCreateSession(command.UserId);
         userSession.Remove("state");
 
-        await _translations.SetLanguageByUserId(command.UserId, cancellationToken);
-
         await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,
-            text: _translations.StartMessage,
-            replyMarkup: DefaultKeyboard
-                .GetKeyboard(_keyboardGenerator),
+            text: translation.Messages["Start"],
+            replyMarkup: _keyboardFactory
+                .CreateKeyboard(translation),
             cancellationToken: cancellationToken);
 
         return Result.Success();

@@ -1,4 +1,4 @@
-﻿namespace Common.Constants;
+﻿namespace Domain.Languages;
 
 public static class Languages
 {

@@ -10,67 +10,84 @@ using Domain.CachedLocations;
 
 namespace Application.Commands.Requests.RequestPlaceName;
 
-internal class RequestPlaceNameCommandHandler : ICommandHandler<RequestPlaceNameCommand>
+internal class RequestPlaceNameCommandHandler
+    : ICommandHandler<RequestPlaceNameCommand>
 {
     private readonly IMessageSender _messageSender;
     private readonly ISessionManager _sessionManager;
     private readonly IGeocodingService _geocodingService;
     private readonly IPlacesRepository _placesRepository;
     private readonly IKeyboardMarkupGenerator _keyboardMarkupGenerator;
+    private readonly IUserTranslationService _translationService;
 
     public RequestPlaceNameCommandHandler(
         IMessageSender messageSender,
         ISessionManager sessionManager,
         IGeocodingService geocodingService,
         IPlacesRepository cachedPlacesRepository,
-        IKeyboardMarkupGenerator keyboardMarkupGenerator)
+        IKeyboardMarkupGenerator keyboardMarkupGenerator,
+        IUserTranslationService userTranslationService)
     {
         _messageSender = messageSender;
         _sessionManager = sessionManager;
         _geocodingService = geocodingService;
         _placesRepository = cachedPlacesRepository;
         _keyboardMarkupGenerator = keyboardMarkupGenerator;
+        _translationService = userTranslationService;
     }
 
-    public async Task<Result> Handle(RequestPlaceNameCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        RequestPlaceNameCommand command,
+        CancellationToken cancellationToken)
     {
+        var translation = await _translationService
+            .GetUserTranslationAsync(command.UserId, cancellationToken);
+
         if (command.PlaceName.Contains('/'))
         {
-            var errorMessage = "Invalid input. Please provide a valid location name.";
             await _messageSender.SendTextMessageAsync(
                 chatId: command.UserId,
-                text: errorMessage,
+                text: translation.Messages["InvalidPlaceName"],
                 cancellationToken: cancellationToken);
 
             return Result.Success();
         }
 
-        var result = await _geocodingService.GetPlacesByName(command.PlaceName, cancellationToken);
+        var result = await _geocodingService
+            .GetPlacesByName(command.PlaceName, cancellationToken);
         if (result.IsFailure)
         {
             await _messageSender.SendTextMessageAsync(
                 chatId: command.UserId,
-                text: "Cannot get places",
+                text: translation.Messages["RequestPlaceFail"],
                 cancellationToken: cancellationToken);
 
             return Result.Failure(result.Error!);
         }
 
         var locations = result.Value;
-        var locationsNames = locations!.Select(l => l.Name).ToArray();
+        var locationsNames = locations!
+            .Select(l => l.Name)
+            .ToArray();
 
-        IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator.BuildKeyboard(locationsNames!);
+        IAppReplyMarkup replyMarkup = _keyboardMarkupGenerator
+            .BuildKeyboard(locationsNames!);
 
-        _placesRepository.SetPlaces(command.UserId, locations!.Select(l => l.ToCachedLocation()).ToArray());
+        _placesRepository
+            .SetPlaces(command.UserId, locations!
+                .Select(l => l.ToCachedLocation())
+                .ToArray());
 
-        var userSession = _sessionManager.GetOrCreateSession(command.UserId);
-        userSession.Remove("state");
-        userSession.Set("state", UserState.SetLocation);
+        var userSession = _sessionManager
+            .GetOrCreateSession(command.UserId);
+        userSession
+            .Remove("state");
+        userSession
+            .Set("state", UserState.SetLocation);
 
         await _messageSender.SendTextMessageAsync(
             chatId: command.UserId,
-            text: "Select location from the list.\n" +
-            "If you did not find the desired location, try entering your location again",
+            text: translation.Messages["RequestPlaceName"],
             replyMarkup: replyMarkup,
             cancellationToken: cancellationToken);
 

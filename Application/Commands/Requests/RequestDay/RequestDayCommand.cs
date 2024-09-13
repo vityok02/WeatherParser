@@ -1,5 +1,6 @@
 ﻿using Application.Common.Abstract;
 
-namespace Application.Commands.Requests.RequestDay;
+namespace Application.Commands.Requests;
 
-public record RequestDayCommand(long UserId, string Text) : ICommand;
+public sealed record RequestDayCommand(long UserId, string Day)
+    : ICommand;

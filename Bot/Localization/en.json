@@ -2,15 +2,43 @@
   "language": "en",
   "translations": {
     "messages": {
-      "StartMessage": "Hello! I am a bot that sends you forecasts. Select an action",
-      "RequestLanguage": "Select language"
+      "Start": "Hello! I am a bot that sends you forecasts. Select an action",
+      "RequestLanguage": "Select language",
+      "RequestLocation": "Enter your location. Click the button or enter your place manually",
+      "LanguageSet": "Language successfully set",
+      "LocationSet": "Location successfully set",
+      "LanguageFail": "Invalid Language. Please try again",
+      "RequestDayError": "The day is entered incorrectly. Please try again",
+      "RequestPlaceName": "Select location from the list. If you did not find the desired location, try entering your location again",
+      "RequestPlaceFail": "Couldn't get places",
+      "InValidPlaceName": "Invalid input. Please, provide a valid location name",
+      "RequestDay": "Select day",
+      "ForecastFail": "Unable to get forecast",
+      "NoLocation": "You haven't set a location yet"
     },
     "buttons": {
-      "CurrentWeatherButton": "Current weather",
-      "ForecastTodayButton": "Forecast today",
-      "ForecastTomorrowButton": "Forecast tomorrow",
-      "ChangeLocationButton": "Change location",
-      "ChangeLanguageButton": "Change language"
+      "CurrentWeather": "Current weather",
+      "ForecastToday": "Forecast today",
+      "ForecastTomorrow": "Forecast tomorrow",
+      "ChangeLocation": "Change location",
+      "ChangeLanguage": "Change language",
+      "Cancel": "Cancel",
+      "ShareLocation": "Send geolocation",
+      "ViewLocation": "View Location"
+    },
+    "units": {
+      "Kph": "kph"
+    },
+    "weather": {
+      "Time": "Time",
+      "Temperature": "Temperature",
+      "FeelsLike": "Feels like",
+      "Humidity": "Humidity",
+      "WindSpeed": "Wind speed",
+      "Cloudiness": "Cloudiness",
+      "Condition": "Condition",
+      "WindDirection": "Wind direction",
+      "UpdatedTime": "Update time"
     }
   }
 }
