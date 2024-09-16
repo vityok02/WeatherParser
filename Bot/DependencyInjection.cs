@@ -20,7 +20,6 @@ public static class DependencyInjection
             .AddHostedService<PollingService>()
             .AddScoped<UpdateHandler>()
             .AddScoped<IMessageHandler, MessageHandler>()
-            .AddScoped<CallbackQueryHandler>()
             .AddScoped<DefaultHandler>()
             .AddScoped<IValidator<Message>, MessageValidator>()
             .AddScoped<IMessageSender, TelegramMessageSender>()
