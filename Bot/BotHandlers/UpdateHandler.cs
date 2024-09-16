@@ -9,16 +9,13 @@ namespace Bot.BotHandlers;
 public class UpdateHandler : IUpdateHandler
 {
     private readonly ILogger<UpdateHandler> _logger;
-    private readonly IServiceProvider _serviceProvider;
     private readonly IMessageHandler _messageHandler;
 
     public UpdateHandler(
         ILogger<UpdateHandler> logger,
-        IServiceProvider serviceProvider,
         IMessageHandler messageHandler)
     {
         _logger = logger;
-        _serviceProvider = serviceProvider;
         _messageHandler = messageHandler;
     }
 
