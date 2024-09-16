@@ -25,7 +25,7 @@ public static class DependencyInjection
 
         services
             .AddScoped<TableConverter>()
-            .AddScoped<IFile, FileWrapper>()
+            //.AddScoped<IFile, FileWrapper>()
             .AddScoped<ForecastTableGenerator>()
             .AddScoped<HtmlBuilder>()
             .AddScoped<HtmlToImageConverter>()
@@ -35,7 +35,7 @@ public static class DependencyInjection
             .AddScoped<CommandFactory>()
             .AddScoped<ICommandFactory, CommandFactory>()
             .AddScoped<IUserService, UserService>()
-            .AddScoped<IUserSession, UserSession>()
+            //.AddScoped<IUserSession, UserSession>()
             .AddScoped<IUserTranslationService, UserTranslationService>()
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBegavior<,>))
             .AddStrategies()

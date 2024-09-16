@@ -18,18 +18,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F341881A-C92F-4AD4-887F-FAEA53827330}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{2E7298A5-7EB6-40AD-AB36-C58E7601F223}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4696C549-95F0-439D-BB1E-F006B6BBF502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appliation.UnitTests", "tests\Appliation.UnitTests\Appliation.UnitTests.csproj", "{A1B356A8-FD8F-42C2-AC68-08BFDB29A6F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Appliation.UnitTests", "tests\Appliation.UnitTests\Appliation.UnitTests.csproj", "{A1B356A8-FD8F-42C2-AC68-08BFDB29A6F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.UnitTests", "tests\Infrastructure.UnitTests\Infrastructure.UnitTests.csproj", "{BBE08165-7AD9-40CB-939A-2ED415252B64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UnitTests", "tests\Infrastructure.UnitTests\Infrastructure.UnitTests.csproj", "{BBE08165-7AD9-40CB-939A-2ED415252B64}"
 	ProjectSection(ProjectDependencies) = postProject
 		{51A26FCB-5755-485D-B15C-E26B62F8CE4A} = {51A26FCB-5755-485D-B15C-E26B62F8CE4A}
 	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D877B895-8185-436F-878E-CA833987991A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,6 @@ Global
 		{FDD973AA-140A-4F96-9C52-21F602BC681E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDD973AA-140A-4F96-9C52-21F602BC681E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDD973AA-140A-4F96-9C52-21F602BC681E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F341881A-C92F-4AD4-887F-FAEA53827330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F341881A-C92F-4AD4-887F-FAEA53827330}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F341881A-C92F-4AD4-887F-FAEA53827330}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F341881A-C92F-4AD4-887F-FAEA53827330}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E7298A5-7EB6-40AD-AB36-C58E7601F223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E7298A5-7EB6-40AD-AB36-C58E7601F223}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E7298A5-7EB6-40AD-AB36-C58E7601F223}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{BBE08165-7AD9-40CB-939A-2ED415252B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBE08165-7AD9-40CB-939A-2ED415252B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBE08165-7AD9-40CB-939A-2ED415252B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D877B895-8185-436F-878E-CA833987991A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D877B895-8185-436F-878E-CA833987991A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D877B895-8185-436F-878E-CA833987991A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D877B895-8185-436F-878E-CA833987991A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

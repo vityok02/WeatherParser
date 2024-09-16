@@ -10,13 +10,10 @@ public static class FormattedHourlyForecastExtension
         this HourlyForecast forecast,
         Translation translation)
     {
-        // TODO: Celsius symbol
-        string celsius = "C";
-
         return new FormattedHourlyForecast(
             forecast.Time.ToShortTimeString(),
-            $"{Convert.ToInt32(forecast.Temp)}{celsius}",
-            $"{Convert.ToInt32(forecast.FeelsLikeTemp)}{celsius}",
+            $"{Convert.ToInt32(forecast.Temp)}{Units.Celsius}",
+            $"{Convert.ToInt32(forecast.FeelsLikeTemp)}{Units.Celsius}",
             $"{Convert.ToInt32(forecast.Humidity)}%",
             $"{Convert.ToInt32(forecast.WindSpeed)} {translation.Units[Units.Kph]}",
             $"{Convert.ToInt32(forecast.Cloud)}%",

@@ -11,7 +11,7 @@ using Domain.Users;
 using MediatR;
 
 namespace Application.Commands.Locations.SetLocation;
-// TODO: many dependencies
+
 internal sealed class SetLocationCommandHandler
     : ICommandHandler<SetLocationCommand>
 {
@@ -71,14 +71,14 @@ internal sealed class SetLocationCommandHandler
 
         var locationToSet = selectedLocation.ToAppLocation();
 
-        var user = await _userRepository
-            .GetByIdWithLocationsAsync(command.UserId, cancellationToken);
-        user!
-            .SetCurrentLocation(locationToSet);
-
         var userSession = _sessionManager
             .GetOrCreateSession(command.UserId);
         userSession.Remove("state");
+
+        var user = await _userRepository
+            .GetByIdWithLocationsAsync(command.UserId, cancellationToken);
+
+        user!.SetCurrentLocation(locationToSet);
 
         await _userRepository.SaveChangesAsync(cancellationToken);
 

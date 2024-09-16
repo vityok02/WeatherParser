@@ -13,7 +13,7 @@ public class TableConverter
     private readonly HtmlToImageConverter _converter;
     private readonly ForecastTableGenerator _tableGenerator;
     private readonly ILogger<TableConverter> _logger;
-    // TODO: abstract htmlBuilder
+
     public TableConverter(
         HtmlToImageConverter converter,
         IStyleLoader styleLoader,

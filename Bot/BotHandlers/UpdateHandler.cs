@@ -10,26 +10,32 @@ public class UpdateHandler : IUpdateHandler
 {
     private readonly ILogger<UpdateHandler> _logger;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IMessageHandler _messageHandler;
 
     public UpdateHandler(
         ILogger<UpdateHandler> logger,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IMessageHandler messageHandler)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
+        _messageHandler = messageHandler;
     }
 
-    public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleUpdateAsync(
+        ITelegramBotClient botClient,
+        Update update,
+        CancellationToken cancellationToken)
     {
-        // TODO: Find the best solution for the situation
-        var handler = update switch
+        if (update.Message is Message message)
         {
-            { Message: { } message } => _serviceProvider.GetRequiredService<IMessageHandler>().HandleMessage(message, cancellationToken),
-            { CallbackQuery: { } callbackQuery } => _serviceProvider.GetRequiredService<CallbackQueryHandler>().HandleCallbackQuery(callbackQuery, cancellationToken),
-            _ => _serviceProvider.GetRequiredService<DefaultHandler>().HandleDefault(update)
-        };
+            await _messageHandler
+                .HandleMessage(message, cancellationToken);
+        }
 
-        await handler;
+        _logger.LogDebug(
+            "Received an unsupported update type: {UpdateType}.",
+            update.Type);
     }
 
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception ex, CancellationToken cancellationToken)

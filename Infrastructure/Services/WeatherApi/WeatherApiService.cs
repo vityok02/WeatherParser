@@ -96,7 +96,6 @@ public class WeatherApiService : IWeatherApiService
 
     private async Task<Result<T>> GetForecastResponseAsync<T>(string uri)
     {
-        // TODO: logging
         try
         {
             var forecastResponse = await _client

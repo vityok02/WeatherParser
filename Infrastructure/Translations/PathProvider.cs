@@ -10,7 +10,6 @@ public class PathProvider : IPathProvider
         string path = "Localization/";
         return language switch
         {
-            // TODO: bug with jsonen
             Languages.English => path += "en.json",
             Languages.Ukrainian => path += "ua.json",
             _ => path += "en.json"

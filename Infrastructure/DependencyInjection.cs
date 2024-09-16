@@ -52,9 +52,7 @@ public static class DependencyInjection
     private static IServiceCollection AddDbContext(
         this IServiceCollection services, IConfiguration configuration)
     {
-        //string? connectionString = GetConnectionString(configuration);
-
-        var connectionString = configuration.GetConnectionString("docker");
+        var connectionString = GetConnectionString(configuration);
 
         services.AddDbContext<AppDbContext>(options =>
         {
