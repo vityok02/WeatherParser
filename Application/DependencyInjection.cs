@@ -2,6 +2,7 @@
 using Application.Common.Behaviors;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Translations;
 using Application.Services;
 using Application.Services.Bot.Commands;
 using Application.Services.Bot.Strategies;

@@ -16,25 +16,28 @@ public static class WeatherExtensions
         sb
             .AppendLineIfNotNull(
                 weather.CurrentTemperature,
-                $"{translation.Weather["Temperature"]}: {Convert.ToInt32(weather.CurrentTemperature)}{Units.Celsius}")
+                $"🌡{translation.Weather["Temperature"]}: {Convert.ToInt32(weather.CurrentTemperature)}{Units.Celsius}")
+            .AppendLineIfNotNull(
+                weather.FeelsLike,
+                $"🤔{translation.Weather["FeelsLike"]}: {Convert.ToInt32(weather.FeelsLike)}{Units.Celsius}")
             .AppendLineIfNotNull(
                 weather.Humidity,
-                $"{translation.Weather["Humidity"]}: {weather.Humidity}%")
+                $"💧{translation.Weather["Humidity"]}: {weather.Humidity}%")
             .AppendLineIfNotNull(
                 weather.WindSpeed,
-                $"{translation.Weather["WindSpeed"]}: {weather.WindSpeed} {translation.Units["Kph"]}")
+                $"💨{translation.Weather["WindSpeed"]}: {weather.WindSpeed} {translation.Units["Kph"]}")
             .AppendLineIfNotNull(
                 weather.WindDirection,
-                $"{translation.Weather["WindDirection"]}: {weather.WindDirection}")
+                $"🧭{translation.Weather["WindDirection"]}: {weather.WindDirection}")
             .AppendLineIfNotNull(
                 weather.Cloud,
-                $"{translation.Weather["Cloudiness"]}: {weather.Cloud}%")
+                $"☁{translation.Weather["Cloudiness"]}: {weather.Cloud}%")
             .AppendLineIfNotNull(
                 weather.ConditionText,
-                $"{translation.Weather["Condition"]}: {weather.ConditionText}")
+                $"🌤{translation.Weather["Condition"]}: {weather.ConditionText}")
             .AppendLineIfNotNull(
                 weather.ObservationTime,
-                $"{translation.Weather["UpdatedTime"]}: {TimeOnly.FromDateTime(weather.ObservationTime!.Value)}");
+                $"🕒{translation.Weather["UpdatedTime"]}: {TimeOnly.FromDateTime(weather.ObservationTime!.Value)}");
 
         return sb.ToString();
     }

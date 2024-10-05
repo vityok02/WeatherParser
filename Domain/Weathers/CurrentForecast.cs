@@ -7,6 +7,7 @@ namespace Domain.Weathers;
 public class CurrentForecast
 {
     public double? CurrentTemperature { get; private set; }
+    public double? FeelsLike { get; private set; }
     public double? MinTemperature { get; private set; }
     public double? MaxTemperature { get; private set; }
     public double? WindSpeed { get; private set; }
@@ -21,6 +22,7 @@ public class CurrentForecast
 
     public CurrentForecast(
         double? currentTemperature,
+        double? feelsLike,
         double? windSpeed,
         string? windDirection,
         double? humidity,
@@ -30,6 +32,7 @@ public class CurrentForecast
         DateTime? observationTime)
     {
         CurrentTemperature = currentTemperature;
+        FeelsLike = feelsLike;
         WindSpeed = windSpeed;
         WindDirection = windDirection;
         Humidity = humidity;

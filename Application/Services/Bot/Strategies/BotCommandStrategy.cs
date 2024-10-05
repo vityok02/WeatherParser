@@ -7,6 +7,7 @@ using Application.Common.Abstract;
 using Application.Common.Constants;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Translations;
 using Domain.Locations;
 using Domain.Users;
 
@@ -71,9 +72,14 @@ public class BotCommandStrategy : ICommandStrategy
                 () => new ViewLocationCommand(userId)}
         };
 
-        return commandMappings
-            .TryGetValue(message.Text, out var commandFactory)
-            ? commandFactory()
-            : null!;
+        foreach (var button in commandMappings.Keys)
+        {
+            if (message.Text.Contains(button, StringComparison.OrdinalIgnoreCase))
+            {
+                return commandMappings[button]();
+            }
+        }
+
+        return null!;
     }
 }

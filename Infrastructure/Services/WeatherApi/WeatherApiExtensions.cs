@@ -11,6 +11,7 @@ public static class WeatherApiExtensions
 
         return new CurrentForecast(
             response.Current.Temp_c,
+            response.Current.Feelslike_c,
             response.Current.Wind_kph,
             response.Current.Wind_dir,
             response.Current.Humidity,

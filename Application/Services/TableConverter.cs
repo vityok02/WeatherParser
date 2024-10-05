@@ -29,7 +29,8 @@ public class TableConverter
     public FileWrapper ToTable(DailyForecast forecast, Translation translation)
     {
         string table = _tableGenerator.CreateDailyForecastTable(forecast, translation);
-        string styles = _styleLoader.LoadStyles("table.css");
+        var path = Path.Combine(Environment.CurrentDirectory, "table.css");
+        string styles = _styleLoader.LoadStyles(path);
 
         HtmlBuilder htmlBuilder = new();
 

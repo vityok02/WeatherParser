@@ -17,16 +17,17 @@ public class DefaultKeyboardFactory : IDefaultKeyboardFactory
     public IAppReplyMarkup CreateKeyboard(
         Translation translation)
     {
-        IEnumerable<IEnumerable<string>> buttons = [
+        IEnumerable<IEnumerable<string>> buttons =
+        [
             [
-                translation.Buttons[Buttons.CurrentWeather],
-                translation.Buttons[Buttons.ForecastToday],
-                translation.Buttons[Buttons.ForecastTomorrow]
+                $"{translation.Buttons[Buttons.CurrentWeather]} ☀️",
+                $"{translation.Buttons[Buttons.ForecastToday]} 🌤️",
+                $"{translation.Buttons[Buttons.ForecastTomorrow]} 🌧️"
             ],
             [
-                translation.Buttons[Buttons.ViewLocation],
-                translation.Buttons[Buttons.ChangeLocation],
-                translation.Buttons[Buttons.ChangeLanguage],
+                $"{translation.Buttons[Buttons.ViewLocation]} 📍",
+                $"{translation.Buttons[Buttons.ChangeLocation]} 🗺️",
+                $"{translation.Buttons[Buttons.ChangeLanguage]} 🌐"
             ]
         ];
 

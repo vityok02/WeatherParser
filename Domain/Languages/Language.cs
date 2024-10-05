@@ -9,9 +9,6 @@ public class Language : BaseEntity
     public string Code { get; private set; } = string.Empty;
     public ICollection<User> Users { get; private set; } = new List<User>();
 
-    public Language()
-    { }
-
     public Language(long id, string name, string code)
     {
         Id = id;

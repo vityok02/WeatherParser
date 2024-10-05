@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Translations;
 using Application.Services;
 using Domain.Abstract;
 using Domain.Users;

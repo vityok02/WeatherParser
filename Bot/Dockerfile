@@ -21,6 +21,7 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["Common/Common.csproj", "Common/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
+COPY Bot /app/Bot
 RUN dotnet restore "./Bot/Bot.csproj"
 COPY . .
 WORKDIR "/src/Bot"

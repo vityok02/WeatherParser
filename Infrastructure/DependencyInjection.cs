@@ -1,5 +1,8 @@
 ﻿using Application.Common.Interfaces;
-using Application.Commands.Weathers;
+using Application.Common.Interfaces.Localization;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
+using Domain.Languages;
 using Domain.Users;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
@@ -7,16 +10,12 @@ using Infrastructure.Data.Users;
 using Infrastructure.Services;
 using Infrastructure.Services.Geocoding;
 using Infrastructure.Services.WeatherApi;
+using Infrastructure.Translations;
+using Infrastructure.Translations.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Application.Common.Interfaces.Services;
-using Application.Common.Interfaces.Repositories;
-using Infrastructure.Translations;
-using Infrastructure.Translations.Interfaces;
-using Application.Common.Interfaces.Localization;
-using Domain.Languages;
 
 namespace Infrastructure;
 
@@ -108,6 +107,8 @@ public static class DependencyInjection
 
     private static string? GetConnectionString(IConfiguration configuration)
     {
+        return Environment.GetEnvironmentVariable("CONNECTION_STRING")
+            ?? configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
         var connectionString = string.Empty;
         bool useDocker = false;
 

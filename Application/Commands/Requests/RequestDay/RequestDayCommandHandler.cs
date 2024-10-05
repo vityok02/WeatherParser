@@ -1,6 +1,7 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Translations;
 using Common.Constants;
 using Domain.Abstract;
 

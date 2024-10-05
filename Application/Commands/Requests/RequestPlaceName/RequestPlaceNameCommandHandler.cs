@@ -4,6 +4,7 @@ using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Translations;
 using Common.Constants;
 using Domain.Abstract;
 using Domain.CachedLocations;

@@ -7,6 +7,7 @@
       "RequestLocation": "Enter your location. Click the button or enter your place manually",
       "LanguageSet": "Language successfully set",
       "LocationSet": "Location successfully set",
+      "LocationFail": "Couldn't get location",
       "LanguageFail": "Invalid Language. Please try again",
       "RequestDayError": "The day is entered incorrectly. Please try again",
       "RequestPlaceName": "Select location from the list. If you did not find the desired location, try entering your location again",

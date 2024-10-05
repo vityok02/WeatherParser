@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces.Services;
 using Domain.Abstract;
 using Domain.Locations;
-using Infrastructure.Services.Geocoding.Response;
+using Infrastructure.Services.Geocoding.Responses;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,9 +31,46 @@ public class GeocodingService : IGeocodingService
     }
 
     public async Task<Result<string>> GetPlaceName(
-        Coordinates coordinates, CancellationToken cancellationToken)
+        Coordinates coordinates, string languageCode, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(Result<string>.Success(string.Empty));
+        var url = GetPath(coordinates, languageCode);
+
+        try
+        {
+            var response = await _client.GetAsync(url, cancellationToken);
+
+            var geocodingResponse = await response
+                .Content.ReadFromJsonAsync<GeocodingResponse>(_jsonOptions, cancellationToken);
+
+            var placeName = geocodingResponse?.Features?.FirstOrDefault()?.FullPlaceName;
+
+            _logger.LogInformation("Recieved Geocoding HTTP response GET {@url} with status code {@code}", url, response.StatusCode);
+
+            return placeName is not null
+                ? Result<string>.Success(placeName)
+                : Result<string>.Failure(GeocodingErrors.LocationsNull);
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "HTTP Request Error: {@description}",
+                GeocodingErrors.HttpRequestError.Description);
+
+            return Result<string>.Failure(GeocodingErrors.HttpRequestError);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogError(ex, "Deserialization Error: {description}",
+                GeocodingErrors.DeserializationError.Description);
+
+            return Result<string>.Failure(GeocodingErrors.DeserializationError);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected Error: {description}",
+                GeocodingErrors.UnexpectedError.Description);
+
+            return Result<string>.Failure(GeocodingErrors.UnexpectedError);
+        }
     }
 
     public async Task<Result<Location[]>> GetPlacesByName(
@@ -52,7 +89,8 @@ public class GeocodingService : IGeocodingService
 
             if (locations is null)
             {
-                return Result<Location[]>.Failure(GeocodingErrors.LocationsNull);
+                return Result<Location[]>
+                    .Failure(GeocodingErrors.LocationsNull);
             }
 
             return Result<Location[]>
@@ -79,6 +117,18 @@ public class GeocodingService : IGeocodingService
 
             return Result<Location[]>.Failure(GeocodingErrors.UnexpectedError);
         }
+    }
+
+    private Uri GetPath(Coordinates coordinates, string languageCode)
+    {
+        QueryBuilder qb = new(
+            new List<KeyValuePair<string, string>>
+            {
+                new( "key", _cfg.Token ),
+                new( "language", languageCode )
+            });
+
+        return new Uri($"{_cfg.Path}/{coordinates}.json{qb}");
     }
 
     private Uri GetPath(string locationName)

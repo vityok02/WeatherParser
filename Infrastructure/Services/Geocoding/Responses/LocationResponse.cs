@@ -1,4 +1,4 @@
-﻿using Infrastructure.Services.Geocoding.Response;
+﻿using Infrastructure.Services.Geocoding.Responses;
 
 namespace WeatherParser.Features.Geocoding.GeocodingRecords;
 

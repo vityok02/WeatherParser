@@ -9,6 +9,7 @@ services:
       dockerfile: Bot/Dockerfile
     environment:
       - UseDocker=true
+      - CONNECTION_STRING=Server=db,1433;Database=WeatherBot;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=true
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: db
@@ -27,4 +28,3 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - 5341:5341
-      - 8081:80 
