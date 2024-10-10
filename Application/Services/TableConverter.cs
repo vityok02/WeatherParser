@@ -29,7 +29,7 @@ public class TableConverter
     public FileWrapper ToTable(DailyForecast forecast, Translation translation)
     {
         string table = _tableGenerator.CreateDailyForecastTable(forecast, translation);
-        var path = Path.Combine(AppContext.BaseDirectory, "table.css");
+        var path = Path.Combine("wwwroot", "table.css");
         _logger.LogInformation("Getting file by path: @{path}", path);
         string styles = _styleLoader.LoadStyles(path);
 
