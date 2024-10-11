@@ -5,8 +5,9 @@ using Bot.Extensions;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using System.Net;
 using Telegram.Bot;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,4 +50,5 @@ catch (Exception ex)
 
 app.MapGet("/", () => "Bot is running");
 
-await app.RunAsync();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://*:{port}");
