@@ -3,7 +3,6 @@ using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Localization;
 using Application.Common.Interfaces.Messaging;
-using Application.Common.Interfaces.Repositories;
 using Domain.Abstract;
 using Domain.Languages;
 using Domain.Users;
