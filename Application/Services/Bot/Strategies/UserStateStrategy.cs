@@ -7,6 +7,7 @@ using Application.Commands.Weathers.Commands.SendForecastToday;
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Translations;
 using Common.Constants;
 using Domain.Locations;
 using MediatR;
@@ -18,15 +19,18 @@ public class UserStateStrategy : ICommandStrategy
     private readonly IUserService _userService;
     private readonly ISessionManager _sessionManager;
     private readonly ISender _sender;
+    private readonly IUserTranslationService _translationService;
 
     public UserStateStrategy(
         IUserService userService,
         ISessionManager sessionManager,
-        ISender sender)
+        ISender sender,
+        IUserTranslationService translationService)
     {
         _userService = userService;
         _sessionManager = sessionManager;
         _sender = sender;
+        _translationService = translationService;
     }
 
     public async Task<ICommand> CreateCommand(
@@ -53,12 +57,12 @@ public class UserStateStrategy : ICommandStrategy
         }
 
         var date = userSession.Get<DateTime>("date");
-        var command = GetUserStateCommand(message, coordinates!, userState.Value, date);
+        var command = await GetUserStateCommand(message, coordinates!, userState.Value, date);
         return command;
 
     }
 
-    private ICommand GetUserStateCommand(
+    private async Task<ICommand> GetUserStateCommand(
         IMessage message, Coordinates coordinates, UserState userState, DateTime date)
     {
         return userState switch
@@ -66,7 +70,7 @@ public class UserStateStrategy : ICommandStrategy
             UserState.SetLocation =>
                 new SetLocationCommand(message.UserId, message.Text),
             UserState.EnterLocation =>
-                GetRequestPlaceNameCommand(message.UserId, message.Text),
+                await GetRequestPlaceNameCommand(message.UserId, message.Text),
             UserState.GetDailyForecast =>
                 new SendDailyForecastCommand(message.UserId, coordinates, date),
             UserState.ChangeLanguage =>
@@ -75,9 +79,12 @@ public class UserStateStrategy : ICommandStrategy
         };
     }
 
-    private ICommand GetRequestPlaceNameCommand(long userId, string text)
+    private async Task<ICommand> GetRequestPlaceNameCommand(long userId, string text)
     {
-        if (text == BotCommand.Cancel)
+        var translation = await _translationService
+            .GetUserTranslationAsync(userId, CancellationToken.None);
+
+        if (text == translation.Buttons["Cancel"])
         {
             return new DefaultCommand(userId);
         }
