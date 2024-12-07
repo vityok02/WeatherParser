@@ -50,5 +50,4 @@ catch (Exception ex)
 
 app.MapGet("/", () => "Bot is running");
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://*:{port}");
+app.Run();
