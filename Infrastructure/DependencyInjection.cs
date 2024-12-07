@@ -109,22 +109,22 @@ public static class DependencyInjection
     {
         return Environment.GetEnvironmentVariable("CONNECTION_STRING")
             ?? configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-        var connectionString = string.Empty;
-        bool useDocker = false;
+        //var connectionString = string.Empty;
+        //bool useDocker = false;
 
-        var v = Environment.GetEnvironmentVariable("UseDocker");
+        //var v = Environment.GetEnvironmentVariable("UseDocker");
 
-        _ = bool.TryParse(Environment.GetEnvironmentVariable("UseDocker"), out useDocker);
+        //_ = bool.TryParse(Environment.GetEnvironmentVariable("UseDocker"), out useDocker);
 
-        if (useDocker)
-        {
-            connectionString = configuration.GetConnectionString("docker-compose");
-        }
-        else
-        {
-            connectionString = configuration.GetConnectionString("docker");
-        }
+        //if (useDocker)
+        //{
+        //    connectionString = configuration.GetConnectionString("docker-compose");
+        //}
+        //else
+        //{
+        //    connectionString = configuration.GetConnectionString("docker");
+        //}
 
-        return connectionString;
+        //return connectionString;
     }
 }
