@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Build with dotnet
-        run: dotnet build src/WeatherBot/Bot.csproj --configuration Release
+        run: dotnet build src/Bot.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/WeatherBot/Bot.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish src/Bot.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
