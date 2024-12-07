@@ -23,8 +23,7 @@ public class ReceiverServiceBase<TUpdateHandler> : IReceiverService
     {
         var receiverOptions = new ReceiverOptions()
         {
-            AllowedUpdates = [],
-            ThrowPendingUpdates = true,
+            AllowedUpdates = []
         };
 
         var me = await _botClient.GetMeAsync(cancellationToken);

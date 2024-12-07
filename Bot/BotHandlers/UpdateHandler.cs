@@ -35,7 +35,7 @@ public class UpdateHandler : IUpdateHandler
             update.Type);
     }
 
-    public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception ex, CancellationToken cancellationToken)
+    public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception ex, HandleErrorSource source, CancellationToken cancellationToken)
     {
         var errorMessage = ex switch
         {
