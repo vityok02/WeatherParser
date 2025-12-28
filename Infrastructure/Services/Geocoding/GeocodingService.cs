@@ -48,7 +48,7 @@ public class GeocodingService : IGeocodingService
                 .FirstOrDefault()?.FullPlaceName;
 
             _logger.LogInformation(
-                "Recieved Geocoding HTTP response GET {Url} with status code {Code}",
+                "Received Geocoding HTTP response GET {Url} with status code {Code}",
                 url,
                 response.StatusCode);
 
