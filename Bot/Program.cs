@@ -40,7 +40,6 @@ try
     using var scope = app.Services.CreateScope();
     using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await dbContext.Database.MigrateAsync();
-    await dbContext.Database.EnsureCreatedAsync();
     logger.LogInformation("Database was created");
     await DataSeeder.SeedDataAsync(dbContext);
     logger.LogInformation("Data was Seeded");
