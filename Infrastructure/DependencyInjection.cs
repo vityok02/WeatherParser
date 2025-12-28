@@ -55,7 +55,7 @@ public static class DependencyInjection
 
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseSqlServer(connectionString,
+            options.UseNpgsql(connectionString,
                 providerOptions => providerOptions.EnableRetryOnFailure(10));
         });
 
@@ -107,24 +107,6 @@ public static class DependencyInjection
 
     private static string? GetConnectionString(IConfiguration configuration)
     {
-        return Environment.GetEnvironmentVariable("CONNECTION_STRING")
-            ?? configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-        //var connectionString = string.Empty;
-        //bool useDocker = false;
-
-        //var v = Environment.GetEnvironmentVariable("UseDocker");
-
-        //_ = bool.TryParse(Environment.GetEnvironmentVariable("UseDocker"), out useDocker);
-
-        //if (useDocker)
-        //{
-        //    connectionString = configuration.GetConnectionString("docker-compose");
-        //}
-        //else
-        //{
-        //    connectionString = configuration.GetConnectionString("docker");
-        //}
-
-        //return connectionString;
+        return configuration.GetConnectionString("DefaultConnection");
     }
 }
