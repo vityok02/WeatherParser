@@ -35,17 +35,23 @@ public class UpdateHandler : IUpdateHandler
             update.Type);
     }
 
-    public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception ex, HandleErrorSource source, CancellationToken cancellationToken)
+    public async Task HandleErrorAsync(
+        ITelegramBotClient botClient,
+        Exception exception,
+        HandleErrorSource source,
+        CancellationToken cancellationToken)
     {
-        var errorMessage = ex switch
+        var errorMessage = exception switch
         {
             ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-            _ => ex.ToString()
+            _ => exception.ToString()
         };
 
-        _logger.LogInformation("HandleError: {ErrorMessage}", errorMessage);
+        _logger.LogInformation(
+            "HandleError: {ErrorMessage}",
+            errorMessage);
 
-        if (ex is RequestException)
+        if (exception is RequestException)
         {
             await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
         }

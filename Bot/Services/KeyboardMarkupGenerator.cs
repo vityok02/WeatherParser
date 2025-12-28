@@ -1,5 +1,6 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces.ReplyMarkup;
+using Bot.TgTypes;
 
 namespace Bot.Services;
 
@@ -10,8 +11,8 @@ public class KeyboardMarkupGenerator : IKeyboardMarkupGenerator
         return new AppKeyboardMarkup(items);
     }
 
-    public IAppReplyMarkup BuildKeyboard(IEnumerable<IEnumerable<string>> elements)
+    public IAppReplyMarkup BuildKeyboard(IEnumerable<IEnumerable<string>> items)
     {
-        return new AppKeyboardMarkup(elements);
+        return new AppKeyboardMarkup(items);
     }
 }

@@ -61,17 +61,19 @@ public class WeatherApiService : IWeatherApiService
 
         var forecast = forecastResponse.Value!
             .Forecast.ForecastDay
-            .Where(f => f.Date == date.ToString("yyyy-MM-dd"))
-            .FirstOrDefault();
+            .FirstOrDefault(f => f.Date == date.ToString("yyyy-MM-dd"));
 
         if (forecast is null)
         {
-            _logger.LogInformation("Variable is null: {@forecast}",
+            _logger.LogInformation("Forecast is null: {Forecast}",
                 forecast);
-            return Result<DailyForecast>.Failure(WeatherServiceErrors.ForecastNull);
+
+            return Result<DailyForecast>
+                .Failure(WeatherServiceErrors.ForecastNull);
         }
 
-        return Result<DailyForecast>.Success(forecast.ToDailyForecast());
+        return Result<DailyForecast>
+            .Success(forecast.ToDailyForecast());
     }
 
     public async Task<Result<Forecast>> GetMultiDayForecastAsync(
@@ -110,21 +112,21 @@ public class WeatherApiService : IWeatherApiService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Description: {@description}",
+            _logger.LogError(ex, "Description: {Description}",
                 ex.Message);
 
             return Result<T>.Failure(ClientErrors.HttpResponseError);
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Description: {@description}",
+            _logger.LogError(ex, "Description: {Description}",
                 ex.Message);
 
             return Result<T>.Failure(ClientErrors.JsonError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Description: {@description}",
+            _logger.LogError(ex, "Description: {Description}",
                 ex.Message);
 
             return Result<T>.Failure(ClientErrors.UnexpectedError);

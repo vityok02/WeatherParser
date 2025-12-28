@@ -1,6 +1,6 @@
 ﻿using Application.Commands.Weathers.Formatting.HourlyForecast;
-using Application.Common.Interfaces.Localization;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Translations;
 using Domain.Translations;
 using Domain.Weathers;
 using System.Globalization;

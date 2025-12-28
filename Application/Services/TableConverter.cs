@@ -28,9 +28,15 @@ public class TableConverter
 
     public FileWrapper ToTable(DailyForecast forecast, Translation translation)
     {
-        string table = _tableGenerator.CreateDailyForecastTable(forecast, translation);
+        string table = _tableGenerator
+            .CreateDailyForecastTable(forecast, translation);
+
         var path = Path.Combine("wwwroot", "table.css");
-        _logger.LogInformation("Getting file by path: @{path}", path);
+
+        _logger.LogInformation(
+            "Getting file by path: {Path}",
+            path);
+
         string styles = _styleLoader.LoadStyles(path);
 
         HtmlBuilder htmlBuilder = new();
@@ -40,7 +46,9 @@ public class TableConverter
             .AddHtml(table)
             .Build();
 
-        _logger.LogInformation($"Generated html code\n{html}");
+        _logger.LogInformation(
+            "Generated html code\n{Html}",
+            html);
 
         return _converter.ConvertToImage(html);
     }

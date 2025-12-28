@@ -23,8 +23,6 @@ public static class DependencyInjection
             .AddScoped<DefaultHandler>()
             .AddScoped<IValidator<Message>, MessageValidator>()
             .AddScoped<IMessageSender, TelegramMessageSender>()
-            .AddScoped<IAppReplyMarkup, TgReplyMarkup>()
-            .AddScoped<TelegramFileAdapter>()
             .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()
             .AddScoped<IRemoveKeyboardMarkup, RemoveKeyboardMarkup>()
             .AddScoped<IDefaultKeyboardFactory, DefaultKeyboardFactory>()

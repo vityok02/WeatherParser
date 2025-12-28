@@ -1,4 +1,4 @@
-﻿using Application.Common.Interfaces.Localization;
+﻿using Application.Common.Interfaces.Translations;
 using Domain.Translations;
 using Infrastructure.Translations.Interfaces;
 using Microsoft.Extensions.Logging;

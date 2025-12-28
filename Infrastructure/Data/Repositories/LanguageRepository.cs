@@ -12,14 +12,14 @@ public class LanguageRepository : ILanguageRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Language>> GetAll(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Language>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _context.Languages.ToArrayAsync(cancellationToken);
     }
 
-    public async Task<Language?> GetByName(string name, CancellationToken cancellationToken)
+    public async Task<Language?> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
-        return await _context.Languages.Where(l => l.Name == name)
-            .SingleOrDefaultAsync();
+        return await _context.Languages
+            .SingleOrDefaultAsync(l => l.Name == name, cancellationToken);
     }
 }

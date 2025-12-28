@@ -6,9 +6,7 @@ using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Serilog;
-using System.Net;
 using Telegram.Bot;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,4 +49,4 @@ catch (Exception ex)
 
 app.MapGet("/", () => "Bot is running");
 
-app.Run();
+await app.RunAsync();

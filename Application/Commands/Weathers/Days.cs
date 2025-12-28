@@ -12,7 +12,4 @@ public static class Days
         {"Sixth", DateTime.Now.AddDays(5) },
         {"Seventh", DateTime.Now.AddDays(6) },
     };
-
-    //public readonly static KeyValuePair<string, DateTime> Today = new("Today", DateTime.Now);
-    //public readonly static KeyValuePair<string, DateTime> Tomorrow = new("Tomorrow", DateTime.Now.AddDays(1));
 }

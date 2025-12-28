@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces.Messaging;
 using Domain.Locations;
 using Telegram.Bot.Types;
+using MessageLocation = Telegram.Bot.Types.Location;
 
 namespace Bot.Messages;
 
@@ -19,7 +20,7 @@ public class TelegramMessageAdapter : IMessage
     {
         get
         {
-            if (_message.Location is Telegram.Bot.Types.Location location)
+            if (_message.Location is MessageLocation location)
             {
                 return new Coordinates(location.Latitude, location.Longitude);
             }

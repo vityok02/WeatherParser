@@ -9,7 +9,7 @@ public class ReceiverService : ReceiverServiceBase<UpdateHandler>
     public ReceiverService(
         ITelegramBotClient botClient,
         UpdateHandler updateHandler,
-        ILogger<ReceiverServiceBase<UpdateHandler>> logger)
+        ILogger<ReceiverService> logger)
         : base(botClient, updateHandler, logger)
     { }
 }

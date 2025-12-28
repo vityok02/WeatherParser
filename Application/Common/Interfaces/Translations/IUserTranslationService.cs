@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces.Localization;
-using Domain.Languages;
+﻿using Domain.Languages;
 using Domain.Translations;
 using Domain.Users;
 

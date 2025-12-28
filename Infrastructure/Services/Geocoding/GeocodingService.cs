@@ -31,7 +31,9 @@ public class GeocodingService : IGeocodingService
     }
 
     public async Task<Result<string>> GetPlaceName(
-        Coordinates coordinates, string languageCode, CancellationToken cancellationToken)
+        Coordinates coordinates,
+        string languageCode,
+        CancellationToken cancellationToken)
     {
         var url = GetPath(coordinates, languageCode);
 
@@ -39,12 +41,16 @@ public class GeocodingService : IGeocodingService
         {
             var response = await _client.GetAsync(url, cancellationToken);
 
-            var geocodingResponse = await response
-                .Content.ReadFromJsonAsync<GeocodingResponse>(_jsonOptions, cancellationToken);
+            var geocodingResponse = await response.Content
+                .ReadFromJsonAsync<GeocodingResponse>(_jsonOptions, cancellationToken);
 
-            var placeName = geocodingResponse?.Features?.FirstOrDefault()?.FullPlaceName;
+            var placeName = geocodingResponse?.Features?
+                .FirstOrDefault()?.FullPlaceName;
 
-            _logger.LogInformation("Recieved Geocoding HTTP response GET {@url} with status code {@code}", url, response.StatusCode);
+            _logger.LogInformation(
+                "Recieved Geocoding HTTP response GET {Url} with status code {Code}",
+                url,
+                response.StatusCode);
 
             return placeName is not null
                 ? Result<string>.Success(placeName)
@@ -52,32 +58,40 @@ public class GeocodingService : IGeocodingService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "HTTP Request Error: {@description}",
+            _logger.LogError(
+                ex,
+                "HTTP Request Error: {Description}",
                 GeocodingErrors.HttpRequestError.Description);
 
-            return Result<string>.Failure(GeocodingErrors.HttpRequestError);
+            return Result<string>
+                .Failure(GeocodingErrors.HttpRequestError);
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Deserialization Error: {description}",
+            _logger.LogError(ex,
+                "Deserialization Error: {Description}",
                 GeocodingErrors.DeserializationError.Description);
 
-            return Result<string>.Failure(GeocodingErrors.DeserializationError);
+            return Result<string>
+                .Failure(GeocodingErrors.DeserializationError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected Error: {description}",
+            _logger.LogError(
+                ex,
+                "Unexpected Error: {Description}",
                 GeocodingErrors.UnexpectedError.Description);
 
-            return Result<string>.Failure(GeocodingErrors.UnexpectedError);
+            return Result<string>
+                .Failure(GeocodingErrors.UnexpectedError);
         }
     }
 
     public async Task<Result<Location[]>> GetPlacesByName(
-        string locationName,
-        CancellationToken cancellationToken = default)
+        string placeName,
+        CancellationToken cancellationToken)
     {
-        var url = GetPath(locationName);
+        var url = GetPath(placeName);
 
         try
         {
@@ -98,24 +112,33 @@ public class GeocodingService : IGeocodingService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "HTTP Request Error: {@description}",
+            _logger.LogError(
+                ex,
+                "HTTP Request Error: {Description}",
                 GeocodingErrors.HttpRequestError.Description);
 
-            return Result<Location[]>.Failure(GeocodingErrors.HttpRequestError);
+            return Result<Location[]>
+                .Failure(GeocodingErrors.HttpRequestError);
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Deserialization Error: {description}",
+            _logger.LogError(
+                ex,
+                "Deserialization Error: {Description}",
                 GeocodingErrors.DeserializationError.Description);
 
-            return Result<Location[]>.Failure(GeocodingErrors.DeserializationError);
+            return Result<Location[]>
+                .Failure(GeocodingErrors.DeserializationError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected Error: {description}", 
+            _logger.LogError(
+                ex,
+                "Unexpected Error: {Description}",
                 GeocodingErrors.UnexpectedError.Description);
 
-            return Result<Location[]>.Failure(GeocodingErrors.UnexpectedError);
+            return Result<Location[]>
+                .Failure(GeocodingErrors.UnexpectedError);
         }
     }
 

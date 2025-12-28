@@ -2,7 +2,6 @@
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
-using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Translations;
 using Common.Constants;
 using Domain.Abstract;
@@ -16,7 +15,6 @@ internal class RequestLanguageCommandHandler : ICommandHandler<RequestLanguageCo
     private readonly IUserTranslationService _translationService;
     private readonly IKeyboardMarkupGenerator _keyboardMarkupGenerator;
     private readonly ILanguageRepository _languageRepository;
-    private readonly IUserStateRepository _userStateRepository;
     private readonly ISessionManager _sessionManager;
 
     public RequestLanguageCommandHandler(
@@ -24,14 +22,12 @@ internal class RequestLanguageCommandHandler : ICommandHandler<RequestLanguageCo
         IUserTranslationService translationService,
         IKeyboardMarkupGenerator keyboardMarkupGenerator,
         ILanguageRepository languageRepository,
-        IUserStateRepository userStateRepository,
         ISessionManager sessionManager)
     {
         _messageSender = messageSender;
         _translationService = translationService;
         _keyboardMarkupGenerator = keyboardMarkupGenerator;
         _languageRepository = languageRepository;
-        _userStateRepository = userStateRepository;
         _sessionManager = sessionManager;
     }
 
@@ -45,7 +41,7 @@ internal class RequestLanguageCommandHandler : ICommandHandler<RequestLanguageCo
         List<string> buttons = [];
 
         var languages = await _languageRepository
-            .GetAll(cancellationToken);
+            .GetAllAsync(cancellationToken);
 
         foreach (var l in languages.ToList())
         {

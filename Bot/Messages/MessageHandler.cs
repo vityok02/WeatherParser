@@ -21,20 +21,25 @@ public class MessageHandler : IMessageHandler
         _commandProcessor = commandProcessor;
     }
 
-    public async Task HandleMessage(Message message, CancellationToken cancellationToken)
+    public async Task HandleMessage(
+        Message message,
+        CancellationToken cancellationToken)
     {
-        _logger
-            .LogInformation("Receive message type: {MessageType}", message.Type);
+        _logger.LogInformation(
+            "Receive message type: {MessageType}",
+            message.Type);
 
         var validationResult = _validator.Validate(message);
         if (validationResult.IsError)
         {
-            _logger
-                .LogError("Invalid message: {validationResult}", validationResult.ToString());
+            _logger.LogError(
+                "Invalid message: {ValidationResult}",
+                validationResult.ToString());
         }
 
         IMessage appMessage = new TelegramMessageAdapter(message);
 
-        await _commandProcessor.ProcessCommand(appMessage, cancellationToken);
+        await _commandProcessor
+            .ProcessCommand(appMessage, cancellationToken);
     }
 }

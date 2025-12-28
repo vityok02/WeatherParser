@@ -1,6 +1,6 @@
 ﻿using Domain.Translations;
 
-namespace Application.Common.Interfaces.Localization;
+namespace Application.Common.Interfaces.Translations;
 
 public interface ITranslationService
 {

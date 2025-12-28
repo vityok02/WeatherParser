@@ -2,6 +2,7 @@
 
 public interface ILanguageRepository
 {
-    Task<IEnumerable<Language>> GetAll(CancellationToken cancellationToken);
-    Task<Language?> GetByName(string name, CancellationToken cancellationToken);
+    Task<IEnumerable<Language>> GetAllAsync(CancellationToken cancellationToken);
+
+    Task<Language?> GetByNameAsync(string name, CancellationToken cancellationToken);
 }
