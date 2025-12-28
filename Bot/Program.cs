@@ -5,6 +5,7 @@ using Bot.Extensions;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System.Net;
@@ -38,7 +39,8 @@ try
 {
     using var scope = app.Services.CreateScope();
     using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.EnsureCreated();
+    await dbContext.Database.MigrateAsync();
+    await dbContext.Database.EnsureCreatedAsync();
     logger.LogInformation("Database was created");
     await DataSeeder.SeedDataAsync(dbContext);
     logger.LogInformation("Data was Seeded");
