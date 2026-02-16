@@ -1,20 +1,19 @@
 ﻿using Application.Common.Abstract;
 using Application.Common.Interfaces.Messaging;
-using Application.Common.Interfaces.Services;
-using Domain.Abstract;
-using Domain.Users;
-using Domain.Locations;
-using Microsoft.Extensions.Logging;
 using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Translations;
+using Domain.Abstract;
+using Domain.Locations;
+using Domain.Users;
+using Microsoft.Extensions.Logging;
 
-namespace Application.Locations.SetLocationFromRequest;
+namespace Application.Commands.Locations.SetSharedLocation;
 
 internal sealed class SetSharedLocationCommandHandler
     : ICommandHandler<SetSharedLocationCommand>
 {
     private readonly IMessageSender _messageSender;
-    private readonly ILogger<SetSharedLocationCommandHandler> _logger;
     private readonly IGeocodingService _geocodingService;
     private readonly IUserTranslationService _translation;
     private readonly IUserRepository _userRepository;
@@ -22,14 +21,12 @@ internal sealed class SetSharedLocationCommandHandler
 
     public SetSharedLocationCommandHandler(
         IMessageSender messageSender,
-        ILogger<SetSharedLocationCommandHandler> logger,
         IUserTranslationService translation,
         IGeocodingService geocodingService,
         IUserRepository userRepository,
         IUserStateRepository userStateRepository)
     {
         _messageSender = messageSender;
-        _logger = logger;
         _translation = translation;
         _geocodingService = geocodingService;
         _userRepository = userRepository;

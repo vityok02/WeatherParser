@@ -5,7 +5,7 @@ using Application.Common.Interfaces.Translations;
 using Common.Constants;
 using Domain.Abstract;
 
-namespace Application.Commands.Requests;
+namespace Application.Commands.Requests.RequestDay;
 
 internal sealed class RequestDayCommandHandler
     : ICommandHandler<RequestDayCommand>

@@ -10,14 +10,11 @@ namespace Bot.Services;
 public class TelegramMessageSender : IMessageSender
 {
     private readonly ITelegramBotClient _botClient;
-    private readonly TelegramFileAdapter _fileAdapter;
-
+    
     public TelegramMessageSender(
-        ITelegramBotClient botClient,
-        TelegramFileAdapter fileAdapter)
+        ITelegramBotClient botClient)
     {
         _botClient = botClient;
-        _fileAdapter = fileAdapter;
     }
 
     public async Task SendTextMessageAsync(
@@ -25,7 +22,7 @@ public class TelegramMessageSender : IMessageSender
         string text,
         CancellationToken cancellationToken)
     {
-        await _botClient.SendTextMessageAsync(
+        await _botClient.SendMessage(
             chatId: chatId,
             text: text,
             cancellationToken: cancellationToken);
@@ -44,7 +41,7 @@ public class TelegramMessageSender : IMessageSender
             _ => new ReplyKeyboardRemove()
         };
 
-        await _botClient.SendTextMessageAsync(
+        await _botClient.SendMessage(
             chatId: chatId,
             text: text,
             replyMarkup: telegramReplyMarkup,
@@ -58,7 +55,7 @@ public class TelegramMessageSender : IMessageSender
         string[] additionalButtons,
         CancellationToken cancellationToken)
     {
-        await _botClient.SendTextMessageAsync(
+        await _botClient.SendMessage(
             chatId: chatId,
             text: messageText,
             replyMarkup: GetKeyboard(buttonText, additionalButtons),
@@ -70,13 +67,13 @@ public class TelegramMessageSender : IMessageSender
         IFile photo,
         CancellationToken cancellationToken)
     {
-        await _botClient.SendPhotoAsync(
+        await _botClient.SendPhoto(
             chatId: chatId,
-            photo: _fileAdapter.ConvertToTelegramFile(photo),
+            photo: TelegramFileAdapter.ConvertToTelegramFile(photo),
             cancellationToken: cancellationToken);
     }
 
-    private ReplyKeyboardMarkup GetKeyboard(
+    private static ReplyKeyboardMarkup GetKeyboard(
         string button,
         string[] additionalButtons)
     {

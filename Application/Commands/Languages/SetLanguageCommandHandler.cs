@@ -1,8 +1,8 @@
 ﻿using Application.Commands.Default;
 using Application.Common.Abstract;
 using Application.Common.Interfaces;
-using Application.Common.Interfaces.Localization;
 using Application.Common.Interfaces.Messaging;
+using Application.Common.Interfaces.Translations;
 using Domain.Abstract;
 using Domain.Languages;
 using Domain.Users;
@@ -40,20 +40,20 @@ internal class SetLanguageCommandHandler
         CancellationToken cancellationToken)
     {
         var language = await _languageRepository
-            .GetByName(command.Language, cancellationToken);
-
-        var translation = _translationService
-            .GetTranslation(language.Name);
+            .GetByNameAsync(command.Language, cancellationToken);
 
         if (language is null)
         {
             await _messageSender.SendTextMessageAsync(
                 command.UserId,
-                translation.Messages["LanguageFail"],
+                "Selected language not found. Please select another one.",
                 cancellationToken);
 
             return Result.Failure("Language is null");
         }
+
+        var translation = _translationService
+            .GetTranslation(language.Name);
 
         var user = await _userRepository
             .GetByIdAsync(command.UserId, cancellationToken);

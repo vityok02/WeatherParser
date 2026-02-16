@@ -5,9 +5,9 @@ namespace Domain.Languages;
 
 public class Language : BaseEntity
 {
-    public string Name { get; private set; } = string.Empty;
-    public string Code { get; private set; } = string.Empty;
-    public ICollection<User> Users { get; private set; } = new List<User>();
+    public string Name { get; private set; }
+    public string Code { get; private set; }
+    public ICollection<User> Users { get; private set; } = [];
 
     public Language(long id, string name, string code)
     {

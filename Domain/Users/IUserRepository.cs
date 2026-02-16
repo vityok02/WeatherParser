@@ -9,7 +9,7 @@ public interface IUserRepository
     Task<User?> GetByIdWithLocationsAsync(long id, CancellationToken cancellationToken);
     Task CreateAsync(User user, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
-    Task<bool> HasLocationAsync(long Id, CancellationToken cancellationToken);
-    Task EnsureCreateAsync(long userId, CancellationToken cancellationToken);
-    Task<Language?> GetLanguageAsync(long userId, CancellationToken cancellationToken);
+    Task<bool> HasLocationAsync(long id, CancellationToken cancellationToken);
+    Task EnsureCreateAsync(long id, CancellationToken cancellationToken);
+    Task<Language?> GetLanguageAsync(long id, CancellationToken cancellationToken);
 }

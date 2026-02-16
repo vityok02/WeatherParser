@@ -4,5 +4,7 @@ namespace Bot.Messages;
 
 public interface IMessageHandler
 {
-    Task HandleMessage(Message message, CancellationToken cancellationToken);
+    Task HandleMessage(
+        Message message,
+        CancellationToken cancellationToken);
 }

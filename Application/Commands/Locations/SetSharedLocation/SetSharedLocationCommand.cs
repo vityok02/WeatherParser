@@ -1,6 +1,6 @@
 ﻿using Application.Common.Abstract;
 using Domain.Locations;
 
-namespace Application.Locations.SetLocationFromRequest;
+namespace Application.Commands.Locations.SetSharedLocation;
 
 public record SetSharedLocationCommand(long UserId, Coordinates Coordinates) : ICommand;

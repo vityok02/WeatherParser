@@ -2,4 +2,5 @@
 
 namespace Application.Commands.Default;
 
-public record DefaultCommand(long UserId) : ICommand;
+public record DefaultCommand(long UserId)
+    : ICommand;

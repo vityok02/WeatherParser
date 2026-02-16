@@ -1,7 +1,7 @@
-﻿using Application.Common.Abstract;
+﻿using Application.Commands.Locations.SetSharedLocation;
+using Application.Common.Abstract;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Messaging;
-using Application.Locations.SetLocationFromRequest;
 
 namespace Application.Services.Bot.Strategies;
 

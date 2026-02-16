@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces;
-using Application.Common.Interfaces.Localization;
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Interfaces.Services;
+using Application.Common.Interfaces.Translations;
 using Domain.Languages;
 using Domain.Users;
 using Infrastructure.Data;

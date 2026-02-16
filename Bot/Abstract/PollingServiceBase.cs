@@ -1,12 +1,15 @@
 ﻿namespace Bot.Abstract;
 
-public abstract class PollingServiceBase<TReceiverService> : BackgroundService
+public abstract class PollingServiceBase<TReceiverService>
+    : BackgroundService 
     where TReceiverService : IReceiverService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger _logger;
 
-    internal PollingServiceBase(IServiceProvider serviceProvider, ILogger logger)
+    private protected PollingServiceBase(
+        IServiceProvider serviceProvider,
+        ILogger logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
@@ -25,14 +28,17 @@ public abstract class PollingServiceBase<TReceiverService> : BackgroundService
         {
             try
             {
-                using var scope = _serviceProvider.CreateScope();
-                var receiver = scope.ServiceProvider.GetRequiredService<TReceiverService>();
+                using var scope = _serviceProvider
+                    .CreateScope();
+
+                var receiver = scope.ServiceProvider
+                    .GetRequiredService<TReceiverService>();
 
                 await receiver.ReceiveAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Polling failed with exception: {Exception}", ex);
+                _logger.LogError(ex, "Polling failed with exception");
 
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }

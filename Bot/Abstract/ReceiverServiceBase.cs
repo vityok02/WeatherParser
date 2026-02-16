@@ -3,7 +3,8 @@ using Telegram.Bot.Polling;
 
 namespace Bot.Abstract;
 
-public class ReceiverServiceBase<TUpdateHandler> : IReceiverService
+public class ReceiverServiceBase<TUpdateHandler>
+    : IReceiverService
     where TUpdateHandler : IUpdateHandler
 {
     private readonly ITelegramBotClient _botClient;
@@ -26,9 +27,12 @@ public class ReceiverServiceBase<TUpdateHandler> : IReceiverService
             AllowedUpdates = []
         };
 
-        var me = await _botClient.GetMeAsync(cancellationToken);
+        var me = await _botClient
+            .GetMe(cancellationToken);
 
-        _logger.LogInformation("Start receiving updates for {BotName}", me.Username ?? "My Awesome Bot");
+        _logger.LogInformation(
+            "Start receiving updates for {BotName}",
+            me.Username ?? "My Awesome Bot");
 
         await _botClient.ReceiveAsync(
             updateHandler: _updateHandler,

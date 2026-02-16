@@ -20,7 +20,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FindAsync(id, cancellationToken);
+        return await _dbContext.Users.FindAsync([id], cancellationToken: cancellationToken);
     }
 
     public async Task<User?> GetByIdWithLocationsAsync(long id, CancellationToken cancellationToken)
@@ -47,18 +47,18 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.AnyAsync(u => u.Id == id && u.CurrentLocation != null, cancellationToken);
     }
 
-    public async Task EnsureCreateAsync(long userId, CancellationToken cancellationToken)
+    public async Task EnsureCreateAsync(long id, CancellationToken cancellationToken)
     {
         var users = _dbContext.Users;
-        var isUserExist = await users.AnyAsync(u => u.Id == userId, cancellationToken);
+        var isUserExist = await users.AnyAsync(u => u.Id == id, cancellationToken);
 
         if (!isUserExist)
         {
             var defaultLanguage = await _dbContext.Languages
                 .Where(l => l.Id == 1)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
-            var user = new User(userId, defaultLanguage!);
+            var user = new User(id, defaultLanguage!);
 
             await CreateAsync(user, cancellationToken);
         }
