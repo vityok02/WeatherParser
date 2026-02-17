@@ -50,18 +50,21 @@ public class UserRepository : IUserRepository
     public async Task EnsureCreateAsync(long id, CancellationToken cancellationToken)
     {
         var users = _dbContext.Users;
-        var isUserExist = await users.AnyAsync(u => u.Id == id, cancellationToken);
+        var user = await users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 
-        if (!isUserExist)
+        if (user is not null)
         {
-            var defaultLanguage = await _dbContext.Languages
-                .Where(l => l.Id == 1)
-                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-
-            var user = new User(id, defaultLanguage!);
-
-            await CreateAsync(user, cancellationToken);
+            return;
         }
+
+        var defaultLanguage = await _dbContext.Languages
+            .Where(l => l.Id == 1)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        user = new User(id, defaultLanguage!);
+
+        await _dbContext.Users.AddAsync(user, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<Language?> GetLanguageAsync(long id, CancellationToken cancellationToken)

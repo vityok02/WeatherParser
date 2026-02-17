@@ -29,8 +29,6 @@ public class CommandProcessor : ICommandProcessor
         await _userRepository
             .EnsureCreateAsync(message.UserId, cancellationToken);
 
-        await _userRepository.SaveChangesAsync(cancellationToken);
-
         var command = await _commandFactory.Create(message, cancellationToken);
 
         await _sender.Send(command, cancellationToken);
