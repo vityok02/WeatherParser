@@ -19,25 +19,33 @@ builder.Host.UseSerilog((context, config) =>
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-try
+if (app.Environment.IsDevelopment())
 {
-    await using var scope = app.Services.CreateAsyncScope();
-    using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    await dbContext.Database.MigrateAsync();
-    await DataSeeder.SeedDataAsync(dbContext);
-
-    logger.LogInformation("Database migration & seed completed");
-}
-catch (Exception ex)
-{
-    logger.LogError(ex, "Database migration or seed failed");
-    throw;
+    await ApplyMigrationAndSeedData(app);
 }
 
 app.MapGet("/", () => "Bot is alive and kicking.");
 app.UseHealthChecks("/health");
 
 await app.RunAsync();
+
+static async Task ApplyMigrationAndSeedData(WebApplication app)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        await dbContext.Database.MigrateAsync();
+        await DataSeeder.SeedDataAsync(dbContext);
+
+        logger.LogInformation("Database migration & seed completed");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Database migration or seed failed");
+        throw;
+    }
+}
