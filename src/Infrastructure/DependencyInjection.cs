@@ -56,7 +56,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
         {
             options.UseNpgsql(connectionString,
-                providerOptions => providerOptions.EnableRetryOnFailure(10));
+                providerOptions => providerOptions.EnableRetryOnFailure());
         });
 
         return services;

@@ -25,7 +25,8 @@ internal sealed class RequestLocationCommandHandler
     }
 
     public async Task<Result> Handle(
-        RequestLocationCommand command, CancellationToken cancellationToken)
+        RequestLocationCommand command,
+        CancellationToken cancellationToken)
     {
         var userSession = _sessionManager
             .GetOrCreateSession(command.UserId);

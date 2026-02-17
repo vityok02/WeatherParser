@@ -12,6 +12,8 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPresentation(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
 builder.Host.UseSerilog((context, config) =>
     config.ReadFrom.Configuration(context.Configuration));
 
@@ -22,10 +24,9 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 try
 {
     await using var scope = app.Services.CreateAsyncScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    //await dbContext.Database.MigrateAsync();
-    dbContext.Database.EnsureCreated();
+    await dbContext.Database.MigrateAsync();
     await DataSeeder.SeedDataAsync(dbContext);
 
     logger.LogInformation("Database migration & seed completed");
@@ -36,6 +37,6 @@ catch (Exception ex)
     throw;
 }
 
-app.MapGet("/", () => "Bot is running");
+app.UseHealthChecks("/health");
 
 await app.RunAsync();

@@ -34,7 +34,7 @@ public class UserStateStrategy : ICommandStrategy
     }
 
     public async Task<ICommand> CreateCommand(
-        IMessage message, CancellationToken cancelToken)
+        IMessage message, CancellationToken cancellationToken)
     {
         var userSession = _sessionManager
             .GetOrCreateSession(message.UserId);
@@ -42,7 +42,7 @@ public class UserStateStrategy : ICommandStrategy
         UserState? userState = userSession.Get<UserState>("state");
 
         var coordinates = await _userService
-            .GetUserCoordinatesAsync(message.UserId, cancelToken);
+            .GetUserCoordinatesAsync(message.UserId, cancellationToken);
 
         if (!userState.HasValue)
         {
@@ -52,7 +52,7 @@ public class UserStateStrategy : ICommandStrategy
         // TODO: refactor logic with Sender.
         if (userState.Value == UserState.EnterDay)
         {
-            await _sender.Send(new RequestDayCommand(message.UserId, message.Text), cancelToken);
+            await _sender.Send(new RequestDayCommand(message.UserId, message.Text), cancellationToken);
             userState = userSession.Get<UserState>("state");
         }
 
