@@ -37,6 +37,7 @@ catch (Exception ex)
     throw;
 }
 
+app.MapGet("/", () => "Bot is alive and kicking.");
 app.UseHealthChecks("/health");
 
 await app.RunAsync();
