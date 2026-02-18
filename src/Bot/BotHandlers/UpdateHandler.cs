@@ -29,10 +29,6 @@ public class UpdateHandler : IUpdateHandler
             await _messageHandler
                 .HandleMessage(message, cancellationToken);
         }
-
-        _logger.LogDebug(
-            "Received an unsupported update type: {UpdateType}.",
-            update.Type);
     }
 
     public async Task HandleErrorAsync(
@@ -43,17 +39,25 @@ public class UpdateHandler : IUpdateHandler
     {
         var errorMessage = exception switch
         {
-            ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+            ApiRequestException apiRequestException =>
+                $"Telegram API Error: [{apiRequestException.ErrorCode}]. {apiRequestException.Message}",
             _ => exception.ToString()
         };
 
-        _logger.LogInformation(
-            "HandleError: {ErrorMessage}",
+        _logger.LogError(
+            exception,
+            "HandleError from {Source}: {ErrorMessage}",
+            source,
             errorMessage);
 
         if (exception is RequestException)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
+            _logger.LogWarning(
+                "Request exception detected, waiting before retry");
+
+            await Task.Delay(
+                TimeSpan.FromSeconds(5),
+                cancellationToken);
         }
     }
 }

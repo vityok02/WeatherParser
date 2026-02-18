@@ -3,8 +3,12 @@ using Bot;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Telegram.Bot;
+using Telegram.Bot.Polling;
+using Telegram.Bot.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +29,22 @@ if (app.Environment.IsDevelopment())
     await ApplyMigrationAndSeedData(app);
 }
 
-app.MapGet("/", () => "Bot is alive and kicking.");
+app.MapPost("/bot", async (
+    [FromBody] Update update,
+    [FromServices] IUpdateHandler handler,
+    [FromServices] ITelegramBotClient client,
+    CancellationToken cancellationToken) =>
+{
+    await client.SendMessage(
+        update.Message.From.Id,
+        "I am Weather Bot");
+
+    await handler.HandleUpdateAsync(
+        client,
+        update,
+        cancellationToken);
+});
+
 app.UseHealthChecks("/health");
 
 await app.RunAsync();
