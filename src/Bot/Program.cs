@@ -23,7 +23,6 @@ builder.Host.UseSerilog((context, config) =>
 
 var app = builder.Build();
 
-
 if (app.Environment.IsDevelopment())
 {
     await ApplyMigrationAndSeedData(app);
@@ -35,16 +34,13 @@ app.MapPost("/bot", async (
     [FromServices] ITelegramBotClient client,
     CancellationToken cancellationToken) =>
 {
-    await client.SendMessage(
-        update.Message.From.Id,
-        "I am Weather Bot");
-
     await handler.HandleUpdateAsync(
         client,
         update,
         cancellationToken);
 });
 
+app.MapGet("/", () => "Bot is alive");
 app.UseHealthChecks("/health");
 
 await app.RunAsync();

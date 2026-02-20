@@ -1,6 +1,4 @@
 ﻿using Bot.Configurations;
-using Bot.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 
@@ -12,17 +10,15 @@ public class BotWebhookService(
     ILogger<BotWebhookService> logger)
     : IHostedService
 {
-    private readonly string _hostAddress = options
-        .CurrentValue.HostAddress;
-
     public async Task StartAsync(
         CancellationToken cancellationToken)
     {
-        var webhookUrl = $"{_hostAddress.TrimEnd('/')}/bot";
+        var hostAddress = options.CurrentValue.HostAddress;
+        var webhookUrl = $"{hostAddress.TrimEnd('/')}/bot";
 
         logger.LogInformation(
-            "Setting webhook to: {HostAddress}",
-            _hostAddress);
+            "Setting webhook to: {WebhookUrl}",
+            webhookUrl);
 
         await botClient.SetWebhook(
             webhookUrl,
