@@ -2,7 +2,7 @@
 
 namespace Bot.Extensions;
 
-public static class PollingExtensions
+public static class ServiceProviderExtensions
 {
     public static T GetConfiguration<T>(this IServiceProvider sp)
         where T : class

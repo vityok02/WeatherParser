@@ -24,7 +24,8 @@ public class ReceiverServiceBase<TUpdateHandler>
     {
         var receiverOptions = new ReceiverOptions()
         {
-            AllowedUpdates = []
+            AllowedUpdates = [],
+            Limit = 100
         };
 
         var me = await _botClient
@@ -34,9 +35,24 @@ public class ReceiverServiceBase<TUpdateHandler>
             "Start receiving updates for {BotName}",
             me.Username ?? "My Awesome Bot");
 
-        await _botClient.ReceiveAsync(
-            updateHandler: _updateHandler,
-            receiverOptions: receiverOptions,
-            cancellationToken: cancellationToken);
+        try
+        {
+            await _botClient.ReceiveAsync(
+                updateHandler: _updateHandler,
+                receiverOptions: receiverOptions,
+                cancellationToken: cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("Receiving was cancelled");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during ReceiveAsync");
+            throw;
+        }
+
+        _logger.LogWarning("ReceiveAsync exited unexpectedly without exception");
     }
 }

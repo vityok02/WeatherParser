@@ -3,6 +3,7 @@ using Application.Common.Abstract;
 using Application.Common.Interfaces.Messaging;
 using Application.Common.Interfaces.ReplyMarkup;
 using Application.Keyboard;
+using Bot.Abstract;
 using Bot.BotHandlers;
 using Bot.Configurations;
 using Bot.Extensions;
@@ -10,6 +11,7 @@ using Bot.Messages;
 using Bot.Services;
 using Bot.TgTypes;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 
 namespace Bot;
@@ -32,9 +34,7 @@ public static class DependencyInjection
             });
 
         services
-            .AddScoped<ReceiverService>()
-            .AddHostedService<PollingService>()
-            .AddScoped<UpdateHandler>()
+            .AddScoped<IUpdateHandler, UpdateHandler>()
             .AddScoped<IMessageHandler, MessageHandler>()
             .AddScoped<DefaultHandler>()
             .AddScoped<IValidator<Message>, MessageValidator>()
@@ -42,8 +42,9 @@ public static class DependencyInjection
             .AddScoped<IKeyboardMarkupGenerator, KeyboardMarkupGenerator>()
             .AddScoped<IRemoveKeyboardMarkup, RemoveKeyboardMarkup>()
             .AddScoped<IDefaultKeyboardFactory, DefaultKeyboardFactory>()
-
             ;
+
+        services.AddHostedService<BotWebhookService>();
 
         return services;
     }

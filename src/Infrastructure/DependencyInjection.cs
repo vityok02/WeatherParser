@@ -56,7 +56,16 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
         {
             options.UseNpgsql(connectionString,
-                providerOptions => providerOptions.EnableRetryOnFailure());
+                providerOptions =>
+                {
+                    providerOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorCodesToAdd: null);
+                    providerOptions.CommandTimeout(30);
+                });
+            options.EnableSensitiveDataLogging(false);
+            options.EnableDetailedErrors(false);
         });
 
         return services;

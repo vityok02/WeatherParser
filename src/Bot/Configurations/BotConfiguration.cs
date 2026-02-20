@@ -3,5 +3,8 @@
 public record BotConfiguration
 {
     public const string Configuration = "BotConfiguration";
-    public string BotToken { get; init; } = "";
+
+    public string HostAddress { get; init; } = string.Empty;
+
+    public string BotToken { get; init; } = string.Empty;
 }
